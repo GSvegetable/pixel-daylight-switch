@@ -14,6 +14,9 @@ All notable changes to Pixel Daylight Switch are documented here.
 
 ### Playground
 - Add a standalone interactive Playground with live preview, grouped controls, presets, and copyable HTML configuration.
+- Redesign the Playground with a restrained editorial layout instead of generic gradient cards.
+- Isolate the component renderer in `preview.html`; parameter controls no longer unmount and recreate the WebGL canvas on every slider movement.
+- Make preview updates explicit through an Apply action, preventing rapid context churn, white frames, and unnecessary rendering work.
 
 ### Documentation
 - Restructure README with Chinese documentation first, a table of contents, Playground entry points, and a concise English section.
