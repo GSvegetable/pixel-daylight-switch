@@ -321,7 +321,7 @@ function mount(root) {
     rect(0, 74, CORE_W, 8, M.STONE); rect(0, 82, CORE_W, 30, M.PATH_DK);
     for (let y=76;y<82;y+=2) rect(0,y,CORE_W,1,M.STONE_LT);
     // shopfronts and narrow Japanese buildings
-    rect(0,24,53,51,M.WALL); rect(0,20,55,5,M.ROOF_DK || M.ROOF);
+    rect(0,24,53,51,M.WALL); rect(0,20,55,5,M.ROOF);
     rect(4,30,45,3,M.WOOD_DK); rect(5,34,43,23,M.GLASS);
     rect(4,58,46,17,M.WOOD_DK); rect(7,60,40,13,M.WOOD);
     for(let x=10;x<47;x+=8){rect(x,60,1,13,M.WOOD_DK);}
@@ -428,7 +428,7 @@ function mount(root) {
     // wooden cabin
     rect(66,55,62,35,M.WALL); for(let y=60;y<88;y+=5)rect(66,y,62,1,M.WOOD);
     for(let y=34;y<57;y++){const t=(y-34)/23;for(let x=Math.round(58+t*8);x<=136-Math.round(t*8);x++)put(x,y,M.ROOF);}
-    rect(57,53,80,4,M.ROOF_DK || M.WOOD_DK); rect(88,67,17,23,M.WOOD_DK);rect(90,69,13,21,M.WOOD);
+    rect(57,53,80,4,M.WOOD_DK); rect(88,67,17,23,M.WOOD_DK);rect(90,69,13,21,M.WOOD);
     rect(71,65,13,12,M.GLASS);rect(73,67,9,8,M.LIT);rect(77,65,2,12,M.WOOD_DK);
     rect(111,64,12,13,M.GLASS);rect(112,65,10,3,M.GLASS_HI);
     rect(87,90,20,3,M.STONE);rect(83,93,28,2,M.STONE_LT);
