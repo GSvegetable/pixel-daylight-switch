@@ -521,5 +521,35 @@ function mount(root) {
   renderWorld(clockOf(), 0, 0); if (ready) uploadWorld(); wake();
   return () => { stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); for (const off of cleanups) off(); if (gl && ready) { gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); gl.deleteTexture(texWorld); gl.deleteTexture(texNear); const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); } };
 }
-mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
+  return {
+    toggle: toggle,
+    setNight: (isNight) => {
+      target = isNight ? 1 : 0;
+      moving = true;
+      wake();
+    },
+    setValue: (val) => {
+      x = clamp(val, 0, 1);
+      commit(x);
+      dirty = true;
+      wake();
+    },
+    destroy: () => {
+      stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); 
+      for (const off of cleanups) off(); 
+      if (gl && ready) { 
+        gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); 
+        gl.deleteTexture(texWorld); gl.deleteTexture(texNear); 
+        const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); 
+      }
+    }
+  };
+}
+
+const toggleEl = document.querySelector('[data-ld-part="toggle-daylight"]');
+if (toggleEl) {
+  window.DaylightSwitch = mount(toggleEl);
+  const isNight = toggleEl.getAttribute('aria-checked') === 'true';
+  toggleEl.dispatchEvent(new CustomEvent('daylight:change', { detail: { night: isNight } }));
+}
 })();

@@ -25,41 +25,54 @@
 - **点击开关**：直接切换昼夜。
 - **键盘操作**：聚焦后用方向键，每按一次推进一小步。
 
-## 放进你的页面
+## 一键引入 (CDN 接入)
 
-没有依赖，开箱即用。带上 `style.css` 和 `app.js`，页面里放这一段：
+无需构建，原生零依赖。将以下代码粘贴到你的 HTML 中即可（`script` 放在 `div` 后面）：
 
-```html
+~~~html
+<link rel="stylesheet" href="https://gsvegetable.github.io/pixel-daylight-switch/style.css">
+
 <div data-ld-part="toggle-daylight">
   <canvas class="scene" aria-hidden="true"></canvas>
   <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
   <span class="vh" role="status" aria-live="polite" data-status></span>
   <span class="probe" aria-hidden="true"></span>
 </div>
-<script src="app.js"></script>
-```
 
-`app.js` 会挂载页面上第一个 `data-ld-part="toggle-daylight"` 的元素，所以 `<script>` 务必放在它后面。
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+~~~
 
-昼夜切换时，这个元素会发出 `daylight:change` 事件，`detail.night` 为 `true` 表示夜晚：
+## 控制 API (JavaScript)
 
-```javascript
-const toggle = document.querySelector('[data-ld-part="toggle-daylight"]');
-toggle.addEventListener('daylight:change', (e) => {
-  document.body.classList.toggle('night', e.detail.night);
+组件会自动挂载并暴露全局变量 `window.DaylightSwitch`，你可以用代码自由控制它：
+
+~~~javascript
+// 1. 强制切换昼夜
+window.DaylightSwitch.toggle();
+
+// 2. 强制设为黑夜 (true) 或白天 (false)
+window.DaylightSwitch.setNight(true);
+
+// 3. 监听状态变化，用于与你的网站主题联动
+document.querySelector('[data-ld-part="toggle-daylight"]').addEventListener('daylight:change', (e) => {
+  if (e.detail.night) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
 });
-```
+~~~
 
 ## 改颜色
 
 画面配色来自 CSS 变量，在你的样式表里覆盖对应元素的变量即可无缝融入你的网站：
 
-```css
+~~~css
 [data-ld-part="toggle-daylight"] {
   --ld-bg: #f5ecd9;
   --ld-accent: #efa02c;
 }
-```
+~~~
 
 可用的变量有 `--ld-bg`、`--ld-surface`、`--ld-fg`、`--ld-muted`、`--ld-accent`。另外 `--ld-radius`、`--ld-font`、`--ld-space`、`--ld-shadow`、`--ld-motion` 控制外形和动效。
 
@@ -96,7 +109,12 @@ A day-night switch with a tiny pixel person living inside. Drag it and the sky g
 
 **How to play.** Drag the slider; on release it settles at the nearest end, and a quick fling carries it over. Click to toggle. When focused, arrow keys move it in small steps.
 
-**Use it in your page.** No dependencies. Include `style.css` and `app.js`, and put the markup shown above on the page, before the `<script>`. The element fires a `daylight:change` event with `detail.night` (boolean).
+**One-click Integration (CDN).** No dependencies, no build step. Just include `style.css` and `app.js` via CDN, and place the component markup on your page.
+
+**Control API.** The component mounts globally to `window.DaylightSwitch`. You can control it programmatically:
+- `window.DaylightSwitch.toggle()`
+- `window.DaylightSwitch.setNight(true)`
+- Listen to the `daylight:change` event on the element to sync your site's dark mode.
 
 **Theming.** Colors come from CSS custom properties on the element: `--ld-bg`, `--ld-surface`, `--ld-fg`, `--ld-muted`, `--ld-accent`, plus `--ld-radius`, `--ld-font`, `--ld-space`, `--ld-shadow`, `--ld-motion`.
 
