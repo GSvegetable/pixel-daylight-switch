@@ -134,20 +134,21 @@ let activeLayer = $('layerA');
 let inactiveLayer = $('layerB');
 
 const groups=[
- ['运动手感',[
-   ['speed','基础滑行速度',3,25,.1],
-   ['friction','惯性阻尼',0.1,0.95,.01],
-   ['bounce','边缘回弹力度',0,20,.5]
+ ['运动反馈',[
+   ['speed','滑动响应速度',3,25,.1],
+   ['friction','松手后的惯性',0.1,0.9,.01],
+   ['bounce','边缘回弹力度',0,12,.2]
  ]],
- ['液态玻璃',[
-   ['refraction','折射强度',0.8,3.0,.01],
-   ['bezel','边缘厚度',0.01,0.12,.001],
-   ['dispersion','彩虹色散',0,0.4,.01],
-   ['shine','表面高光',0,2.0,.05]
+ ['玻璃光学',[
+   ['refraction','镜片折射率',0.8,3.0,.01],
+   ['bezel','玻璃边缘厚度',0.01,0.12,.001],
+   ['dispersion','边缘色散强度',0,0.25,.005],
+   ['shine','表面反射高光',0,1.5,.02]
  ]],
- ['像素世界',[
-   ['timeSpeed','时间流速',0,5,.1]
- ]]
+ ['世界节奏',[
+   ['timeSpeed','世界时间倍率',0,8,.1]
+ ]],
+ ['场景环境',[]]
 ];
 
 const nums = groups.flatMap(g=>g[1]);
@@ -181,11 +182,11 @@ const names = {
 
 let applied = null;
 
-$('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='default'}">${names[k]}</button>`).join('');
+$('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='countryside'}">${names[k]}</button>`).join('');
 $('tabs').innerHTML = groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
 $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
  g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
- (i===2?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div><div class="ctl"><div class="row"><label for="scene">真实场景</label><select id="scene"><option value="countryside">乡村小屋</option><option value="japanese-street">日本街道</option><option value="apartment">现代公寓</option><option value="seaside">海边灯塔</option><option value="mountain-cabin">山间木屋</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
+ (i===3?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div><div class="ctl"><div class="row"><label for="scene">真实场景</label><select id="scene"><option value="countryside">乡村小屋</option><option value="japanese-street">日本街道</option><option value="apartment">现代公寓</option><option value="seaside">海边灯塔</option><option value="mountain-cabin">山间木屋</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
  '</div>').join('');
 
 const read = ()=>{ const c={}; for(const id of fields) c[id] = (id==='weather'||id==='scene')?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
