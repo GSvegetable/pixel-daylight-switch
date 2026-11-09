@@ -2,21 +2,12 @@
 
 一个住着像素小人的昼夜开关。拖一下，天黑了；再拖一下，天亮了。
 
-<!-- 中英文跳转锚点 -->
-**[English](#english) | [中文](#中文)**
-
-<!-- 无边框并排图片 -->
 <p align="center">
   <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" />
   <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" />
 </p>
 
 - [点击这里直接在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
-
-<br>
-
-<!-- ================= 中文部分 ================= -->
-<div id="中文"></div>
 
 ## 这是什么
 
@@ -40,14 +31,11 @@
 
 Unlicense，公有领域。想怎么用都行，包括商用，不用署名。
 
+<details>
+<summary><b>👉 Click here to show English version (点击展开英文版)</b></summary>
 <br>
 
----
-
-<!-- ================= 英文部分 ================= -->
-<div id="english"></div>
-
-## English
+### Pixel Day-Night Switch
 
 A tiny web component. Inside the switch is a pixel world: sunrise and sunset during the day, stars and fireflies at night, and a little person living inside. The glass shell is rendered with WebGL for refraction and highlights, giving it a sense of depth.
 
@@ -65,3 +53,5 @@ No dependencies, no installation. Download the repo and open `index.html` in you
 
 **License:**
 Unlicense, public domain. Do whatever you want, including commercial use, no attribution required.
+
+</details>
