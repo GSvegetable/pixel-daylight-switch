@@ -40,6 +40,64 @@
 
 如果你需要离线部署，也可以直接下载仓库中的 `app.js` 并自行托管。
 
+### 使用 NPM
+
+适合 Vite、Webpack、Rspack 等构建项目：
+
+```bash
+npm install pixel-daylight-switch
+```
+
+**原生 JavaScript / ESM**
+
+```js
+import PixelDaylightSwitch from 'pixel-daylight-switch';
+
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+PixelDaylightSwitch.mount(root);
+
+// 页面卸载或组件移除前
+PixelDaylightSwitch.unmount(root);
+```
+
+**React**
+
+```jsx
+import { useEffect, useRef } from 'react';
+import PixelDaylightSwitch from 'pixel-daylight-switch';
+
+export function DaylightSwitch() {
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    PixelDaylightSwitch.mount(root);
+    return () => PixelDaylightSwitch.unmount(root);
+  }, []);
+
+  return <div ref={rootRef} data-ld-part="toggle-daylight" />;
+}
+```
+
+**Vue 3**
+
+```vue
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import PixelDaylightSwitch from 'pixel-daylight-switch';
+
+const root = ref(null);
+onMounted(() => PixelDaylightSwitch.mount(root.value));
+onBeforeUnmount(() => PixelDaylightSwitch.unmount(root.value));
+</script>
+
+<template>
+  <div ref="root" data-ld-part="toggle-daylight"></div>
+</template>
+```
+
+NPM 入口同时提供 CommonJS 与 ESM。导入在服务端渲染环境中不会访问 DOM；实际挂载应在浏览器端执行。
+
 ## 参数实验室 Playground
 
 **不想手动试参数？打开 [Pixel Daylight Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)。**
@@ -261,6 +319,25 @@ No npm, dependencies, or build step required:
 ```
 
 The script creates the internal canvas, interaction target, and accessibility elements. The component is responsive and supports multiple independent instances on one page.
+
+### NPM installation
+
+```bash
+npm install pixel-daylight-switch
+```
+
+ESM / native build tools:
+
+```js
+import PixelDaylightSwitch from 'pixel-daylight-switch';
+
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+PixelDaylightSwitch.mount(root);
+// Before removing the root:
+PixelDaylightSwitch.unmount(root);
+```
+
+React and Vue 3 integrations should call `mount(element)` after the element is created and `unmount(element)` before it is removed. The package exposes both ESM and CommonJS entry points and is safe to import during SSR; mount only in the browser.
 
 ### Interactive Playground
 
