@@ -2,9 +2,12 @@
 
 一个住着像素小人的昼夜开关。拖一下，天黑了；再拖一下，天亮了。
 
-<img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="100%" />
-
-<img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="100%" />
+<table>
+  <tr>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="100%" /></td>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="100%" /></td>
+  </tr>
+</table>
 
 - [点击这里直接在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
 
