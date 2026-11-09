@@ -1,3 +1,12 @@
+/*!
+ * Pixel Day-Night Switch (Unlicense, public domain)
+ * https://github.com/GSvegetable/pixel-daylight-switch
+ *
+ * 用法：引入这个文件，页面里放一个空的 div 就行。
+ *   <script src="app.js"></script>
+ *   <div data-ld-part="toggle-daylight"></div>
+ * 样式和内部结构都由本文件自动生成，不需要 style.css。
+ */
 (function () {
 "use strict";
 const CORE_W = 192;
@@ -521,58 +530,109 @@ function mount(root) {
   renderWorld(clockOf(), 0, 0); if (ready) uploadWorld(); wake();
   return () => { stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); for (const off of cleanups) off(); if (gl && ready) { gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); gl.deleteTexture(texWorld); gl.deleteTexture(texNear); const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); } };
 }
-  return {
-    toggle: toggle,
-    setNight: (isNight) => {
-      target = isNight ? 1 : 0;
-      moving = true;
-      wake();
-    },
-    setValue: (val) => {
-      x = clamp(val, 0, 1);
-      commit(x);
-      dirty = true;
-      wake();
-    },
-    destroy: () => {
-      stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); 
-      for (const off of cleanups) off(); 
-      if (gl && ready) { 
-        gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); 
-        gl.deleteTexture(texWorld); gl.deleteTexture(texNear); 
-        const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); 
-      }
-    }
+const SELECTOR = '[data-ld-part="toggle-daylight"]';
+const STYLE_ID = 'ld-toggle-daylight-style';
+const COMPONENT_CSS = `
+[data-ld-part="toggle-daylight"] {
+  --_bg: var(--ld-bg, #f5ecd9);
+  --_surface: var(--ld-surface, #8c9a62);
+  --_fg: var(--ld-fg, #1b2146);
+  --_muted: var(--ld-muted, #7f97b3);
+  --_accent: var(--ld-accent, #efa02c);
+  --_radius: var(--ld-radius, 9999px);
+  --_font: var(--ld-font, system-ui, sans-serif);
+  --_space: var(--ld-space, 8px);
+  --_shadow: var(--ld-shadow, 0 8px 24px rgb(27 33 70 / .2));
+  --_motion: var(--ld-motion, 200ms);
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: min(100%, calc((100vh - 64px) * 1.6439));
+  aspect-ratio: 1.6439;
+  font-family: var(--_font);
+  color: var(--_fg);
+}
+[data-ld-part="toggle-daylight"] .probe { display: none; }
+[data-ld-part="toggle-daylight"] .vh {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+[data-ld-part="toggle-daylight"] .scene {
+  position: absolute; top: 0; left: 0;
+  display: block; width: 100%; height: 100%;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+[data-ld-part="toggle-daylight"] .hit {
+  position: absolute; top: 12.121%; left: 7.373%;
+  width: 85.253%; height: 75.758%;
+  margin: 0; padding: 0; border: 0;
+  border-radius: var(--_radius);
+  background: transparent;
+  cursor: grab; touch-action: pan-y;
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+[data-ld-part="toggle-daylight"] .hit:active { cursor: grabbing; }
+[data-ld-part="toggle-daylight"] .hit:focus { outline: none; }
+[data-ld-part="toggle-daylight"] .hit:focus-visible {
+  outline: 2px solid var(--_accent);
+  outline-offset: calc(var(--_space) * .5);
+  transition: outline-offset var(--_motion) ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ld-part="toggle-daylight"] .hit:focus-visible { transition: none; }
+}
+`;
+function injectStyle() {
+  if (document.getElementById(STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = STYLE_ID;
+  style.textContent = COMPONENT_CSS;
+  document.head.insertBefore(style, document.head.firstChild);
+}
+function ensureMarkup(root) {
+  const doc = root.ownerDocument;
+  const make = (tag, className, attrs) => {
+    const el = doc.createElement(tag);
+    if (className) el.className = className;
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
   };
-}
-
-const toggleEl = document.querySelector('[data-ld-part="toggle-daylight"]');
-if (toggleEl) {
-  window.DaylightSwitch = mount(toggleEl);
-  const isNight = toggleEl.getAttribute('aria-checked') === 'true';
-  toggleEl.dispatchEvent(new CustomEvent('daylight:change', { detail: { night: isNight } }));
-}
-})();
-  return {
-    toggle: () => { toggle(); },
-    setNight: (isNight) => { target = isNight ? 1 : 0; moving = true; wake(); },
-    destroy: () => {
-      stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); 
-      for (const off of cleanups) off(); 
-      if (gl && ready) { 
-        gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); 
-        gl.deleteTexture(texWorld); gl.deleteTexture(texNear); 
-        const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); 
-      }
-    }
-  };
-}
-
-// 大厂标准做法：自动寻找页面上的容器，自动挂载，并暴露全局 API
-document.addEventListener('DOMContentLoaded', () => {
-  const el = document.querySelector('[data-ld-part="toggle-daylight"]');
-  if (el) {
-    window.DaylightSwitch = mount(el);
+  if (!root.querySelector('.scene')) root.appendChild(make('canvas', 'scene', { 'aria-hidden': 'true' }));
+  if (!root.querySelector('.hit')) {
+    const lang = ((root.closest('[lang]') || doc.documentElement).getAttribute('lang') || '').toLowerCase();
+    const label = root.getAttribute('data-label') || (lang.indexOf('zh') === 0 ? '昼夜开关' : 'Day/night switch');
+    root.appendChild(make('button', 'hit', { type: 'button', role: 'switch', 'aria-checked': 'false', 'aria-label': label }));
   }
-});
+  if (!root.querySelector('[data-status]')) {
+    root.appendChild(make('span', 'vh', { role: 'status', 'aria-live': 'polite', 'data-status': '' }));
+  }
+  if (!root.querySelector('.probe')) root.appendChild(make('span', 'probe', { 'aria-hidden': 'true' }));
+}
+const mounted = new WeakMap();
+function mountOne(root) {
+  if (!root) return null;
+  if (mounted.has(root)) return mounted.get(root);
+  try {
+    injectStyle();
+    ensureMarkup(root);
+    const destroy = mount(root);
+    mounted.set(root, destroy);
+    return destroy;
+  } catch (err) {
+    console.error('[pixel-daylight-switch]', err);
+    return null;
+  }
+}
+function unmountOne(root) {
+  const destroy = mounted.get(root);
+  if (destroy) { destroy(); mounted.delete(root); }
+}
+function mountAll() { document.querySelectorAll(SELECTOR).forEach(mountOne); }
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true });
+else mountAll();
+window.PixelDaylightSwitch = { mount: mountOne, unmount: unmountOne };
 })();
