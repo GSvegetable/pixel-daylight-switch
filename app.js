@@ -314,8 +314,145 @@ function mount(root) {
     for (let y = 56; y < 90; y++) { const flare = y > 83 ? (y - 83) * 0.8 : 0; const up = y < 66 ? (66 - y) * 0.1 : 0; const l = Math.round(X - flare - up); const r = Math.round(X + 7 + flare * 0.9 + up); for (let x = l; x <= r; x++) { const t = (x - l) / Math.max(r - l, 1); const grain = noiseB(x * 0.9, y * 0.14) > 0.55; put(x, y, t > 0.84 ? M.BARK : t < 0.2 ? M.WOOD_LT : grain ? M.BARK_LT : M.WOOD); } }
     rect(156, 87, 5, 2, M.STONE); rect(157, 86, 3, 1, M.STONE_LT); rect(124, 95, 4, 2, M.STONE); rect(125, 94, 2, 1, M.STONE_LT);
   };
+
+  // Additional handcrafted pixel environments. Coordinates share the 192×112 world grid.
+  const paintJapaneseStreet = () => {
+    rect(0, 0, CORE_W, 74, 0);
+    rect(0, 74, CORE_W, 8, M.STONE); rect(0, 82, CORE_W, 30, M.PATH_DK);
+    for (let y=76;y<82;y+=2) rect(0,y,CORE_W,1,M.STONE_LT);
+    // shopfronts and narrow Japanese buildings
+    rect(0,24,53,51,M.WALL); rect(0,20,55,5,M.ROOF_DK || M.ROOF);
+    rect(4,30,45,3,M.WOOD_DK); rect(5,34,43,23,M.GLASS);
+    rect(4,58,46,17,M.WOOD_DK); rect(7,60,40,13,M.WOOD);
+    for(let x=10;x<47;x+=8){rect(x,60,1,13,M.WOOD_DK);}
+    rect(8,27,39,5,M.ROOF_HI); rect(8,36,39,2,M.WOOD_DK);
+    // noren curtain
+    for(let x=10;x<44;x+=7){rect(x,38,5,9,M.CLOUD);rect(x+1,45,3,2,M.CLOUD_SH);}
+    rect(68,16,42,59,M.WALL_SH); rect(70,19,38,5,M.ROOF);
+    for(let x=74;x<106;x+=12){rect(x,30,8,13,M.GLASS);rect(x+1,31,6,2,M.GLASS_HI);rect(x+3,30,1,13,M.WOOD_DK);}
+    rect(72,51,34,22,M.WOOD_DK); rect(75,54,28,19,M.WOOD);
+    rect(78,57,22,9,M.GLASS); rect(79,58,20,2,M.GLASS_HI);
+    // right-side ramen shop
+    rect(132,29,60,46,M.WALL); rect(130,24,62,6,M.ROOF);
+    rect(135,34,54,4,M.WOOD_DK); rect(138,39,48,3,M.WOOD_LT);
+    rect(139,44,44,19,M.GLASS); rect(141,46,40,14,M.WOOD_DK);
+    rect(143,48,36,10,M.GLASS); rect(144,49,34,2,M.GLASS_HI);
+    rect(135,63,54,12,M.WOOD_DK); rect(139,65,46,8,M.WOOD);
+    // lanterns, signs, street poles and wires
+    rect(15,18,2,8,M.WOOD_DK); rect(12,17,8,1,M.WOOD_DK); rect(13,18,6,6,M.LIT); rect(14,19,4,4,M.LIT_HI);
+    rect(150,15,2,9,M.WOOD_DK); rect(146,14,10,1,M.WOOD_DK); rect(147,15,8,7,M.LIT); rect(148,16,6,4,M.LIT_HI);
+    rect(117,10,2,70,M.WOOD_DK); rect(108,12,22,2,M.WOOD_DK); rect(111,14,1,5,M.WOOD_DK);
+    for(let x=0;x<CORE_W;x+=2){ if(x%4===0) put(x,12+Math.round(Math.sin(x*.035)*2),M.WOOD_DK); }
+    rect(118,78,2,8,M.WOOD_DK); rect(115,76,8,2,M.WOOD_LT);
+    // road markings and drain
+    for(let x=14;x<CORE_W;x+=36){rect(x,94,14,2,M.STONE_LT);rect(x+4,95,7,1,M.PATH);}
+    rect(24,80,12,2,M.WOOD_DK); for(let x=26;x<35;x+=3) put(x,80,M.STONE_LT);
+    // vending machine and bicycle silhouette
+    rect(57,51,8,24,M.WOOD_DK); rect(58,52,6,18,M.CLOUD); rect(59,54,4,6,M.GLASS_HI); rect(59,63,4,2,M.LIT);
+    for(let x of [84,101]){for(let a=0;a<360;a+=30){const rad=a*Math.PI/180;put(Math.round(x+4*Math.cos(rad)),Math.round(78+4*Math.sin(rad)),M.WOOD_DK);} }
+    rect(88,75,10,1,M.WOOD_DK); rect(91,72,4,4,M.WOOD_DK); rect(95,72,4,1,M.WOOD_DK);
+  };
+  const paintApartment = () => {
+    rect(0,0,CORE_W,78,M.WALL); rect(0,78,CORE_W,34,M.PLANK);
+    for(let y=4;y<76;y+=12) rect(0,y,CORE_W,1,M.WALL_SH);
+    // large city window
+    rect(12,12,68,52,M.WOOD_DK); rect(15,15,62,46,M.GLASS);
+    rect(44,15,2,46,M.WOOD_DK); rect(15,37,62,2,M.WOOD_DK);
+    // distant city skyline through glass
+    rect(17,42,58,18,M.CLOUD_SH);
+    rect(20,32,8,28,M.STONE); rect(31,25,10,35,M.STONE_LT); rect(49,35,9,25,M.STONE); rect(63,29,10,31,M.STONE_LT);
+    for(let x=21;x<28;x+=3) for(let y=36;y<57;y+=6) put(x,y,M.LIT);
+    for(let x=33;x<40;x+=3) for(let y=29;y<57;y+=6) put(x,y,M.LIT);
+    for(let x=51;x<57;x+=3) for(let y=39;y<57;y+=6) put(x,y,M.LIT);
+    for(let x=65;x<72;x+=3) for(let y=33;y<57;y+=6) put(x,y,M.LIT);
+    // curtains
+    rect(9,10,5,57,M.WOOD); rect(78,10,5,57,M.WOOD);
+    for(let y=12;y<65;y+=4){put(10,y,M.WOOD_LT);put(80,y,M.WOOD_LT);}
+    // sofa and coffee table
+    rect(91,59,63,8,M.WOOD_DK); rect(94,54,57,12,M.SHIRT_DK); rect(97,51,50,10,M.SHIRT);
+    rect(89,63,6,12,M.WOOD_DK); rect(151,63,6,12,M.WOOD_DK);
+    rect(105,76,42,4,M.WOOD_DK); rect(108,80,3,8,M.WOOD); rect(141,80,3,8,M.WOOD);
+    rect(112,72,27,4,M.WOOD_LT); rect(119,69,12,3,M.BOOK);
+    // floor lamp, framed art and indoor plant
+    rect(169,25,2,47,M.WOOD_DK); rect(164,21,12,5,M.LIT); rect(166,22,8,2,M.LIT_HI);
+    rect(160,72,20,2,M.WOOD_DK); rect(162,68,16,4,M.WOOD);
+    rect(23,69,19,2,M.WOOD_DK); rect(25,53,15,14,M.WOOD_DK); rect(27,55,11,10,M.CLOUD);
+    rect(26,84,11,10,M.WOOD_DK); rect(24,92,15,3,M.WOOD);
+    for(let i=0;i<5;i++){put(31+i*2,83-i*2,M.LEAF2);put(29-i,85-i*2,M.LEAF1);}
+    // rug and small details
+    rect(78,91,89,10,M.SHIRT_DK); rect(82,93,81,6,M.SHIRT);
+    rect(12,103,168,1,M.WOOD_DK);
+  };
+  const paintSeaside = () => {
+    // ocean band and distant islands
+    rect(0,48,CORE_W,36,M.CLOUD); rect(0,82,CORE_W,30,M.PATH);
+    for(let y=52;y<82;y+=5){for(let x=(y%2)*7;x<CORE_W;x+=24){rect(x,y,8+(x%3),1,M.CLOUD_SH);}}
+    rect(0,46,48,5,M.HILL_FAR); rect(142,43,50,7,M.HILL_NEAR);
+    // sandy beach and shoreline
+    rect(0,83,CORE_W,29,M.PATH); for(let y=84;y<112;y+=5) for(let x=(y%3)*4;x<CORE_W;x+=19) put(x,y,M.STONE_LT);
+    for(let x=0;x<CORE_W;x++){const shore=82+Math.round(Math.sin(x*.055)*2);put(x,shore,M.CLOUD_SH);if(x%3===0)put(x,shore+1,M.STONE_LT);}
+    // lighthouse on rocky point
+    rect(145,34,31,9,M.STONE); rect(151,16,18,27,M.WALL); rect(149,14,22,4,M.WOOD_DK);
+    rect(153,19,14,3,M.WOOD_LT); rect(155,23,10,17,M.WALL_SH);
+    rect(155,27,10,7,M.GLASS); rect(157,28,6,4,M.LIT_HI);
+    rect(154,10,12,4,M.ROOF); rect(157,7,6,3,M.LIT); rect(159,3,2,4,M.LIT_HI);
+    rect(144,41,34,3,M.STONE_LT); rect(148,44,28,2,M.STONE);
+    // sailboat
+    rect(49,56,2,18,M.WOOD_DK); rect(51,58,13,12,M.CLOUD); rect(39,70,31,3,M.WOOD_DK);
+    rect(42,73,25,2,M.WOOD); rect(52,60,1,9,M.WOOD_DK);
+    // beach umbrella, towel and rocks
+    rect(25,77,2,18,M.WOOD_DK); rect(17,73,18,4,M.ROOF); rect(20,70,12,3,M.ROOF_LT);
+    rect(8,96,28,5,M.SHIRT); rect(11,98,22,1,M.SHIRT_DK);
+    paintBush(101,91,10,5,440); paintBush(186,87,12,6,441);
+    rect(115,101,19,5,M.STONE); rect(117,99,15,2,M.STONE_LT);
+    // small palm at edge
+    for(let y=52;y<82;y++){const x=16+Math.round((y-52)*.18);put(x,y,M.BARK);}
+    for(const [dx,dy] of [[-13,-4],[-9,-9],[-3,-12],[5,-11],[12,-6],[15,-1]]) for(let i=0;i<7;i++) put(16+dx+Math.round(i*dx*.08),52+dy+Math.round(i*.35),M.LEAF2);
+  };
+  const paintMountainCabin = () => {
+    rect(0,0,CORE_W,112,0);
+    // layered mountain silhouettes
+    for(let x=0;x<CORE_W;x++){
+      const a=35+Math.round(Math.sin(x*.045)*9+Math.sin(x*.11)*4);
+      const b=50+Math.round(Math.sin(x*.035+1.7)*8+Math.sin(x*.08)*3);
+      for(let y=a;y<68;y++) put(x,y,M.HILL_FAR);
+      for(let y=b;y<77;y++) put(x,y,M.HILL_NEAR);
+    }
+    // snow caps
+    for(let x=0;x<CORE_W;x++){const peak=35+Math.round(Math.sin(x*.045)*9+Math.sin(x*.11)*4);if(x%2===0){put(x,peak,M.CLOUD);put(x,peak+1,M.CLOUD_SH);}}
+    rect(0,77,CORE_W,35,M.GRASS_DK);
+    for(let y=82;y<112;y+=7) for(let x=(y%2)*5;x<CORE_W;x+=18) put(x,y,M.STONE_LT);
+    // pines
+    const pine=(cx,base,h)=>{rect(cx-1,base-h,3,h,M.BARK);for(let j=0;j<4;j++){const yy=base-h+j*Math.floor(h/4);const w=3+j*3;for(let y=yy;y<yy+Math.floor(h/4)+2;y++)for(let x=cx-w;x<=cx+w;x++)if(Math.abs(x-cx)<=w-(y-yy)*.45)put(x,y,j%2?M.LEAF1:M.LEAF0);}};
+    pine(18,91,37);pine(34,88,28);pine(178,94,42);pine(160,89,27);pine(116,86,22);
+    // wooden cabin
+    rect(66,55,62,35,M.WALL); for(let y=60;y<88;y+=5)rect(66,y,62,1,M.WOOD);
+    for(let y=34;y<57;y++){const t=(y-34)/23;for(let x=Math.round(58+t*8);x<=136-Math.round(t*8);x++)put(x,y,M.ROOF);}
+    rect(57,53,80,4,M.ROOF_DK || M.WOOD_DK); rect(88,67,17,23,M.WOOD_DK);rect(90,69,13,21,M.WOOD);
+    rect(71,65,13,12,M.GLASS);rect(73,67,9,8,M.LIT);rect(77,65,2,12,M.WOOD_DK);
+    rect(111,64,12,13,M.GLASS);rect(112,65,10,3,M.GLASS_HI);
+    rect(87,90,20,3,M.STONE);rect(83,93,28,2,M.STONE_LT);
+    // chimney and smoke
+    rect(115,34,8,17,M.BRICK);rect(113,32,12,3,M.STONE_LT);
+  };
+  const scene = ['countryside','japanese-street','apartment','seaside','mountain-cabin'].includes(dataset.scene) ? (dataset.scene || 'countryside') : 'countryside';
+  let sceneAnim = 0;
+  const drawSceneResident = (dt) => {
+    if (!calm) sceneAnim += dt;
+    if (scene === 'apartment') {
+      const pose = Math.sin(sceneAnim * 0.6) > 0.85 ? SPR.seatBlink : SPR.seat;
+      blit(pose, 128, 61);
+      return;
+    }
+    const x = scene === 'japanese-street' ? 104 + Math.sin(sceneAnim * 0.18) * 20 : scene === 'seaside' ? 104 : 91;
+    const y = scene === 'seaside' ? 82 : 88;
+    const moving = !calm && scene !== 'seaside';
+    const sprite = moving ? SPR.walk[Math.floor(sceneAnim * 3) % 4] : SPR.stand;
+    blit(sprite, Math.round(x)-3, y-12, Math.sin(sceneAnim * 0.18) < 0);
+  };
+
   const buildBase = () => {
-    matBuf.fill(0); paintGround(); paintFence(); paintBush(22, 78, 16, 8, 61); paintBush(176, 80, 14, 7, 62); paintBush(-6, 81, 11, 6, 63); paintBush(204, 81, 10, 5, 64); paintTrunk(); paintHouse(); paintFlowers(96, 126, 85, 92, 26, 91); paintFlowers(14, 38, 86, 96, 16, 92); paintFlowers(150, 205, 90, 106, 24, 93); paintFlowers(-14, 14, 88, 104, 12, 95); paintFlowers(40, 62, 90, 104, 12, 94); baseBuf.set(matBuf); buildCanopy();
+    matBuf.fill(0); if (scene === 'countryside') { paintGround(); paintFence(); paintBush(22, 78, 16, 8, 61); paintBush(176, 80, 14, 7, 62); paintBush(-6, 81, 11, 6, 63); paintBush(204, 81, 10, 5, 64); paintTrunk(); paintHouse(); paintFlowers(96, 126, 85, 92, 26, 91); paintFlowers(14, 38, 86, 96, 16, 92); paintFlowers(150, 205, 90, 106, 24, 93); paintFlowers(-14, 14, 88, 104, 12, 95); paintFlowers(40, 62, 90, 104, 12, 94); buildCanopy(); } else { canopy = []; if (scene === 'japanese-street') paintJapaneseStreet(); else if (scene === 'apartment') paintApartment(); else if (scene === 'seaside') paintSeaside(); else paintMountainCabin(); } baseBuf.set(matBuf);
     const r = seeded(808); stars = [];
     for (let i = 0; i < 95; i++) { stars.push({ x: Math.floor(r() * (CORE_W + 40)) - 20, y: Math.floor(r() * 66), seed: r(), big: r() < 0.14 }); }
     skyKeys = KEYS.map(([, , stops]) => { const sky = new Uint8Array(bw * bh); const n = stops.length - 1; for (let py = 0; py < bh; py++) { const pos = clamp((py - oy) / HORIZON) * n; const a = Math.min(Math.floor(pos), n); const b = Math.min(a + 1, n); const f = smoothstep(0.3, 0.7, pos - a) * 4; for (let px = 0; px < bw; px++) { const cell = ((py & 1) << 1) | (px & 1); sky[py * bw + px] = f > [0, 2, 3, 1][cell] ? stops[b] : stops[a]; } } return sky; });
@@ -397,6 +534,7 @@ function mount(root) {
   const drawCanopy = () => { for (let i = 0; i < canopy.length; i += 3) { const y = canopy[i + 1]; const sway = calm ? 0 : Math.round(Math.sin(anim * 0.9 + y * 0.11) * (1.15 - (y - 10) * 0.012)); put(canopy[i] + sway, y, canopy[i + 2]); } };
   const drawParticles = (h, dt) => {
     const snowNight = clamp(smoothstep(18.2, 20.2, h) + (1 - smoothstep(4.6, 6.2, h)));
+    if (scene !== 'countryside') { if (weather === 'snow') { const snowMat = snowNight > 0.55 ? M.STAR : M.CLOUD; for (const flake of snowflakes) { if (!calm) { flake.y += dt * flake.speed; flake.x += dt * (flake.drift + Math.sin(anim * 0.7 + flake.phase) * 1.4); if (flake.y > CORE_H + 1) { flake.y = -1; flake.x = (flake.x + CORE_W * 0.37) % CORE_W; } } put(Math.round(flake.x), Math.round(flake.y), snowMat); } } return; }
     const smoking = (h >= 17.2 && h < 19.8) || (h >= 7 && h < 8.2);
     if (!calm && smoking) { smokeAcc += dt * (h >= 17 ? 3.2 : 1.4); while (smokeAcc >= 1) { smokeAcc -= 1; smoke.push({ x: 72 + Math.random() * 2, y: 25, t: 0, seed: Math.random() * 10 }); } }
     for (let i = smoke.length - 1; i >= 0; i--) { const s = smoke[i]; s.t += dt; s.y -= dt * (7 - s.t * 0.8); s.x += dt * (2.2 + Math.sin(s.t * 1.7 + s.seed) * 2.6); if (s.t > 4.2 || s.y < -4) { smoke.splice(i, 1); continue; } const size = 1 + Math.floor(s.t * 0.75); const thin = s.t * 2.6; for (let dy = 0; dy < size; dy++) { for (let dx = 0; dx < size; dx++) { const x = Math.round(s.x) + dx; const y = Math.round(s.y) + dy; if (bayerAt(x, y) < 16 - thin * 1.3) put(x, y, s.t > 2.3 ? M.SMOKE_DK : M.SMOKE); } } }
@@ -431,8 +569,7 @@ function mount(root) {
     for (const c of sources) { c.w = 0; c.x = 0; c.y = 0; }
     lampFlick = calm ? 1 : 0.95 + 0.05 * Math.sin(anim * 13) * Math.sin(anim * 5.3);
     if (!calm) { birds.next -= dt; if (birds.t >= 0) { birds.t += dt; if (birds.t > 9) birds.t = -1; } else if (birds.next <= 0) { birds.t = 0; birds.next = 12 + Math.random() * 14; birds.y = 10 + Math.random() * 24; birds.dir = Math.random() < 0.5 ? 1 : -1; } shoot.next -= dt; if (shoot.t >= 0) { shoot.t += dt; if (shoot.t > 0.6) shoot.t = -1; } else if (shoot.next <= 0) { shoot.t = 0; shoot.next = 9 + Math.random() * 16; shoot.x = 10 + Math.random() * 130; shoot.y = 2 + Math.random() * 20; } }
-    const plan = stepResident(dt, h, hurry);
-    drawSky(h); drawShadows(h); const state = drawWindow(h); drawDoor(); drawLights(state, h); drawResident(plan, h); drawCanopy(); drawParticles(h, dt);
+    drawSky(h); if (scene === 'countryside') { const plan = stepResident(dt, h, hurry); drawShadows(h); const state = drawWindow(h); drawDoor(); drawLights(state, h); drawResident(plan, h); drawCanopy(); drawParticles(h, dt); } else { drawSceneResident(dt); drawParticles(h, dt); }
     pickKeys(h); const ta = table[keyA]; const tb = table[keyB]; const sa = skyKeys[keyA]; const sb = skyKeys[keyB]; const p = keyP * 16; const n = bw * bh;
     for (let i = 0; i < n; i++) { const m = matBuf[i]; const useB = thrA[i] < p; const idx = m === 0 ? (useB ? sb[i] : sa[i]) : (useB ? tb : ta)[varBuf[i] * NM + m]; pixels[i] = palette32[idx]; }
   };
