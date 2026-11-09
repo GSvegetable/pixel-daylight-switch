@@ -2,9 +2,8 @@
 
 一个住着像素小人的昼夜开关。拖一下，天黑了；再拖一下，天亮了。
 
-<video src="https://gsvegetable.github.io/pixel-daylight-switch/video_261109_212223.mp4" controls="controls" width="100%" type="video/mp4"></video>
-
-**[👉 点击这里直接在线试玩 👈](https://gsvegetable.github.io/pixel-daylight-switch/)**
+- [点击这里直接在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
+- [点击这里在线播放效果](https://gsvegetable.github.io/pixel-daylight-switch/video_261109_212223.mp4)
 
 ## 这是什么
 
