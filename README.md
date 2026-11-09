@@ -7,7 +7,9 @@
   <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" />
 </p>
 
-[在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
+<p align="center">
+  <b><a href="https://gsvegetable.github.io/pixel-daylight-switch/" target="_blank">点击这里直接在线体验</a></b>
+</p>
 
 ## 它是什么
 
@@ -19,13 +21,13 @@
 
 ## 怎么玩
 
-- 拖动滑块。松手后会自己滑到最近的一端，甩一下也能带过去
-- 点一下，直接切换
-- 聚焦后用方向键，每按一次推进一小步
+- **拖动滑块**：松手后会自己滑到最近的一端，甩一下也能带过去。
+- **点击开关**：直接切换昼夜。
+- **键盘操作**：聚焦后用方向键，每按一次推进一小步。
 
 ## 放进你的页面
 
-没有依赖。带上 `style.css` 和 `app.js`，页面里放这一段：
+没有依赖，开箱即用。带上 `style.css` 和 `app.js`，页面里放这一段：
 
 ```html
 <div data-ld-part="toggle-daylight">
@@ -37,11 +39,11 @@
 <script src="app.js"></script>
 ```
 
-`app.js` 会挂载页面上第一个 `data-ld-part="toggle-daylight"` 的元素，所以 `<script>` 要放在它后面。
+`app.js` 会挂载页面上第一个 `data-ld-part="toggle-daylight"` 的元素，所以 `<script>` 务必放在它后面。
 
 昼夜切换时，这个元素会发出 `daylight:change` 事件，`detail.night` 为 `true` 表示夜晚：
 
-```js
+```javascript
 const toggle = document.querySelector('[data-ld-part="toggle-daylight"]');
 toggle.addEventListener('daylight:change', (e) => {
   document.body.classList.toggle('night', e.detail.night);
@@ -50,7 +52,7 @@ toggle.addEventListener('daylight:change', (e) => {
 
 ## 改颜色
 
-画面配色来自 CSS 变量，在开关元素上覆盖就行：
+画面配色来自 CSS 变量，在你的样式表里覆盖对应元素的变量即可无缝融入你的网站：
 
 ```css
 [data-ld-part="toggle-daylight"] {
@@ -59,29 +61,31 @@ toggle.addEventListener('daylight:change', (e) => {
 }
 ```
 
-可用的有 `--ld-bg`、`--ld-surface`、`--ld-fg`、`--ld-muted`、`--ld-accent`，另外 `--ld-radius`、`--ld-font`、`--ld-space`、`--ld-shadow`、`--ld-motion` 控制外形和动效。
+可用的变量有 `--ld-bg`、`--ld-surface`、`--ld-fg`、`--ld-muted`、`--ld-accent`。另外 `--ld-radius`、`--ld-font`、`--ld-space`、`--ld-shadow`、`--ld-motion` 控制外形和动效。
 
 ## 实现上的几件事
 
-- 画面是 192×112 的像素世界，每秒更新 30 次。配色在 Oklab 空间里取，再用 Bayer 抖动打散色阶
-- 玻璃壳是 WebGL2 着色器，不支持时退回 Canvas 2D
-- 开关不在屏幕内、或页面切到后台时，会暂停绘制
-- 遵循系统的「减少动态效果」设置。开关本身是 `role="switch"`，可聚焦，状态会播报给读屏软件
+- 画面是 192×112 的像素世界，每秒更新 30 次。配色在 Oklab 空间里取，再用 Bayer 抖动打散色阶。
+- 玻璃壳是 WebGL2 着色器，不支持时自动退回 Canvas 2D。
+- 开关不在屏幕内、或页面切到后台时，会暂停绘制以节省性能。
+- 遵循系统的「减少动态效果」设置。开关本身是 `role="switch"`，可聚焦，状态会播报给读屏软件。
 
 ## 本地运行
 
-下载仓库，用浏览器打开 `index.html`。
+不需要配置任何环境，下载仓库，直接用浏览器打开 `index.html` 即可。
 
-- `index.html`：页面
+- `index.html`：页面结构
 - `style.css`：样式和 CSS 变量
 - `app.js`：像素世界、小人、玻璃渲染和交互
 
 ## 协议
 
-Unlicense，公有领域。想怎么用都行，包括商用，不用署名。
+Unlicense 协议，公有领域。想怎么用都行，包括商业用途，不需要署名。
+
+<br>
 
 <details>
-<summary>English</summary>
+<summary><b>English Documentation</b></summary>
 <br>
 
 ### Pixel Day-Night Switch
@@ -98,4 +102,6 @@ A day-night switch with a tiny pixel person living inside. Drag it and the sky g
 
 **Under the hood.** A 192×112 pixel world updated at 30 Hz, Oklab color ramps with Bayer dithering, a WebGL2 glass shader with a Canvas 2D fallback. Drawing pauses when offscreen or in a background tab. Respects `prefers-reduced-motion`; the switch is a focusable `role="switch"` with screen-reader status.
 
-**Run locally.** Download the repo and
+**Run locally.** Download the repo and open `index.html` in your browser.
+
+</details>
