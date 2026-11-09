@@ -45,7 +45,7 @@
 **不想手动试参数？打开 [Pixel Daylight Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)。**
 
 - 左侧实时预览组件，直接拖动开关测试手感。
-- 右侧调整物理、液态玻璃和世界动态参数。
+- 右侧按「运动反馈、玻璃光学、世界节奏、场景环境」四组调整参数。
 - 使用场景预设快速切换乡村小屋、日本街道、现代公寓、海边灯塔和山间木屋。
 - 调整参数时只更新数值；点击「应用参数」后才刷新独立预览，避免拖动滑块时反复重建 WebGL。
 - 预览运行在独立页面中，与控制面板隔离，减少渲染状态互相干扰。
@@ -95,20 +95,20 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
 
 ### 参数分组与调校建议
 
-**Physics / 物理手感**
+**运动反馈 / Motion**
 
 - `data-speed` 控制开关运动的基础速度。
 - `data-friction` 控制松手后的惯性衰减。较小的值更滑，较大的值更黏。
 - `data-bounce` 控制滑块触及边缘时的回弹力度。
 
-**Liquid Glass / 液态玻璃**
+**玻璃光学 / Glass Optics**
 
 - `data-refraction` 控制镜片折射强度。
 - `data-bezel` 控制镜片外框厚度。
 - `data-dispersion` 控制边缘色散。数值越大，彩虹色边缘越明显。
 - `data-shine` 控制白天镜片高光。
 
-**World / 像素世界**
+**世界节奏 / World Rhythm**
 
 - `data-time-speed="0"` 可以冻结世界时间和动态。
 - `data-time-speed="2"` 会让世界模拟以两倍速度运行。
@@ -117,6 +117,8 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
 - `data-start-night="true"` 让组件从夜晚开始。
 
 ### 默认值与兼容性
+
+场景、天气和初始昼夜状态归入「场景环境」；它们不是连续数值，因此使用选择器与开关，而不是滑动条。
 
 如果只写：
 
@@ -214,12 +216,12 @@ cd pixel-daylight-switch
 
 ## 更新记录
 
-### v1.3.0 — 开发中，尚未正式发布
+### v1.3.0
 
 - 新增四个独立像素环境：日本街道、现代公寓、海边灯塔和山间木屋。
 - Playground 新增真实场景选择，可与玻璃参数、昼夜和天气效果组合。
 
-### v1.2.0 — 开发中，尚未正式发布
+### v1.2.0
 
 本次版本包含两轮未发布的更新：
 
@@ -297,6 +299,7 @@ Example:
   data-shine="0.6"
   data-time-speed="1.5"
   data-weather="snow"
+  data-scene="mountain-cabin"
 ></div>
 ```
 
@@ -346,7 +349,7 @@ Open `index.html` in a modern browser. No build step is needed.
 
 ### Version status
 
-**v1.3.0 is in development and has not been formally released.** It adds four new pixel environments. v1.2.0's physics, glass, world-weather, and Playground work remains unreleased as well. See [CHANGELOG.md](./CHANGELOG.md) for the detailed history.
+v1.3.0 adds four new pixel environments and a reorganized Playground. See [CHANGELOG.md](./CHANGELOG.md) for the detailed history.
 
 ### License
 
