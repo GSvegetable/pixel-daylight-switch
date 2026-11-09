@@ -165,12 +165,19 @@ const defaults = {
 };
 
 const presets = {
-  default: {...defaults},
-  cinematic: { speed:10, friction:0.8, bounce:5, refraction:2.2, bezel:0.08, dispersion:0.25, shine:1.2, timeSpeed:0.5, weather:'default', startNight:false },
-  snow: { speed:9.5, friction:0.5, bounce:6, refraction:1.5, bezel:0.05, dispersion:0.15, shine:0.6, timeSpeed:1.5, weather:'snow', startNight:true },
-  frozen: { ...defaults, timeSpeed:0, weather:'snow', scene:'mountain-cabin', startNight:true }
+  countryside: {...defaults, scene:'countryside'},
+  japanese: {...defaults, scene:'japanese-street'},
+  apartment: {...defaults, scene:'apartment'},
+  seaside: {...defaults, scene:'seaside'},
+  mountain: {...defaults, scene:'mountain-cabin', weather:'snow', startNight:true}
 };
-const names = { default:'乡村小屋', cinematic:'电影玻璃', snow:'雪夜', frozen:'山间木屋' };
+const names = {
+  countryside:'乡村小屋',
+  japanese:'日本街道',
+  apartment:'现代公寓',
+  seaside:'海边灯塔',
+  mountain:'山间木屋'
+};
 
 let applied = null;
 
@@ -293,8 +300,9 @@ async function executeApply() {
       if (c[id]) targetRoot.setAttribute('data-start-night', 'true');
       else targetRoot.removeAttribute('data-start-night');
     } else if (id === 'weather' || id === 'scene') {
-      if (c[id] !== 'default') targetRoot.setAttribute('data-weather', c[id]);
-      else targetRoot.removeAttribute('data-weather');
+      const attribute = `data-${attr[id]}`;
+      if (c[id] !== 'default' && c[id] !== 'countryside') targetRoot.setAttribute(attribute, c[id]);
+      else targetRoot.removeAttribute(attribute);
     } else {
       targetRoot.setAttribute(`data-${attr[id]}`, c[id]);
     }
