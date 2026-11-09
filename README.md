@@ -69,7 +69,8 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
 | `data-dispersion` | `0.05` | 玻璃边缘 RGB 色散强度，范围 `0–0.25`；设为 `0` 可关闭彩虹边 |
 | `data-shine` | `0.44` | 白天玻璃表面高光强度，范围 `0–1.5` |
 | `data-time-speed` | `1.0` | 像素世界时间倍率，范围 `0–8`；`0` 冻结世界动态，`2` 为两倍速度 |
-| `data-weather` | `default` | 天气预设：`default` 或 `snow`；雪天会出现飘落的像素雪花 |\n| `data-scene` | `countryside` | 世界场景：`countryside`、`japanese-street`、`apartment`、`seaside` 或 `mountain-cabin` |
+| `data-weather` | `default` | 天气预设：`default` 或 `snow`；雪天会出现飘落的像素雪花 |
+| `data-scene` | `countryside` | 世界场景：`countryside`、`japanese-street`、`apartment`、`seaside` 或 `mountain-cabin` |
 
 ### 完整配置示例
 
@@ -86,6 +87,7 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
   data-shine="0.6"
   data-time-speed="1.5"
   data-weather="snow"
+  data-scene="mountain-cabin"
 ></div>
 
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
@@ -110,7 +112,8 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
 
 - `data-time-speed="0"` 可以冻结世界时间和动态。
 - `data-time-speed="2"` 会让世界模拟以两倍速度运行。
-- `data-weather="snow"` 开启飘雪；省略或填写其他值时使用默认天气。\n- `data-scene` 选择完整的像素环境：乡村、日本街道、公寓室内、海边或山间木屋。
+- `data-weather="snow"` 开启飘雪；省略或填写其他值时使用默认天气。
+- `data-scene` 选择完整的像素环境：乡村、日本街道、公寓室内、海边或山间木屋。
 - `data-start-night="true"` 让组件从夜晚开始。
 
 ### 默认值与兼容性
@@ -211,7 +214,12 @@ cd pixel-daylight-switch
 
 ## 更新记录
 
-### v1.3.0 — 开发中，尚未正式发布\n\n- 新增四个独立像素环境：日本街道、现代公寓、海边灯塔和山间木屋。\n- Playground 新增真实场景选择，可与玻璃参数、昼夜和天气效果组合。\n\n### v1.2.0 — 开发中，尚未正式发布
+### v1.3.0 — 开发中，尚未正式发布
+
+- 新增四个独立像素环境：日本街道、现代公寓、海边灯塔和山间木屋。
+- Playground 新增真实场景选择，可与玻璃参数、昼夜和天气效果组合。
+
+### v1.2.0 — 开发中，尚未正式发布
 
 本次版本包含两轮未发布的更新：
 
@@ -271,7 +279,8 @@ All settings are optional and configured per instance using `data-*` attributes.
 | `data-dispersion` | `0.05` | RGB chromatic dispersion at the glass edge; `0` disables it. |
 | `data-shine` | `0.44` | Daytime glass highlight intensity. |
 | `data-time-speed` | `1.0` | World simulation speed; `0` freezes world dynamics and `2` doubles the speed. |
-| `data-weather` | `default` | Weather preset: `default` or `snow`. |\n| `data-scene` | `countryside` | Pixel environment: `countryside`, `japanese-street`, `apartment`, `seaside`, or `mountain-cabin`. |
+| `data-weather` | `default` | Weather preset: `default` or `snow`. |
+| `data-scene` | `countryside` | Pixel environment: `countryside`, `japanese-street`, `apartment`, `seaside`, or `mountain-cabin`. |
 
 Example:
 
@@ -291,7 +300,7 @@ Example:
 ></div>
 ```
 
-Missing or invalid numeric values fall back to defaults. Unknown weather values fall back to `default`. With no new v1.2.0 attributes, the component retains the intended v1.1.0 defaults.
+Missing or invalid numeric values fall back to defaults. Unknown weather values fall back to `default`; unknown scene values fall back to `countryside`. With no new v1.2.0 or v1.3.0 attributes, the component retains the intended default appearance.
 
 ### Page theme integration
 
@@ -337,7 +346,7 @@ Open `index.html` in a modern browser. No build step is needed.
 
 ### Version status
 
-**v1.3.0 is in development and has not been formally released.** It adds four new pixel environments. v1.2.0's physics, glass, world-weather, and Playground work remains unreleased as well. It combines the physics, shader, world-weather, and interactive Playground updates. See [CHANGELOG.md](./CHANGELOG.md).
+**v1.3.0 is in development and has not been formally released.** It adds four new pixel environments. v1.2.0's physics, glass, world-weather, and Playground work remains unreleased as well. See [CHANGELOG.md](./CHANGELOG.md) for the detailed history.
 
 ### License
 
