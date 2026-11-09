@@ -8,18 +8,20 @@
 :root{--bg:#dbe6ee;--surface:#f4f8fa;--ink:#1b2146;--muted:#566680;--line:#b4c4d2;--accent:#efa02c;color-scheme:light}
 :root[data-night="1"]{--bg:#141936;--surface:#1d2347;--ink:#ecebf7;--muted:#9aa3c7;--line:#36406f;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;transition:background-color .4s,color .4s}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;transition:background-color .3s,color .3s; overflow-x:hidden;}
 a{color:inherit;text-underline-offset:3px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
 .top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
 .top nav{display:flex;gap:16px;font-size:14px}
 
-/* 去掉丑陋的边框和背景，让组件直接漂浮在页面上 */
-.stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:24px 18px 12px;transition:background-color .4s}
-.stage{position:relative;display:flex;justify-content:center;align-items:center;min-height:240px;transition:opacity 0.3s ease}
-/* 解决闪烁的核心：重载组件时，平滑过渡透明度 */
-.stage.busy{opacity:0.3}
+/* 预览区剥离边框，开启 GPU 加速层 */
+.stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:24px 18px 12px;transition:background-color .3s}
+.stage{
+  position:relative; display:flex; justify-content:center; align-items:center; min-height:240px;
+  transform: translateZ(0); /* 强制开启 GPU 硬件加速，防止闪烁 */
+  will-change: transform;
+}
 .hint{margin:10px 0 0;font-size:13px;color:var(--muted);text-align:center}
 
 .panel{padding:0 18px}
@@ -32,15 +34,26 @@ h2{font-size:14px;margin:22px 0 10px}
 .tabs button{flex:1;border:0;background:transparent;padding:8px 0}
 .tabs button+button{border-left:2px solid var(--ink)}
 .tabs button[aria-selected=true]{background:var(--ink);color:var(--surface)}
-.ctl{margin:20px 0}
+
+/* 修复进度条滑动卡顿和触摸手感 */
+.ctl{margin:20px 0; touch-action: pan-y; }
 .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 output{font:13px ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:bold}
-input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:26px;margin:0;background:transparent;cursor:pointer;--p:50%}
-input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p))}
-input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:26px;margin-top:-10px;background:var(--surface);border:2px solid var(--ink);border-radius:0;box-shadow:2px 2px 0 var(--line);cursor:grab}
-input[type=range]::-webkit-slider-thumb:active{cursor:grabbing}
-input[type=range]::-moz-range-thumb{width:14px;height:22px;background:var(--surface);border:2px solid var(--ink);border-radius:0;box-shadow:2px 2px 0 var(--line);cursor:grab}
+input[type=range]{
+  -webkit-appearance:none; appearance:none; display:block; width:100%; height:30px; margin:0;
+  background:transparent; cursor:pointer; --p:50%;
+}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
+input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:20px; height:26px; margin-top:-10px; background:var(--surface);
+  border:2px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--line);
+}
+input[type=range]::-moz-range-thumb{
+  width:16px; height:22px; background:var(--surface); border:2px solid var(--ink);
+  border-radius:0; box-shadow:2px 2px 0 var(--line);
+}
+
 select{font:inherit;background:var(--surface);color:var(--ink);border:2px solid var(--ink);padding:5px 10px}
 .check{display:flex;align-items:center;gap:10px;margin:20px 0}
 .check input{width:20px;height:20px;margin:0;accent-color:var(--accent)}
@@ -74,12 +87,12 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 <main>
 <section class="stage-col">
   <div class="stage" id="stage">
-    <!-- 直接把组件放在这里，彻底干掉 iframe -->
-    <div style="width: 100%; max-width: 640px;">
+    <!-- 给外层加点底色防白闪，彻底消除闪烁 -->
+    <div style="width: 100%; max-width: 640px; background: var(--surface); padding: 20px; box-sizing: border-box;">
       <div id="preview-container" data-ld-part="toggle-daylight"></div>
     </div>
   </div>
-  <p class="hint">拖动滑块调参，点「应用参数」即可实时生效。</p>
+  <p class="hint">直接拖动滑块即可调整，点「应用参数」生效。</p>
 </section>
 
 <section class="panel">
@@ -100,7 +113,6 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 </section>
 </main>
 
-<!-- 引入你的组件源码 -->
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
 
 <script>
@@ -108,42 +120,37 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 const $=id=>document.getElementById(id);
 const root = $('preview-container');
 
-// 优化：扩大了参数的上下限，确保视觉/手感差异巨大
 const groups=[
  ['运动手感',[
    ['speed','基础滑行速度',3,25,.1],
-   ['friction','惯性阻尼 (越小越滑)',0.1,0.95,.01],
+   ['friction','惯性阻尼',0.1,0.95,.01],
    ['bounce','边缘回弹力度',0,20,.5]
  ]],
  ['液态玻璃',[
-   ['refraction','折射强度 (放大倍数)',0.8,3.0,.01],
+   ['refraction','折射强度',0.8,3.0,.01],
    ['bezel','边缘厚度',0.01,0.12,.001],
    ['dispersion','彩虹色散',0,0.4,.01],
    ['shine','表面高光',0,2.0,.05]
  ]],
  ['像素世界',[
-   ['timeSpeed','时间流速 (0=冻结)',0,5,.1]
+   ['timeSpeed','时间流速',0,5,.1]
  ]]
 ];
 
 const nums = groups.flatMap(g=>g[1]);
 const fields = [...nums.map(n=>n[0]), 'weather', 'startNight'];
-
-// 配置项映射到 HTML 属性
 const attr = {
   speed:'speed', friction:'friction', bounce:'bounce', 
   refraction:'refraction', bezel:'bezel', dispersion:'dispersion', shine:'shine', 
   timeSpeed:'time-speed', weather:'weather', startNight:'start-night'
 };
 
-// 默认值，与你的 v1.1 保持一致
 const defaults = {
   speed:9.5, friction:0.6, bounce:3.2, 
   refraction:1.24, bezel:0.046, dispersion:0.05, shine:0.44, 
   timeSpeed:1, weather:'default', startNight:false
 };
 
-// 预设场景
 const presets = {
   default: {...defaults},
   cinematic: { speed:10, friction:0.8, bounce:5, refraction:2.2, bezel:0.08, dispersion:0.25, shine:1.2, timeSpeed:0.5, weather:'default', startNight:false },
@@ -153,9 +160,8 @@ const presets = {
 const names = { default:'原始状态', cinematic:'夸张玻璃', snow:'极寒雪夜', frozen:'时间冻结' };
 
 let applied = null;
-let busy = false;
 
-// UI 渲染
+// 渲染 DOM 结构
 $('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='default'}">${names[k]}</button>`).join('');
 $('tabs').innerHTML = groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
 $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
@@ -163,82 +169,97 @@ $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-l
  (i===2?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
  '</div>').join('');
 
-// 核心逻辑
-const fmt = (n,v)=>Number(v).toFixed((String(n[4]).split('.')[1]||'').length);
 const read = ()=>{ const c={}; for(const id of fields) c[id] = id==='weather'?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
-const set = c=>{ for(const id of fields){ if(id==='startNight') $(id).checked=!!c[id]; else $(id).value=c[id]; } refresh(); };
+const set = c=>{ for(const id of fields){ if(id==='startNight') $(id).checked=!!c[id]; else $(id).value=c[id]; } updateUI(); mark(); };
 
-function code(){
- const c = read();
- // 只生成非默认值的属性，保持代码干净
- const a = fields.filter(id=>c[id]!==defaults[id]).map(id=>`  data-${attr[id]}="${c[id]}"`);
- const el = a.length ? ['<div','  data-ld-part="toggle-daylight"',...a,'></div>'].join('\n') : '<div data-ld-part="toggle-daylight"></div>';
- $('snippet').textContent = el + '\n<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><\/script>';
+// 更新代码和滑块进度条的 UI
+function updateUI() {
+  for(const n of nums) {
+    const el=$(n[0]);
+    $(n[0]+'Out').textContent = Number(el.value).toFixed((String(n[4]).split('.')[1]||'').length);
+    el.style.setProperty('--p', (el.value-n[2])/(n[3]-n[2])*100+'%');
+  }
+}
+
+function generateCode() {
+  const c = read();
+  const a = fields.filter(id=>c[id]!==defaults[id]).map(id=>`  data-${attr[id]}="${c[id]}"`);
+  const el = a.length ? ['<div','  data-ld-part="toggle-daylight"',...a,'></div>'].join('\n') : '<div data-ld-part="toggle-daylight"></div>';
+  $('snippet').textContent = el + '\n<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><\/script>';
 }
 
 function mark(){
- const dirty = JSON.stringify(read()) !== JSON.stringify(applied);
- $('status').textContent = busy ? '正在应用...' : dirty ? '参数有变动，尚未应用' : '参数已是最新';
- $('apply').toggleAttribute('data-clean', !dirty && !busy);
+  const dirty = JSON.stringify(read()) !== JSON.stringify(applied);
+  $('status').textContent = dirty ? '参数有变动，尚未应用' : '参数已是最新';
+  $('apply').toggleAttribute('data-clean', !dirty);
 }
 
-function refresh(){
- for(const n of nums){ const el=$(n[0]); $(n[0]+'Out').textContent = fmt(n, el.value); el.style.setProperty('--p', (el.value-n[2])/(n[3]-n[2])*100+'%'); }
- code(); mark();
+// 防抖变量，解决滑动卡顿
+let isTicking = false;
+
+function handleInput() {
+  document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+  if (!isTicking) {
+    window.requestAnimationFrame(() => {
+      updateUI(); // 滑动时只更新 UI，不生成代码，保证极致丝滑
+      isTicking = false;
+    });
+    isTicking = true;
+  }
 }
 
-// 同步深色/浅色网页背景
-function syncTheme(night){
- document.documentElement.dataset.night = night ? '1' : '0';
+function handleChange() {
+  generateCode();
+  mark();
 }
 
-// 应用参数并重载组件
 function apply(){
- if(busy) return;
- const c = read();
- applied = c;
- busy = true;
- $('stage').classList.add('busy'); // 触发透明度降低
- mark();
-
- // 延迟一点执行，让透明度过渡先走完，掩盖销毁重建的闪烁
- setTimeout(() => {
-   // 1. 卸载旧组件
-   if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
-   
-   // 2. 更新 DOM 参数
-   root.innerHTML = ''; // 清空内部生成的结构
-   for (const id of fields) {
-     if (id === 'startNight') {
-       if (c[id]) root.setAttribute('data-start-night', 'true');
-       else root.removeAttribute('data-start-night');
-     } else if (id === 'weather') {
-       if (c[id] !== 'default') root.setAttribute('data-weather', c[id]);
-       else root.removeAttribute('data-weather');
-     } else {
-       root.setAttribute(`data-${attr[id]}`, c[id]);
-     }
-   }
-
-   // 3. 重新挂载
-   if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
-
-   // 4. 监听日夜变化，同步整个网页背景色
-   root.addEventListener('daylight:change', e => syncTheme(e.detail.night));
-   syncTheme(c.startNight);
-
-   busy = false;
-   $('stage').classList.remove('busy'); // 恢复透明度
-   mark();
- }, 150); // 150ms 足够平滑过渡
+  const c = read();
+  applied = c;
+  
+  // 使用 requestAnimationFrame 让浏览器在重绘前完成 DOM 替换，消除白屏闪烁
+  requestAnimationFrame(() => {
+    if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
+    root.innerHTML = ''; 
+    for (const id of fields) {
+      if (id === 'startNight') {
+        if (c[id]) root.setAttribute('data-start-night', 'true');
+        else root.removeAttribute('data-start-night');
+      } else if (id === 'weather') {
+        if (c[id] !== 'default') root.setAttribute('data-weather', c[id]);
+        else root.removeAttribute('data-weather');
+      } else {
+        root.setAttribute(`data-${attr[id]}`, c[id]);
+      }
+    }
+    if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
+    
+    // 同步外层深色模式
+    document.documentElement.dataset.night = c.startNight ? '1' : '0';
+    
+    generateCode();
+    mark();
+  });
 }
 
-// 初始化绑定事件
-const unpress = ()=>document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
-fields.forEach(id => $(id).addEventListener(id==='weather'||id==='startNight'?'change':'input', ()=>{ unpress(); refresh(); }));
-document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', ()=>{ set(presets[b.dataset.p]); unpress(); b.setAttribute('aria-pressed','true'); apply(); }));
+// 绑定事件
+fields.forEach(id => {
+  const el = $(id);
+  if (id === 'weather' || id === 'startNight') {
+    el.addEventListener('change', () => { handleInput(); handleChange(); });
+  } else {
+    el.addEventListener('input', handleInput);   // 滑动时高频触发
+    el.addEventListener('change', handleChange); // 松手时触发一次
+  }
+});
 
-// Tabs 切换逻辑
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', ()=>{ 
+  set(presets[b.dataset.p]); 
+  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); 
+  apply(); 
+}));
+
 const tabs=[...document.querySelectorAll('.tabs button')];
 tabs.forEach((t,i)=>{
  t.addEventListener('click', ()=>tabs.forEach((x,j)=>{ x.setAttribute('aria-selected',j===i); $('p'+j).hidden=j!==i; }));
@@ -252,7 +273,7 @@ $('copy').addEventListener('click', async()=>{
  setTimeout(()=>b.textContent='复制代码', 1500);
 });
 
-// 启动
+// 初始化
 set(defaults);
 apply();
 })();
