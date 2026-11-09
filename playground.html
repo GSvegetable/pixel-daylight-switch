@@ -8,20 +8,23 @@
 :root{--bg:#dbe6ee;--surface:#f4f8fa;--ink:#1b2146;--muted:#566680;--line:#b4c4d2;--accent:#efa02c;color-scheme:light}
 :root[data-night="1"]{--bg:#141936;--surface:#1d2347;--ink:#ecebf7;--muted:#9aa3c7;--line:#36406f;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;transition:background-color .3s,color .3s; overflow-x:hidden;}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;transition:background-color .3s,color .3s; overflow-x:hidden; overscroll-behavior-y: none;}
 a{color:inherit;text-underline-offset:3px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
 .top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
 .top nav{display:flex;gap:16px;font-size:14px}
 
-/* 预览区剥离边框，开启 GPU 加速层 */
+/* ===== 双缓冲交叉淡化预览区 ===== */
 .stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:24px 18px 12px;transition:background-color .3s}
-.stage{
-  position:relative; display:flex; justify-content:center; align-items:center; min-height:240px;
-  transform: translateZ(0); /* 强制开启 GPU 硬件加速，防止闪烁 */
-  will-change: transform;
+.stage{position:relative; display:flex; justify-content:center; align-items:center; min-height:280px; width:100%; max-width:640px; margin:0 auto;}
+.layer{
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
+  transition:opacity 0.4s ease; /* 平滑过渡，绝无闪烁 */
 }
+.layer.active{opacity:1; z-index:2; pointer-events:auto;}
+.layer.inactive{opacity:0; z-index:1; pointer-events:none;}
 .hint{margin:10px 0 0;font-size:13px;color:var(--muted);text-align:center}
 
 .panel{padding:0 18px}
@@ -35,23 +38,24 @@ h2{font-size:14px;margin:22px 0 10px}
 .tabs button+button{border-left:2px solid var(--ink)}
 .tabs button[aria-selected=true]{background:var(--ink);color:var(--surface)}
 
-/* 修复进度条滑动卡顿和触摸手感 */
-.ctl{margin:20px 0; touch-action: pan-y; }
+/* ===== 修复滑块滑动被拦截的问题 ===== */
+.ctl{margin:20px 0; touch-action: pan-y; overscroll-behavior: contain;}
 .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 output{font:13px ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:bold}
 input[type=range]{
   -webkit-appearance:none; appearance:none; display:block; width:100%; height:30px; margin:0;
   background:transparent; cursor:pointer; --p:50%;
+  touch-action: pan-x; /* 核心修复：只允许水平拖动，不触发页面滚动 */
 }
 input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
 input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none; width:20px; height:26px; margin-top:-10px; background:var(--surface);
-  border:2px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--line);
+  border:2px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--line); pointer-events: auto;
 }
 input[type=range]::-moz-range-thumb{
   width:16px; height:22px; background:var(--surface); border:2px solid var(--ink);
-  border-radius:0; box-shadow:2px 2px 0 var(--line);
+  border-radius:0; box-shadow:2px 2px 0 var(--line); pointer-events: auto;
 }
 
 select{font:inherit;background:var(--surface);color:var(--ink);border:2px solid var(--ink);padding:5px 10px}
@@ -86,13 +90,16 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 
 <main>
 <section class="stage-col">
+  <!-- 双容器重叠结构 -->
   <div class="stage" id="stage">
-    <!-- 给外层加点底色防白闪，彻底消除闪烁 -->
-    <div style="width: 100%; max-width: 640px; background: var(--surface); padding: 20px; box-sizing: border-box;">
-      <div id="preview-container" data-ld-part="toggle-daylight"></div>
+    <div class="layer active" id="layerA">
+      <div id="previewA" data-ld-part="toggle-daylight" style="width: 100%;"></div>
+    </div>
+    <div class="layer inactive" id="layerB">
+      <div id="previewB" data-ld-part="toggle-daylight" style="width: 100%;"></div>
     </div>
   </div>
-  <p class="hint">直接拖动滑块即可调整，点「应用参数」生效。</p>
+  <p class="hint">拖动滑块调节数值，点「应用参数」生效。</p>
 </section>
 
 <section class="panel">
@@ -118,7 +125,12 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 <script>
 (()=>{
 const $=id=>document.getElementById(id);
-const root = $('preview-container');
+
+// 双缓冲状态管理
+let activeRoot = $('previewA');
+let inactiveRoot = $('previewB');
+let activeLayer = $('layerA');
+let inactiveLayer = $('layerB');
 
 const groups=[
  ['运动手感',[
@@ -161,7 +173,6 @@ const names = { default:'原始状态', cinematic:'夸张玻璃', snow:'极寒�
 
 let applied = null;
 
-// 渲染 DOM 结构
 $('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='default'}">${names[k]}</button>`).join('');
 $('tabs').innerHTML = groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
 $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
@@ -172,7 +183,6 @@ $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-l
 const read = ()=>{ const c={}; for(const id of fields) c[id] = id==='weather'?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
 const set = c=>{ for(const id of fields){ if(id==='startNight') $(id).checked=!!c[id]; else $(id).value=c[id]; } updateUI(); mark(); };
 
-// 更新代码和滑块进度条的 UI
 function updateUI() {
   for(const n of nums) {
     const el=$(n[0]);
@@ -194,20 +204,14 @@ function mark(){
   $('apply').toggleAttribute('data-clean', !dirty);
 }
 
-// 防抖变量，解决滑动卡顿
 let isTicking = false;
-
 function handleInput() {
   document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
   if (!isTicking) {
-    window.requestAnimationFrame(() => {
-      updateUI(); // 滑动时只更新 UI，不生成代码，保证极致丝滑
-      isTicking = false;
-    });
+    window.requestAnimationFrame(() => { updateUI(); isTicking = false; });
     isTicking = true;
   }
 }
-
 function handleChange() {
   generateCode();
   mark();
@@ -216,40 +220,52 @@ function handleChange() {
 function apply(){
   const c = read();
   applied = c;
-  
-  // 使用 requestAnimationFrame 让浏览器在重绘前完成 DOM 替换，消除白屏闪烁
-  requestAnimationFrame(() => {
-    if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
-    root.innerHTML = ''; 
-    for (const id of fields) {
-      if (id === 'startNight') {
-        if (c[id]) root.setAttribute('data-start-night', 'true');
-        else root.removeAttribute('data-start-night');
-      } else if (id === 'weather') {
-        if (c[id] !== 'default') root.setAttribute('data-weather', c[id]);
-        else root.removeAttribute('data-weather');
-      } else {
-        root.setAttribute(`data-${attr[id]}`, c[id]);
-      }
+
+  // 1. 将新参数写入隐藏的 inactive 容器
+  if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(inactiveRoot);
+  inactiveRoot.innerHTML = ''; 
+  for (const id of fields) {
+    if (id === 'startNight') {
+      if (c[id]) inactiveRoot.setAttribute('data-start-night', 'true');
+      else inactiveRoot.removeAttribute('data-start-night');
+    } else if (id === 'weather') {
+      if (c[id] !== 'default') inactiveRoot.setAttribute('data-weather', c[id]);
+      else inactiveRoot.removeAttribute('data-weather');
+    } else {
+      inactiveRoot.setAttribute(`data-${attr[id]}`, c[id]);
     }
-    if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
+  }
+  
+  // 2. 在后台静默渲染新容器
+  if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(inactiveRoot);
+
+  // 3. 等待 WebGL 渲染完第一帧（约 50ms），然后进行交叉淡化切换
+  setTimeout(() => {
+    inactiveLayer.classList.remove('inactive');
+    inactiveLayer.classList.add('active');
     
-    // 同步外层深色模式
+    activeLayer.classList.remove('active');
+    activeLayer.classList.add('inactive');
+
+    // 交换引用，为下一次切换做准备
+    [activeRoot, inactiveRoot] = [inactiveRoot, activeRoot];
+    [activeLayer, inactiveLayer] = [inactiveLayer, activeLayer];
+    
+    // 同步网页背景
     document.documentElement.dataset.night = c.startNight ? '1' : '0';
     
     generateCode();
     mark();
-  });
+  }, 60); 
 }
 
-// 绑定事件
 fields.forEach(id => {
   const el = $(id);
   if (id === 'weather' || id === 'startNight') {
     el.addEventListener('change', () => { handleInput(); handleChange(); });
   } else {
-    el.addEventListener('input', handleInput);   // 滑动时高频触发
-    el.addEventListener('change', handleChange); // 松手时触发一次
+    el.addEventListener('input', handleInput);
+    el.addEventListener('change', handleChange);
   }
 });
 
