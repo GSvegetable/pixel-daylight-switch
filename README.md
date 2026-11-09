@@ -2,14 +2,21 @@
 
 一个住着像素小人的昼夜开关。拖一下，天黑了；再拖一下，天亮了。
 
-<table>
-  <tr>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="100%" /></td>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="100%" /></td>
-  </tr>
-</table>
+<!-- 中英文跳转锚点 -->
+**[English](#english) | [中文](#中文)**
+
+<!-- 无边框并排图片 -->
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" />
+  <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" />
+</p>
 
 - [点击这里直接在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
+
+<br>
+
+<!-- ================= 中文部分 ================= -->
+<div id="中文"></div>
 
 ## 这是什么
 
@@ -32,3 +39,29 @@
 ## 协议
 
 Unlicense，公有领域。想怎么用都行，包括商用，不用署名。
+
+<br>
+
+---
+
+<!-- ================= 英文部分 ================= -->
+<div id="english"></div>
+
+## English
+
+A tiny web component. Inside the switch is a pixel world: sunrise and sunset during the day, stars and fireflies at night, and a little person living inside. The glass shell is rendered with WebGL for refraction and highlights, giving it a sense of depth.
+
+**How to play:**
+- Drag the slider to switch between day and night (bounces back on release)
+- Click to toggle directly
+- Arrow keys work too
+
+**Run locally:**
+No dependencies, no installation. Download the repo and open `index.html` in your browser.
+
+- `index.html`: Page
+- `style.css`: Styles
+- `app.js`: Core logic and rendering
+
+**License:**
+Unlicense, public domain. Do whatever you want, including commercial use, no attribution required.
