@@ -2,7 +2,7 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
-## [1.3.0] — 开发中，尚未发布
+## [1.3.0]
 
 <details>
 <summary>查看 v1.3.0 详细更新</summary>
@@ -15,13 +15,14 @@ All notable changes to Pixel Daylight Switch are documented here.
 - 保留乡村小屋作为默认场景。
 - 新增 `data-scene` 场景属性，并在 Playground 中加入场景选择。
 
-### 兼容性
+### Playground 与参数组织
+- 参数按用途拆分：滑动响应速度、惯性与回弹归入运动反馈；折射、边缘厚度、色散与高光归入玻璃光学；时间倍率单独归入世界节奏；场景、天气和初始昼夜归入场景环境。\n\n### 兼容性
 - 默认仍为 `countryside`，既有接入方式不需要修改。
 - 场景切换不改变开关物理、玻璃 shader 与昼夜时间逻辑。
 
 </details>
 
-## [1.2.0] — 开发中，尚未发布
+## [1.2.0]
 
 <details>
 <summary>查看 v1.2.0 详细更新</summary>
