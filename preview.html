@@ -17,7 +17,7 @@ body{display:grid;place-items:center}
 (() => {
  const params = new URLSearchParams(location.search);
  const root = document.getElementById('switch');
- const keys = ['speed','refraction','bezel','start-night','friction','bounce','dispersion','shine','time-speed','weather'];
+ const keys = ['speed','refraction','bezel','start-night','friction','bounce','dispersion','shine','time-speed','weather','scene'];
  for (const key of keys) {
    const value=params.get(key);
    if(value!==null) root.setAttribute('data-'+key,value);
