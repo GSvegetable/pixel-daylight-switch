@@ -136,6 +136,7 @@ function labTone(lab, L) {
     const rgb = oklabToLinear(L, lab[1] * chroma, lab[2] * chroma);
     if (rgb.every((v) => v >= -0.001 && v <= 1.001)) return rgb.map((v) => Math.round(toGamma(clamp(v)) * 255));
     chroma *= 0.9;
+  }
   return oklabToLinear(L, 0, 0).map((v) => Math.round(toGamma(clamp(v)) * 255));
 }
 const CHARS = { H: 'HAIR', S: 'SKIN', E: 'HAIR', T: 'SHIRT', D: 'SHIRT_DK', P: 'PANTS', B: 'BOOT', W: 'BOOK', K: 'BOOK_DK' };
@@ -570,9 +571,8 @@ if (toggleEl) {
 // 大厂标准做法：自动寻找页面上的容器，自动挂载，并暴露全局 API
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.querySelector('[data-ld-part="toggle-daylight"]');
-})();
-const el = document.querySelector('[data-ld-part="toggle-daylight"]');
-if (el) {
-  window.DaylightSwitch = mount(el);
-}
+  if (el) {
+    window.DaylightSwitch = mount(el);
+  }
+});
 })();
