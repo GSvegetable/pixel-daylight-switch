@@ -1,0 +1,54 @@
+{
+  "name": "pixel-daylight-switch",
+  "version": "1.3.0",
+  "description": "A draggable pixel-art day/night switch with a living world inside a refractive glass lens.",
+  "keywords": [
+    "pixel-art",
+    "day-night",
+    "toggle",
+    "switch",
+    "canvas",
+    "webgl",
+    "ui-component",
+    "vanilla-js",
+    "no-dependencies"
+  ],
+  "author": "GSvegetable",
+  "license": "Unlicense",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GSvegetable/pixel-daylight-switch.git"
+  },
+  "homepage": "https://github.com/GSvegetable/pixel-daylight-switch#readme",
+  "bugs": {
+    "url": "https://github.com/GSvegetable/pixel-daylight-switch/issues"
+  },
+  "main": "./index.cjs",
+  "module": "./index.mjs",
+  "browser": "./app.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.cjs"
+    },
+    "./app.js": "./app.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "app.js",
+    "index.cjs",
+    "index.mjs",
+    "README.md",
+    "LICENSE",
+    "llms.txt"
+  ],
+  "sideEffects": [
+    "./app.js"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
