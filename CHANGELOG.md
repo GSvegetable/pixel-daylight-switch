@@ -12,6 +12,12 @@ All notable changes to Pixel Daylight Switch are documented here.
 - `data-time-speed` to scale world simulation time (default: `1.0`; `0` pauses world dynamics).
 - `data-weather="snow"` to enable deterministic falling pixel snow with day/night-aware tones.
 
+### Playground
+- Add a standalone interactive Playground with live preview, grouped controls, presets, and copyable HTML configuration.
+
+### Documentation
+- Restructure README with Chinese documentation first, a table of contents, Playground entry points, and a concise English section.
+
 ### Compatibility
 - All new attributes are optional.
 - Omitted or invalid numeric values fall back to the v1.1.0-equivalent defaults.
