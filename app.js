@@ -418,7 +418,7 @@ function mount(root) {
     rect(94,34,48,2,M.WOOD_DK);rect(99,36,4,2,M.WOOD_LT);rect(132,36,7,2,M.WOOD_LT);
     // Media console and television
     rect(91,43,42,8,M.WOOD_DK);rect(94,45,36,5,M.WOOD);
-    rect(103,29,25,14,M.WOOD_DK);rect(105,31,21,10,M.I1);rect(107,33,17,6,M.HILL_FAR);
+    rect(103,29,25,14,M.WOOD_DK);rect(105,31,21,10,M.GLASS);rect(107,33,17,6,M.HILL_FAR);
     put(115,36,M.LIT_HI);rect(108,43,15,1,M.WOOD_LT);
     // Cushions, seams, throw blanket and side table on sofa
     rect(99,54,11,7,M.SHIRT_DK);rect(101,55,7,4,M.SHIRT);
@@ -430,7 +430,7 @@ function mount(root) {
     rect(4,28,19,45,M.WOOD_DK);rect(6,31,15,2,M.WOOD_LT);rect(6,48,15,2,M.WOOD_LT);
     for(let x=7;x<20;x+=4){rect(x,34,2,12,M.BOOK);rect(x+2,36,1,10,M.BOOK_DK);}
     rect(7,52,5,10,M.WOOD);rect(13,54,6,8,M.BOOK);
-    rect(17,66,5,7,M.WOOD_DK);rect(18,67,3,4,M.I1);
+    rect(17,66,5,7,M.WOOD_DK);rect(18,67,3,4,M.GLASS);
     // Kitchen counter, backsplash and hanging pendant
     rect(4,78,53,3,M.WOOD_DK);rect(7,81,47,10,M.WOOD);
     rect(9,73,44,5,M.STONE);rect(12,74,12,3,M.CLOUD);
