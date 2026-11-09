@@ -1,56 +1,140 @@
-# 像素昼夜开关
+# Pixel Daylight Switch
 
-一个住着像素小人的昼夜开关。拖一下，天黑了；再拖一下，天亮了。
+一个带有像素居民的昼夜开关组件。拖动开关，像素世界会从白天逐渐进入夜晚；再拖回来，日光重新出现。
+
+A day/night switch with a tiny pixel resident. Drag the switch to move the scene from day to night, then bring the daylight back.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" />
-  <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" />
+  <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" alt="Day mode preview" />
+  <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" alt="Night mode preview" />
 </p>
 
-[在线体验](https://gsvegetable.github.io/pixel-daylight-switch/)
+<p align="center">
+  <a href="https://gsvegetable.github.io/pixel-daylight-switch/">Live Demo</a>
+  ·
+  <a href="https://github.com/GSvegetable/pixel-daylight-switch/releases">Releases</a>
+</p>
 
-## 接入
+## Features
 
-两行代码，不用 npm，不用构建工具：
+- **Zero dependencies** — one JavaScript file, no npm install or build step.
+- **Interactive day/night transition** — drag, fling, click, or use the keyboard.
+- **Pixel-art world** — a small resident follows a daily routine as the light changes.
+- **Live page theme value** — exposes the current night level through the `--night` CSS custom property.
+- **Customizable per instance** — configure animation speed, lens refraction, bezel size, and initial night state with HTML data attributes.
+- **Themeable colors** — override CSS custom properties.
+- **Accessible** — keyboard-operable switch semantics and reduced-motion support.
+- **Adaptive rendering** — WebGL2 glass rendering with a Canvas 2D fallback; pauses when offscreen or when the page is in the background.
+
+## Quick start
+
+Add the component wherever you want it to appear, then load the script:
 
 ```html
 <div data-ld-part="toggle-daylight"></div>
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
 ```
 
-放在页面哪里都行，`<script>` 放在 `<head>` 里也没问题。样式和内部结构由脚本自动生成，宽度跟随容器，高度按比例。页面上有几个这样的 `div`，就会出现几个开关。
+That's it. The script generates the component's internal markup and styles automatically. Its width follows its container, and its height keeps the component's aspect ratio. Add multiple matching elements to create multiple independent switches.
 
-## 玩法
+You can also download `app.js` and host it yourself.
 
-- 拖动滑块。松手后会自己滑到最近的一端，甩一下也能带过去
-- 点一下，直接切换
-- 聚焦后用方向键，每按一次推进一小步
+## Configure with HTML attributes
 
-拖动的过程就是时间在走：日出、白天、黄昏、入夜。小人有自己的日程，上午在屋外忙活，中午坐着看书，傍晚散步，天黑了回屋点灯睡觉。拖得太快，他会被吓一跳。
+Each component instance can override its core settings directly in HTML. All attributes are optional; omitted or invalid values fall back to the defaults.
 
-## 让整个页面跟着变
+| Attribute | Default | Description |
+| --- | ---: | --- |
+| `data-speed` | `9.5` | Animation speed used by the switch's motion/tick calculation. |
+| `data-refraction` | `1.24` | Refraction strength of the glass lens. |
+| `data-bezel` | `0.046` | Bezel thickness as a proportion of the switch height. |
+| `data-start-night` | `false` | Set to `true` to initialize the switch in night mode. |
 
-开关运行时，会不断把 `--night` 写到 `<html>` 上：`0` 是白天，`1` 是夜晚，中间是过渡。页面里直接用：
+### Example
+
+```html
+<div
+  data-ld-part="toggle-daylight"
+  data-speed="12"
+  data-refraction="1.5"
+  data-bezel="0.05"
+  data-start-night="true"
+></div>
+
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+```
+
+The values are read from the element's `dataset` during mounting. Numeric settings are converted to numbers and validated; missing, empty, non-finite, or non-positive values use the defaults. The initial night setting is enabled only when `data-start-night="true"`.
+
+### Attribute examples
+
+Start in day mode with the standard appearance:
+
+```html
+<div data-ld-part="toggle-daylight"></div>
+```
+
+Use a slower animation and a thicker bezel:
+
+```html
+<div
+  data-ld-part="toggle-daylight"
+  data-speed="7"
+  data-bezel="0.06"
+></div>
+```
+
+Start in night mode with stronger lens refraction:
+
+```html
+<div
+  data-ld-part="toggle-daylight"
+  data-refraction="1.6"
+  data-start-night="true"
+></div>
+```
+
+## Interaction
+
+- **Drag** the switch. When released, it settles toward the nearest end; a quick fling can carry it across.
+- **Click** the switch to toggle between day and night.
+- **Keyboard**: focus the switch and use the arrow keys to move it in small steps.
+
+Dragging represents the passage of time: sunrise, daytime, dusk, and night. The tiny resident has a daily routine, moving around the pixel world as the light changes.
+
+## Sync your page theme
+
+While the switch is running, it writes the current night level to the `--night` custom property on the root `<html>` element:
+
+- `0` means day.
+- `1` means night.
+- Values between `0` and `1` represent the transition.
+
+Use it to make the rest of your page follow the switch:
 
 ```css
 body {
-  background: color-mix(in srgb, #f5ecd9, #1b2146 calc(var(--night, 0) * 100%));
+  background: color-mix(
+    in srgb,
+    #f5ecd9,
+    #1b2146 calc(var(--night, 0) * 100%)
+  );
 }
 ```
 
-这个值随拖动实时变化，所以不需要再加 `transition`。`color-mix` 需要较新的浏览器。
+The value updates continuously while dragging, so an additional CSS transition is not required. `color-mix()` is supported by modern browsers.
 
-如果只想在昼夜切换时做点事，可以监听 `daylight:change`，`detail.night` 为 `true` 表示夜晚：
+If you only need to react when the day/night state changes, listen for `daylight:change`:
 
 ```js
-document.addEventListener('daylight:change', (e) => {
-  document.documentElement.classList.toggle('dark', e.detail.night);
+document.addEventListener('daylight:change', (event) => {
+  document.documentElement.classList.toggle('dark', event.detail.night);
 });
 ```
 
-## 改配色
+## Customize colors
 
-在你自己的 CSS 里覆盖变量就行，像素世界的配色会跟着变：
+Override the CSS custom properties on the component:
 
 ```css
 [data-ld-part="toggle-daylight"] {
@@ -59,76 +143,205 @@ document.addEventListener('daylight:change', (e) => {
 }
 ```
 
-五个颜色变量和默认值：
+Available color properties and their defaults:
 
-- `--ld-bg`：`#f5ecd9`
-- `--ld-surface`：`#8c9a62`
-- `--ld-fg`：`#1b2146`
-- `--ld-muted`：`#7f97b3`
-- `--ld-accent`：`#efa02c`
+| CSS property | Default |
+| --- | --- |
+| `--ld-bg` | `#f5ecd9` |
+| `--ld-surface` | `#8c9a62` |
+| `--ld-fg` | `#1b2146` |
+| `--ld-muted` | `#7f97b3` |
+| `--ld-accent` | `#efa02c` |
 
-## 动态添加
+## Dynamic mounting
 
-单页应用里，开关是后来才加进页面的，可以手动挂载和卸载：
+For single-page applications or elements added after the initial page load, mount and unmount instances through the global API:
 
 ```js
 const destroy = PixelDaylightSwitch.mount(element);
+
+// When the component is no longer needed:
 PixelDaylightSwitch.unmount(element);
 ```
 
-## 实现上的几件事
+## Browser support
 
-- 单个 JS 文件，约 70 KB，不依赖任何库
-- 画面是 192×112 的像素世界，每秒更新 30 次。配色在 Oklab 空间里取，再用 Bayer 抖动打散色阶
-- 外层玻璃是 WebGL2 着色器，不支持时退回 Canvas 2D
-- 开关不在屏幕内、或页面切到后台时，会暂停绘制
-- 遵循系统的「减少动态效果」设置。开关本身是 `role="switch"`，可聚焦，状态会播报给读屏软件
+- WebGL2 is used for the glass/lens rendering when available.
+- Canvas 2D is used as the fallback renderer.
+- The component respects `prefers-reduced-motion`.
+- The switch is focusable and exposes switch semantics for assistive technology.
 
-## 本地运行
+## Local development
 
-克隆仓库，用浏览器打开 `index.html`。`app.js` 是组件本体，`index.html` 是演示页面。
+Clone the repository and open `index.html` in a modern browser:
 
-## 协议
+```bash
+git clone https://github.com/GSvegetable/pixel-daylight-switch.git
+cd pixel-daylight-switch
+```
 
-Unlicense，公有领域。想怎么用都行，包括商用，不用署名。
+- `app.js` — the component implementation.
+- `index.html` — the demo page.
 
-<details>
-<summary>English</summary>
-<br>
+No build step is required.
 
-### Pixel Day-Night Switch
+## Changelog
 
-A day-night switch with a tiny pixel person living inside. Drag it and the sky goes dark; drag again and it's morning.
+### v1.1.0
 
-**Install.** Two lines, no npm, no build step:
+- Add per-instance HTML data attribute configuration.
+- Add `data-speed` to control animation speed.
+- Add `data-refraction` to control glass lens refraction.
+- Add `data-bezel` to control bezel thickness.
+- Add `data-start-night="true"` to initialize the component in night mode.
+- Validate numeric values and preserve defaults when attributes are missing or invalid.
+- Expand the documentation with configuration examples in Chinese/English-friendly terminology.
+
+### v1.0.0
+
+- Initial public version of the zero-dependency day/night switch component.
+
+## License
+
+[Unlicense](https://unlicense.org/) — public domain. Use it freely, including in commercial projects; attribution is not required.
+
+---
+
+# 中文说明
+
+## 像素昼夜开关
+
+一个带有像素居民的昼夜开关组件。拖动开关，场景会从白天逐渐进入夜晚；再拖回来，日光重新出现。
+
+### 快速接入
+
+只需要两行代码，无需 npm、依赖安装或构建：
 
 ```html
 <div data-ld-part="toggle-daylight"></div>
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
 ```
 
-Place it anywhere; the script can go in `<head>`. Styles and inner markup are generated by the script. Width follows the container, height keeps the aspect ratio. Every matching `div` becomes a switch.
+脚本会自动生成组件内部结构和样式。组件宽度跟随容器，高度保持比例。页面中可以放置多个实例。
 
-**How to play.** Drag the slider; on release it settles at the nearest end, and a quick fling carries it over. Click to toggle. When focused, arrow keys move it in small steps. Dragging is the clock: sunrise, day, dusk, night. The resident has a daily routine, and gets startled if you drag too fast.
+### HTML 参数配置
 
-**Sync your page.** While running, the switch keeps writing `--night` on `<html>`: `0` is day, `1` is night, with smooth values in between.
+每个组件实例都可以通过 HTML 的 `data-*` 属性独立配置。所有参数都是可选的；未填写或填写无效时会使用默认值。
+
+| 属性 | 默认值 | 作用 |
+| --- | ---: | --- |
+| `data-speed` | `9.5` | 控制开关动画速度 |
+| `data-refraction` | `1.24` | 控制玻璃镜片的折射强度 |
+| `data-bezel` | `0.046` | 控制外框厚度系数 |
+| `data-start-night` | `false` | 设置为 `true` 时，组件初始化为黑夜状态 |
+
+完整示例：
+
+```html
+<div
+  data-ld-part="toggle-daylight"
+  data-speed="12"
+  data-refraction="1.5"
+  data-bezel="0.05"
+  data-start-night="true"
+></div>
+
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+```
+
+数值参数会在组件挂载时从 `root.dataset` 读取并转换为数字。缺失、空值、非有限数值或非正数都会自动回退到默认值。只有明确写入 `data-start-night="true"` 才会在初始化时进入黑夜。
+
+### 交互方式
+
+- 拖动滑块：松手后自动吸附到最近的一端，快速甩动也可以切换。
+- 点击开关：直接切换昼夜。
+- 键盘操作：聚焦开关后使用方向键逐步调整。
+
+拖动过程对应日出、白天、黄昏和夜晚。像素世界中的小居民也会随着时间变化进行自己的日常活动。
+
+### 让整个页面跟随昼夜变化
+
+组件会持续把当前夜晚程度写入根元素的 `--night` CSS 变量：
+
+- `0` 表示白天；
+- `1` 表示夜晚；
+- 中间值表示昼夜过渡。
+
+例如：
 
 ```css
 body {
-  background: color-mix(in srgb, #f5ecd9, #1b2146 calc(var(--night, 0) * 100%));
+  background: color-mix(
+    in srgb,
+    #f5ecd9,
+    #1b2146 calc(var(--night, 0) * 100%)
+  );
 }
 ```
 
-It updates live while dragging, so no `transition` is needed. For one-off reactions, listen to `daylight:change` (`e.detail.night` is a boolean).
+如果只需要在昼夜状态改变时执行逻辑，可以监听 `daylight:change` 事件：
 
-**Theming.** Override `--ld-bg`, `--ld-surface`, `--ld-fg`, `--ld-muted`, `--ld-accent` on `[data-ld-part="toggle-daylight"]`.
+```js
+document.addEventListener('daylight:change', (event) => {
+  document.documentElement.classList.toggle('dark', event.detail.night);
+});
+```
 
-**Dynamic mounting.** `PixelDaylightSwitch.mount(el)` and `PixelDaylightSwitch.unmount(el)`.
+### 自定义颜色
 
-**Under the hood.** One ~70 KB file, no dependencies. A 192×112 pixel world at 30 Hz, Oklab color ramps with Bayer dithering, a WebGL2 glass shader with a Canvas 2D fallback. Drawing pauses when offscreen or in a background tab. Respects `prefers-reduced-motion`; the switch is a focusable `role="switch"` with screen-reader status.
+在组件选择器上覆盖以下 CSS 变量：
 
-**Run locally.** Clone the repo and open `index.html`.
+```css
+[data-ld-part="toggle-daylight"] {
+  --ld-bg: #f5ecd9;
+  --ld-accent: #efa02c;
+}
+```
 
-**License.** Unlicense, public domain. Do whatever you want, including commercial use, no attribution required.
+| CSS 变量 | 默认值 |
+| --- | --- |
+| `--ld-bg` | `#f5ecd9` |
+| `--ld-surface` | `#8c9a62` |
+| `--ld-fg` | `#1b2146` |
+| `--ld-muted` | `#7f97b3` |
+| `--ld-accent` | `#efa02c` |
 
-</details>
+### 动态挂载与卸载
+
+单页应用中，如果组件容器是在页面加载后才添加的，可以调用全局 API：
+
+```js
+const destroy = PixelDaylightSwitch.mount(element);
+
+// 不再需要时卸载：
+PixelDaylightSwitch.unmount(element);
+```
+
+### 本地运行
+
+```bash
+git clone https://github.com/GSvegetable/pixel-daylight-switch.git
+cd pixel-daylight-switch
+```
+
+使用浏览器打开 `index.html` 即可，无需构建。
+
+- `app.js`：组件主体。
+- `index.html`：交互演示页面。
+
+### 更新记录
+
+**v1.1.0**
+
+- 新增 HTML `data-*` 参数配置。
+- 新增动画速度、镜片折射强度和外框厚度的独立控制。
+- 新增初始化时默认进入黑夜的选项。
+- 增加数值转换、参数校验和默认值兜底。
+
+**v1.0.0**
+
+- 首个公开版本。
+
+### 开源协议
+
+[Unlicense](https://unlicense.org/)，属于公有领域。允许自由使用，包括商业用途，无需署名。
