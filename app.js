@@ -928,7 +928,11 @@ function unmountOne(root) {
   if (destroy) { destroy(); mounted.delete(root); }
 }
 function mountAll() { document.querySelectorAll(SELECTOR).forEach(mountOne); }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true });
-else mountAll();
-window.PixelDaylightSwitch = { mount: mountOne, unmount: unmountOne };
+const api = { mount: mountOne, unmount: unmountOne };
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true });
+  else mountAll();
+}
+if (typeof window !== 'undefined') window.PixelDaylightSwitch = api;
+if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })();
