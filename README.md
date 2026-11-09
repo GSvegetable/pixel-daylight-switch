@@ -45,13 +45,13 @@
 适合 Vite、Webpack、Rspack 等构建项目：
 
 ```bash
-npm install pixel-daylight-switch
+npm install pixel-daylight-switch-gsvegetable
 ```
 
 **原生 JavaScript / ESM**
 
 ```js
-import PixelDaylightSwitch from 'pixel-daylight-switch';
+import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
 PixelDaylightSwitch.mount(root);
@@ -64,7 +64,7 @@ PixelDaylightSwitch.unmount(root);
 
 ```jsx
 import { useEffect, useRef } from 'react';
-import PixelDaylightSwitch from 'pixel-daylight-switch';
+import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 export function DaylightSwitch() {
   const rootRef = useRef(null);
@@ -84,7 +84,7 @@ export function DaylightSwitch() {
 ```vue
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import PixelDaylightSwitch from 'pixel-daylight-switch';
+import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = ref(null);
 onMounted(() => PixelDaylightSwitch.mount(root.value));
@@ -323,13 +323,13 @@ The script creates the internal canvas, interaction target, and accessibility el
 ### NPM installation
 
 ```bash
-npm install pixel-daylight-switch
+npm install pixel-daylight-switch-gsvegetable
 ```
 
 ESM / native build tools:
 
 ```js
-import PixelDaylightSwitch from 'pixel-daylight-switch';
+import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
 PixelDaylightSwitch.mount(root);
