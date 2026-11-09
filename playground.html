@@ -219,59 +219,67 @@ function handleChange() {
 }
 
 /* =========================================================
-   核心修复：等待新画布「首帧真正就绪」后再交叉淡化
+   终极防闪策略：防抖 + 强制静默等待
    ========================================================= */
 
-// 递增令牌：新的 apply 会让旧的等待立即作废
 let applyToken = 0;
+let debounceTimer = null;
 
-/**
- * 等待目标容器里出现真实尺寸的 canvas，并且连续 2 帧稳定。
- * 三重退出条件，任何一条满足都会 resolve：
- *   1) 连续 2 帧检测到 canvas.width/height > 1  —— 正常路径（~32ms）
- *   2) 被新的 apply 取代（token 变化）           —— 立即放弃
- *   3) 超时（页面隐藏时 rAF 暂停的兜底）          —— 强制退出
- */
-function waitForFirstFrame(root, token, timeout) {
+// 1. 防抖包装：阻止连点造成的并发 WebGL 冲突
+function triggerApply() {
+  clearTimeout(debounceTimer);
+  // 连点时，先把状态置为脏
+  $('status').textContent = '正在准备渲染...';
+  
+  debounceTimer = setTimeout(() => {
+    executeApply();
+  }, 150); // 停下连点操作 150ms 后才真正开始切换
+}
+
+// 2. 等待机制：不仅要求出现 Canvas，还强制要求过 250ms（熬过 0.1s 的白屏期）
+function waitForStableRender(root, token, minDelay = 250) {
   return new Promise((resolve) => {
     let done = false;
+    const start = performance.now();
     let rafId = 0;
-    let stable = 0;
-    let timer = 0;
-    const finish = () => {
+    const timer = setTimeout(() => finish(), 2000); // 超时兜底 2s
+
+    function finish() {
       if (done) return;
       done = true;
       clearTimeout(timer);
       if (rafId) cancelAnimationFrame(rafId);
       resolve();
-    };
-    timer = setTimeout(finish, timeout);
-    const tick = () => {
+    }
+
+    function tick() {
       if (done) return;
-      if (token !== applyToken) return finish(); // 被新任务取代
-      const canvas = root.querySelector('canvas');
-      if (canvas && canvas.width > 1 && canvas.height > 1) {
-        stable++;
-        if (stable >= 2) return finish(); // 连续两帧有内容，合成器已画过至少一次
-      } else {
-        stable = 0;
+      if (token !== applyToken) return finish(); // 被新的任务取代，立刻退出
+
+      const elapsed = performance.now() - start;
+      
+      // 核心修复：必须等够 minDelay(250ms)，确保库把白屏期熬过去了，画出真实内容
+      if (elapsed >= minDelay) {
+        const canvas = root.querySelector('canvas');
+        if (canvas && canvas.width > 1 && canvas.height > 1) {
+          return finish(); // 画面真的出来了，可以切了
+        }
       }
       rafId = requestAnimationFrame(tick);
-    };
+    }
     rafId = requestAnimationFrame(tick);
   });
 }
 
-async function apply() {
+async function executeApply() {
   const myToken = ++applyToken;
   const c = read();
 
-  // 记住本次要操作的两个 layer（后续会交换引用）
   const targetRoot  = inactiveRoot;
   const targetLayer = inactiveLayer;
   const sourceLayer = activeLayer;
 
-  // 1) 清空目标容器（先卸载旧的，避免 WebGL 上下文泄漏）
+  // 1. 清理目标容器（安全清理，防止残留实例干扰）
   try {
     if (window.PixelDaylightSwitch && window.PixelDaylightSwitch.unmount) {
       window.PixelDaylightSwitch.unmount(targetRoot);
@@ -279,7 +287,7 @@ async function apply() {
   } catch (e) { console.warn('unmount 失败', e); }
   targetRoot.innerHTML = '';
 
-  // 2) 写入新参数
+  // 2. 写入新参数
   for (const id of fields) {
     if (id === 'startNight') {
       if (c[id]) targetRoot.setAttribute('data-start-night', 'true');
@@ -292,7 +300,7 @@ async function apply() {
     }
   }
 
-  // 3) 在不可见的容器里静默挂载（此时用户看到的是旧层，屏幕不会闪）
+  // 3. 挂载
   let mounted = false;
   try {
     if (window.PixelDaylightSwitch && window.PixelDaylightSwitch.mount) {
@@ -303,13 +311,13 @@ async function apply() {
     console.error('mount 失败', e);
   }
 
-  // 4) 等首帧渲染完成（正常 ~32ms；后台标签页靠超时退出；被新任务取代则立即退出）
-  await waitForFirstFrame(targetRoot, myToken, mounted ? 1600 : 200);
+  // 4. 强制等待 250ms（覆盖白屏期），且确认 canvas 存在
+  await waitForStableRender(targetRoot, myToken, 250);
 
-  // 5) 如果等待期间用户又点了「应用」/切了预设，本次任务作废
+  // 5. 检查令牌：如果在等待期间用户又点击了，这次任务直接作废
   if (myToken !== applyToken) return;
 
-  // 6) 新画布没出来 → 保留旧画面，绝不切换（这是杜绝白屏的最后一道闸）
+  // 6. 最后的防线：如果 250ms 后连 canvas 都没有，说明彻底失败了，保留原画面
   const hasCanvas = !!targetRoot.querySelector('canvas');
   if (!mounted || !hasCanvas) {
     try {
@@ -323,14 +331,14 @@ async function apply() {
     return;
   }
 
-  // 7) 首帧确定就绪 → 交叉淡化。两边都有内容，物理上不可能白屏
+  // 7. 新画面已经完全就绪 → 交叉淡化，物理上绝不可能看到白屏
   applied = c;
   targetLayer.classList.remove('inactive');
   targetLayer.classList.add('active');
   sourceLayer.classList.remove('active');
   sourceLayer.classList.add('inactive');
 
-  // 交换引用，为下一次切换复用
+  // 交换引用
   [activeRoot, inactiveRoot] = [inactiveRoot, activeRoot];
   [activeLayer, inactiveLayer] = [inactiveLayer, activeLayer];
 
@@ -340,6 +348,8 @@ async function apply() {
   generateCode();
   mark();
 }
+
+/* ========================================================= */
 
 fields.forEach(id => {
   const el = $(id);
@@ -355,7 +365,7 @@ document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', ()=>
   set(presets[b.dataset.p]); 
   document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
   b.setAttribute('aria-pressed','true'); 
-  apply(); 
+  triggerApply(); // 改为防抖触发
 }));
 
 const tabs=[...document.querySelectorAll('.tabs button')];
@@ -363,7 +373,8 @@ tabs.forEach((t,i)=>{
  t.addEventListener('click', ()=>tabs.forEach((x,j)=>{ x.setAttribute('aria-selected',j===i); $('p'+j).hidden=j!==i; }));
 });
 
-$('apply').addEventListener('click', apply);
+$('apply').addEventListener('click', triggerApply); // 改为防抖触发
+
 $('copy').addEventListener('click', async()=>{
  const b=$('copy');
  try { await navigator.clipboard.writeText($('snippet').textContent); b.textContent='已复制'; }
@@ -373,7 +384,8 @@ $('copy').addEventListener('click', async()=>{
 
 // 初始化
 set(defaults);
-apply();
+// 首次加载不走防抖，直接渲染
+executeApply();
 })();
 </script>
 </body>
