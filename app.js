@@ -351,6 +351,30 @@ function mount(root) {
     rect(57,51,8,24,M.WOOD_DK); rect(58,52,6,18,M.CLOUD); rect(59,54,4,6,M.GLASS_HI); rect(59,63,4,2,M.LIT);
     for(let x of [84,101]){for(let a=0;a<360;a+=30){const rad=a*Math.PI/180;put(Math.round(x+4*Math.cos(rad)),Math.round(78+4*Math.sin(rad)),M.WOOD_DK);} }
     rect(88,75,10,1,M.WOOD_DK); rect(91,72,4,4,M.WOOD_DK); rect(95,72,4,1,M.WOOD_DK);
+    // Second-floor balconies, tiled roof edges, shop sign typography and alley depth
+    rect(2,13,49,5,M.WOOD_DK); rect(4,14,45,2,M.ROOF_LT);
+    for(let x=6;x<49;x+=7){rect(x,8,4,5,M.WALL_SH);rect(x+1,9,2,3,M.GLASS);put(x+2,10,M.GLASS_HI);}
+    rect(3,47,48,2,M.WOOD_DK); for(let x=5;x<50;x+=5) rect(x,48,1,5,M.WOOD_LT);
+    rect(6,53,44,2,M.WOOD_DK); rect(10,24,34,7,M.WOOD_DK);
+    for(let x=12;x<43;x+=4){put(x,26,M.LIT_HI);put(x+1,27,M.LIT);}
+    // Ramen shop noren, menu board and noren tassels
+    rect(143,30,43,7,M.WOOD_DK); rect(146,31,37,4,M.LIT_DK);
+    for(let x=148;x<181;x+=6){rect(x,39,4,7,M.CLOUD);put(x+1,46,M.CLOUD_SH);}
+    rect(184,38,5,18,M.WOOD_DK); for(let y=40;y<54;y+=3) put(186,y,M.LIT_HI);
+    // Rooftop water tank, satellite dish and dense utility cables
+    rect(82,7,13,7,M.STONE); rect(84,5,9,2,M.STONE_LT); rect(85,9,7,3,M.WOOD_DK);
+    rect(101,9,2,5,M.WOOD_DK); rect(98,8,8,1,M.WOOD_DK); rect(100,6,4,2,M.STONE_LT);
+    for(let x=0;x<CORE_W;x+=1){const sag=Math.round(10+Math.sin(x/CORE_W*Math.PI)*5);if(x%3===0)put(x,sag,M.WOOD_DK);if(x%11===0)put(x,sag+1,M.WOOD_DK);}
+    // Street utility boxes, bollards, storm drain and manhole
+    rect(4,76,8,8,M.WOOD_DK);rect(5,77,6,5,M.STONE);for(let y=78;y<82;y+=2)rect(6,y,4,1,M.WOOD_DK);
+    for(let x=4;x<CORE_W;x+=48){rect(x,83,2,8,M.STONE);put(x,83,M.STONE_LT);}
+    rect(148,91,16,5,M.WOOD_DK);rect(150,92,12,2,M.STONE);for(let x=151;x<162;x+=3)put(x,93,M.WOOD_DK);
+    // More road perspective and wet-pavement glints
+    for(let y=99;y<111;y+=4){for(let x=(y*3)%17;x<CORE_W;x+=29)rect(x,y,5+(y%3),1,M.STONE);}
+    for(let x=18;x<CORE_W;x+=31){put(x,88,M.CLOUD_SH);put(x+1,89,M.CLOUD_SH);}
+    // Planters and small street tree
+    rect(26,69,13,5,M.WOOD_DK);rect(28,67,9,2,M.STONE);for(let x=29;x<37;x+=2){put(x,65-(x%3),M.LEAF2);put(x+1,67,M.LEAF1);}
+    rect(187,64,5,11,M.WOOD_DK);rect(188,61,3,4,M.LEAF1);put(187,62,M.LEAF2);put(191,63,M.LEAF2);
   };
   const paintApartment = () => {
     rect(0,0,CORE_W,78,M.WALL); rect(0,78,CORE_W,34,M.PLANK);
@@ -382,6 +406,45 @@ function mount(root) {
     // rug and small details
     rect(78,91,89,10,M.SHIRT_DK); rect(82,93,81,6,M.SHIRT);
     rect(12,103,168,1,M.WOOD_DK);
+    // Architectural trim and ceiling coving
+    rect(0,5,CORE_W,2,M.WOOD_DK);rect(0,7,CORE_W,1,M.WOOD_LT);
+    rect(86,12,2,47,M.WOOD_DK);rect(88,12,1,47,M.WOOD_LT);
+    // Gallery wall: framed print, clock and floating shelf
+    rect(96,12,22,20,M.WOOD_DK);rect(98,14,18,16,M.CLOUD_SH);
+    rect(100,16,14,12,M.HILL_FAR);rect(100,24,14,4,M.HILL_NEAR);
+    rect(103,18,3,5,M.LEAF1);put(106,17,M.LEAF2);put(109,19,M.LEAF2);
+    rect(126,16,12,12,M.WOOD_DK);rect(128,18,8,8,M.CLOUD);
+    put(132,21,M.WOOD_DK);put(132,23,M.WOOD_DK);
+    rect(94,34,48,2,M.WOOD_DK);rect(99,36,4,2,M.WOOD_LT);rect(132,36,7,2,M.WOOD_LT);
+    // Media console and television
+    rect(91,43,42,8,M.WOOD_DK);rect(94,45,36,5,M.WOOD);
+    rect(103,29,25,14,M.WOOD_DK);rect(105,31,21,10,M.I1);rect(107,33,17,6,M.HILL_FAR);
+    put(115,36,M.LIT_HI);rect(108,43,15,1,M.WOOD_LT);
+    // Cushions, seams, throw blanket and side table on sofa
+    rect(99,54,11,7,M.SHIRT_DK);rect(101,55,7,4,M.SHIRT);
+    rect(134,54,12,7,M.SHIRT_DK);rect(136,55,8,4,M.SHIRT);
+    for(let x=99;x<149;x+=7)put(x,64,M.SHIRT_DK);
+    rect(154,60,12,12,M.WOOD_DK);rect(156,62,8,7,M.WOOD);
+    rect(158,59,4,2,M.CLOUD);put(159,58,M.LIT_HI);
+    // Bookshelf with books and a small speaker
+    rect(4,28,19,45,M.WOOD_DK);rect(6,31,15,2,M.WOOD_LT);rect(6,48,15,2,M.WOOD_LT);
+    for(let x=7;x<20;x+=4){rect(x,34,2,12,M.BOOK);rect(x+2,36,1,10,M.BOOK_DK);}
+    rect(7,52,5,10,M.WOOD);rect(13,54,6,8,M.BOOK);
+    rect(17,66,5,7,M.WOOD_DK);rect(18,67,3,4,M.I1);
+    // Kitchen counter, backsplash and hanging pendant
+    rect(4,78,53,3,M.WOOD_DK);rect(7,81,47,10,M.WOOD);
+    rect(9,73,44,5,M.STONE);rect(12,74,12,3,M.CLOUD);
+    rect(39,75,10,3,M.WOOD_DK);rect(42,71,4,4,M.GLASS);
+    rect(34,10,2,9,M.WOOD_DK);rect(30,18,10,3,M.LIT);rect(32,19,6,2,M.LIT_HI);
+    // Floorboards, rug border and woven rug pattern
+    for(let y=84;y<111;y+=5)rect(0,y,CORE_W,1,M.WOOD_DK);
+    for(let x=10;x<CORE_W;x+=24)rect(x,84,1,28,M.WOOD_DK);
+    rect(78,89,89,2,M.WOOD_DK);rect(78,101,89,2,M.WOOD_DK);
+    for(let x=86;x<161;x+=8){put(x,95,M.SHIRT_DK);put(x+3,97,M.SHIRT_DK);}
+    // Plant leaves, pot highlights and lamp pull chain
+    rect(26,94,11,2,M.BRICK);rect(28,96,7,3,M.BRICK_LT);
+    for(let i=0;i<7;i++){put(30+i*2,82-i%3*2,M.LEAF3);put(28+i*2,86-i%4*2,M.LEAF2);}
+    rect(170,27,1,28,M.WOOD_LT);put(171,55,M.WOOD_DK);
   };
   const paintSeaside = () => {
     // ocean band and distant islands
@@ -408,6 +471,40 @@ function mount(root) {
     // small palm at edge
     for(let y=52;y<82;y++){const x=16+Math.round((y-52)*.18);put(x,y,M.BARK);}
     for(const [dx,dy] of [[-13,-4],[-9,-9],[-3,-12],[5,-11],[12,-6],[15,-1]]) for(let i=0;i<7;i++) put(16+dx+Math.round(i*dx*.08),52+dy+Math.round(i*.35),M.LEAF2);
+    // Palm fronds with layered highlights and a textured trunk
+    for(let y=55;y<82;y+=3){put(16+Math.round((y-52)*.18)-1,y,M.BARK_LT);put(16+Math.round((y-52)*.18)+1,y,M.BARK);}
+    for(let x=0;x<CORE_W;x+=1){const wave=83+Math.round(Math.sin(x*.11)*2);if(x%2===0)put(x,wave,M.CLOUD);if(x%7===0)put(x,wave+2,M.CLOUD_SH);}
+    // Multiple ocean bands, foam streaks and distant wave crests
+    for(let y=53;y<80;y+=3){for(let x=(y*7)%21;x<CORE_W;x+=27){rect(x,y,5+(x%5),1,M.CLOUD_SH);if(y%2===0)put(x+2,y-1,M.CLOUD);}}
+    for(let x=5;x<CORE_W;x+=17){put(x,61+(x%5),M.CLOUD);put(x+1,62+(x%5),M.CLOUD_SH);}
+    // Lighthouse masonry bands, windows, balcony rail and lantern room
+    for(let y=20;y<41;y+=5){rect(152,y,16,1,M.WOOD_LT);for(let x=153+(y%3);x<168;x+=6)put(x,y+1,M.STONE_LT);}
+    rect(150,12,20,2,M.WOOD_DK);rect(152,9,16,3,M.GLASS);rect(154,10,12,1,M.LIT_HI);
+    rect(149,7,22,2,M.WOOD_DK);rect(151,5,18,2,M.ROOF_LT);
+    rect(150,17,20,1,M.WOOD_DK);for(let x=151;x<170;x+=3)put(x,16,M.WOOD_LT);
+    rect(154,29,12,7,M.GLASS);rect(156,30,8,5,M.LIT);put(159,31,M.LIT_HI);
+    rect(153,38,14,2,M.WOOD_DK);rect(155,40,10,3,M.STONE);
+    // Rocky headland and a winding footpath to the lighthouse
+    rect(137,43,43,4,M.STONE);rect(141,47,34,3,M.STONE_LT);
+    for(let y=49;y<84;y+=3){const x=147-Math.floor((y-49)*.35);rect(x,y,26,2,y%2?M.STONE:M.HILL_NEAR);}
+    for(let i=0;i<8;i++){put(139+i*4,47+i%3,M.CLOUD_SH);put(175-i*3,50+i%4,M.STONE_LT);}
+    // Wooden pier, posts, rope and mooring rings
+    rect(63,82,58,3,M.WOOD_DK);rect(66,83,52,1,M.WOOD_LT);
+    for(let x=68;x<119;x+=8){rect(x,85,2,10,M.WOOD_DK);put(x,86,M.WOOD_LT);}
+    rect(64,80,2,2,M.WOOD_DK);rect(118,80,2,2,M.WOOD_DK);
+    // Boat cabin, rigging, mast flag and hull planks
+    rect(43,68,26,2,M.WOOD_DK);rect(46,65,19,3,M.WOOD);rect(49,62,12,3,M.WOOD_DK);
+    rect(51,58,2,13,M.WOOD_DK);rect(53,58,1,12,M.WOOD_LT);
+    for(let x=45;x<67;x+=5)put(x,71,M.WOOD_LT);
+    rect(53,55,7,2,M.CLOUD);put(60,55,M.ROOF);
+    // Beach details: deck chair, shell, driftwood and dune grass
+    rect(6,87,18,2,M.WOOD_DK);rect(8,89,2,7,M.WOOD_DK);rect(21,89,2,7,M.WOOD_DK);
+    rect(9,88,12,3,M.SHIRT);rect(12,91,7,2,M.SHIRT_DK);
+    put(42,98,M.CLOUD);put(43,97,M.CLOUD_SH);put(44,98,M.CLOUD);
+    rect(128,102,15,2,M.WOOD_DK);put(130,100,M.WOOD_LT);put(137,99,M.WOOD_LT);
+    for(let x=0;x<CORE_W;x+=13){put(x,87+(x%4),M.LEAF1);put(x+2,85+(x%5),M.LEAF2);}
+    // Reflected sunlight on wet sand
+    for(let y=88;y<109;y+=6){for(let x=(y*5)%23;x<CORE_W;x+=31)rect(x,y,7,1,M.LIT_DK);}
   };
   const paintMountainCabin = () => {
     rect(0,0,CORE_W,112,0);
@@ -434,6 +531,35 @@ function mount(root) {
     rect(87,90,20,3,M.STONE);rect(83,93,28,2,M.STONE_LT);
     // chimney and smoke
     rect(115,34,8,17,M.BRICK);rect(113,32,12,3,M.STONE_LT);
+    // Jagged distant peaks with layered snow shelves and exposed rock
+    for(let x=0;x<CORE_W;x+=1){const peak=35+Math.round(Math.sin(x*.045)*9+Math.sin(x*.11)*4);if(x%3===0){put(x,peak+3,M.CLOUD);put(x+1,peak+5,M.CLOUD_SH);}}
+    for(let x=0;x<CORE_W;x+=17){const y=44+(x%5);rect(x,y,5,2,M.HILL_FAR);put(x+2,y-1,M.CLOUD);}
+    // Pine boughs, trunks and snow caught on branches
+    const snowPine=(cx,base,h)=>{for(let j=0;j<5;j++){const yy=base-h+j*Math.floor(h/5);const w=3+j*3;for(let x=cx-w;x<=cx+w;x++){if(Math.abs(x-cx)<=w){put(x,yy+1,M.LEAF2);if((x+yy)%3===0)put(x,yy+2,M.CLOUD_SH);}}}rect(cx,base-h,1,h,M.WOOD_DK);};
+    snowPine(48,91,30);snowPine(145,92,34);snowPine(190,90,29);snowPine(8,94,26);
+    // Cabin log courses, corner joinery and stone foundation
+    for(let y=58;y<89;y+=4){rect(67,y,60,1,M.WOOD_DK);for(let x=70+(y%3);x<124;x+=13)put(x,y+1,M.WOOD_LT);}
+    rect(63,87,68,5,M.STONE);for(let x=66;x<128;x+=8)put(x,89,M.STONE_LT);
+    // Porch roof, posts, railings and steps
+    rect(78,51,48,3,M.WOOD_DK);rect(82,48,40,3,M.ROOF_LT);
+    rect(81,53,2,35,M.WOOD_DK);rect(123,53,2,35,M.WOOD_DK);
+    rect(80,78,45,2,M.WOOD_LT);for(let x=84;x<123;x+=7)rect(x,72,1,8,M.WOOD_DK);
+    rect(88,91,18,2,M.WOOD_DK);rect(86,93,23,2,M.STONE_LT);rect(83,95,29,2,M.STONE);
+    // Window shutters, warm panes and window boxes
+    rect(69,63,16,15,M.WOOD_DK);rect(71,65,12,11,M.GLASS);
+    rect(73,67,8,7,M.LIT);rect(77,65,2,11,M.WOOD_DK);
+    rect(67,62,3,17,M.WOOD);rect(84,62,3,17,M.WOOD);
+    rect(69,79,16,2,M.WOOD_DK);for(let x=71;x<84;x+=3)put(x,78,M.LEAF2);
+    rect(108,61,17,17,M.WOOD_DK);rect(110,63,13,13,M.GLASS);
+    rect(112,65,9,9,M.LIT_DK);rect(116,64,2,12,M.WOOD_DK);
+    // Firewood stack, lantern, mailbox and snow-covered stones
+    rect(133,82,18,5,M.WOOD_DK);for(let y=83;y<87;y+=2)for(let x=135+(y%3);x<149;x+=6)rect(x,y,5,1,M.WOOD);
+    rect(154,76,2,12,M.WOOD_DK);rect(151,74,8,3,M.LIT);put(155,75,M.LIT_HI);
+    rect(55,84,7,5,M.WOOD_DK);rect(56,82,5,3,M.BRICK_LT);put(58,81,M.LIT_HI);
+    // Snowdrifts, tracks and scattered blue-white snow sparkle
+    for(let x=0;x<CORE_W;x+=1){const drift=96+Math.round(Math.sin(x*.07)*2+Math.sin(x*.19));if(x%2===0)put(x,drift,M.CLOUD);if(x%5===0)put(x,drift+1,M.CLOUD_SH);}
+    for(let i=0;i<7;i++){rect(112+i*3,99+i%2*2,2,1,M.CLOUD_SH);put(114+i*3,97+i%3,M.CLOUD);}
+    for(let x=3;x<CORE_W;x+=29){put(x,107,M.CLOUD);put(x+1,106,M.CLOUD_SH);}
   };
   const scene = ['countryside','japanese-street','apartment','seaside','mountain-cabin'].includes(dataset.scene) ? (dataset.scene || 'countryside') : 'countryside';
   let sceneAnim = 0;
