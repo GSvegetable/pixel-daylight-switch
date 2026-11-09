@@ -49,6 +49,12 @@ Each component instance can override its core settings directly in HTML. All att
 | `data-refraction` | `1.24` | Refraction strength of the glass lens. |
 | `data-bezel` | `0.046` | Bezel thickness as a proportion of the switch height. |
 | `data-start-night` | `false` | Set to `true` to initialize the switch in night mode. |
+| `data-friction` | `0.6` | Release inertia/damping. Range: `0.1–0.9`; lower values preserve more fling momentum. |
+| `data-bounce` | `3.2` | Edge rebound impulse. Range: `0–12`; higher values create a stronger elastic kick. |
+| `data-dispersion` | `0.05` | RGB edge dispersion in the glass lens. Range: `0–0.25`; set to `0` to disable chromatic fringes. |
+| `data-shine` | `0.44` | Daytime lens highlight intensity. Range: `0–1.5`; higher values create a stronger glossy reflection. |
+| `data-time-speed` | `1.0` | World simulation speed. Range: `0–8`; `0` freezes world motion and `2` runs it at double speed. |
+| `data-weather` | `default` | World weather preset: `default` or `snow`. Snow adds falling pixel flakes. |
 
 ### Example
 
@@ -59,6 +65,12 @@ Each component instance can override its core settings directly in HTML. All att
   data-refraction="1.5"
   data-bezel="0.05"
   data-start-night="true"
+  data-friction="0.45"
+  data-bounce="4.2"
+  data-dispersion="0.12"
+  data-shine="0.6"
+  data-time-speed="1.5"
+  data-weather="snow"
 ></div>
 
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
@@ -187,6 +199,15 @@ No build step is required.
 
 ## Changelog
 
+### v1.2.0
+
+- Add per-instance physics controls for release friction and edge bounce.
+- Add shader controls for glass chromatic dispersion and surface shine.
+- Add world simulation speed control, including a full pause at `0`.
+- Add an optional pixel-snow weather preset with day/night-aware appearance.
+- Preserve v1.1.0 visuals and behavior when the new attributes are omitted.
+- Validate and clamp numeric parameters; unknown weather values fall back to `default`.
+
 ### v1.1.0
 
 - Add per-instance HTML data attribute configuration.
@@ -234,6 +255,12 @@ No build step is required.
 | `data-refraction` | `1.24` | 控制玻璃镜片的折射强度 |
 | `data-bezel` | `0.046` | 控制外框厚度系数 |
 | `data-start-night` | `false` | 设置为 `true` 时，组件初始化为黑夜状态 |
+| `data-friction` | `0.6` | 松手后的惯性/阻尼系数，范围 `0.1–0.9`；数值越小，甩动后保留的惯性越强 |
+| `data-bounce` | `3.2` | 滑块到达边缘时的回弹力度，范围 `0–12`；数值越大，弹性反馈越明显 |
+| `data-dispersion` | `0.05` | 玻璃镜片边缘的 RGB 色散强度，范围 `0–0.25`；设为 `0` 可关闭彩虹边 |
+| `data-shine` | `0.44` | 白天镜片表面高光强度，范围 `0–1.5`；数值越大，玻璃反光越明显 |
+| `data-time-speed` | `1.0` | 像素世界模拟速度，范围 `0–8`；`0` 冻结世界动态，`2` 表示以两倍速度运行 |
+| `data-weather` | `default` | 天气预设，支持 `default` 和 `snow`；`snow` 会在世界中加入飘落的像素雪花 |
 
 完整示例：
 
@@ -330,6 +357,15 @@ cd pixel-daylight-switch
 - `index.html`：交互演示页面。
 
 ### 更新记录
+
+**v1.2.0**
+
+- 新增物理参数：松手惯性阻尼与边缘回弹力度。
+- 新增 WebGL 着色器参数：玻璃边缘色散与表面高光强度。
+- 新增像素世界时间倍率，支持设置为 `0` 完全冻结世界动态。
+- 新增 `snow` 飘雪天气预设，雪花外观会随昼夜变化。
+- 不传入新增参数时，沿用 v1.1.0 的默认视觉与行为。
+- 对数值参数进行类型转换、范围限制和默认值兜底；未知天气值回退为 `default`。
 
 **v1.1.0**
 
