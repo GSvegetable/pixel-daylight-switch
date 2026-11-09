@@ -1,156 +1,169 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-night="0">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f3f3ef">
-<meta name="description" content="Pixel Daylight Switch 参数实验室">
-<title>Pixel Daylight Switch — Playground</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#dbe6ee">
+<title>像素昼夜开关 · 实验室</title>
 <style>
-:root{color-scheme:light;--paper:#f3f3ef;--ink:#171816;--muted:#777970;--line:#d7d8d0;--soft:#e9eae4;--accent:#c7e36a;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+:root{--bg:#dbe6ee;--surface:#f4f8fa;--ink:#1b2146;--muted:#566680;--line:#b4c4d2;--shadow:#9db0c2;--accent:#efa02c;--on:#1b2146;color-scheme:light}
+:root[data-night="1"]{--bg:#141936;--surface:#1d2347;--ink:#ecebf7;--muted:#9aa3c7;--line:#36406f;--shadow:#090c20;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:1160px;margin:auto;padding:25px 34px 70px}
-header{height:42px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:17px}
-.wordmark{font-size:12px;letter-spacing:.12em;font-weight:750;text-transform:uppercase}
-nav{display:flex;gap:22px;color:var(--muted);font-size:12px}
-.intro{padding:62px 0 42px;display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:end}
-.kicker{font:11px var(--mono);color:#68704c;letter-spacing:.08em}
-h1{font-size:clamp(36px,6vw,64px);letter-spacing:-.065em;line-height:.98;margin:15px 0 17px;font-weight:650}
-.intro p{max-width:590px;color:var(--muted);font-size:15px;margin:0}
-.intro aside{font-size:12px;color:var(--muted);border-left:2px solid var(--accent);padding:4px 0 4px 15px}
-.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:52px;align-items:start}
-.preview-col{position:sticky;top:20px}
-.sectionline{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--ink);padding:11px 0 13px;margin-bottom:14px}
-.sectionline strong{font-size:12px;font-weight:650;letter-spacing:.04em}
-.sectionline span{font:10px var(--mono);color:var(--muted)}
-.stage{background:#e5e6df;min-height:330px;display:grid;place-items:center;overflow:hidden;position:relative}
-.stage iframe{display:block;width:100%;height:330px;border:0;background:#e8e8e3}
-.stage.loading:after{content:"正在重建预览…";position:absolute;bottom:12px;right:14px;font:10px var(--mono);color:#777}
-.previewfoot{display:flex;justify-content:space-between;gap:12px;padding:12px 0 24px;color:var(--muted);font-size:11px}
-.presets{display:flex;gap:7px;flex-wrap:wrap;padding:0 0 27px}
-button{font:inherit;cursor:pointer}
-.preset{border:1px solid var(--line);background:transparent;padding:7px 11px;font-size:11px;color:#51534d}
-.preset[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:white}
-.apply{background:var(--accent);border:0;padding:9px 14px;font-size:12px;font-weight:700}
-.apply:hover{background:#b8d653}
-.group{border-top:1px solid var(--line);padding:15px 0 17px}
-.group h2{font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin:0 0 16px;color:#65685f}
-.control{margin:0 0 16px}.control:last-child{margin-bottom:0}
-.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
-label{font-size:12px}.desc{font-size:10px;color:var(--muted);margin-left:5px}
-output{font:11px var(--mono);color:#5b6540;font-variant-numeric:tabular-nums}
-input[type=range]{width:100%;height:14px;margin:0;accent-color:#68783a;cursor:pointer}
-select{font:12px inherit;border:1px solid var(--line);background:transparent;padding:6px 9px}
-.toggle{display:flex;align-items:center;gap:8px;font-size:12px}
-.toggle input{accent-color:#68783a}
-.actions{display:flex;align-items:center;justify-content:space-between;padding:17px 0;border-top:1px solid var(--ink);margin-top:5px}
-.actions small{color:var(--muted);font-size:10px}
-.code{margin-top:50px;border-top:1px solid var(--ink)}
-.codehead{display:flex;align-items:center;justify-content:space-between;padding:13px 0}
-.codehead strong{font-size:12px}
-.copy{border:1px solid var(--line);background:transparent;padding:7px 12px;font-size:11px}
-pre{margin:0;background:#e8e9e2;padding:18px;overflow:auto;white-space:pre;color:#34372e;font:11px/1.7 var(--mono)}
-footer{margin-top:45px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
-@media(max-width:820px){.wrap{padding:17px 18px 50px}.intro{grid-template-columns:1fr;gap:16px;padding:45px 0 30px}.intro aside{max-width:400px}.layout{grid-template-columns:1fr;gap:26px}.preview-col{position:static}.stage,.stage iframe{min-height:260px;height:260px}.previewfoot{padding-bottom:16px}.controls-col{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}.group:nth-child(1),.group:nth-child(2){border-top:1px solid var(--line)}}
-@media(max-width:540px){.controls-col{grid-template-columns:1fr}.topnav{gap:12px}.intro{padding-top:36px}h1{font-size:43px}}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif}
+body,.stage-col,.stage,.dock,pre,button,select{transition:background-color .9s,border-color .9s,color .9s}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
+.top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
+.top nav{display:flex;gap:16px;font-size:14px}
+.stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 18px 12px}
+.stage{position:relative;height:min(38vh,280px);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--shadow);background:var(--surface);overflow:hidden}
+/* 顺手帮你加了个平滑透明过渡，防止切参数时 iframe 白屏闪烁 */
+.stage iframe{display:block;width:100%;height:100%;border:0;transition:opacity 0.3s ease}
+.stage.busy iframe{opacity:0.3}
+.stage.busy:after{content:"正在重建预览…";position:absolute;right:10px;bottom:8px;font-size:12px;color:var(--muted)}
+.hint{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.panel{padding:0 18px}
+h2{font-size:14px;margin:22px 0 10px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px}
+.chip,.tabs button,.copy{font:inherit;color:var(--ink);cursor:pointer}
+.chip{flex:none;border:2px solid var(--ink);background:transparent;padding:6px 12px;font-size:13px}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--on)}
+.tabs{display:flex;border:2px solid var(--ink)}
+.tabs button{flex:1;border:0;background:transparent;padding:8px 0}
+.tabs button+button{border-left:2px solid var(--ink)}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--surface)}
+.ctl{margin:20px 0}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+output{font:13px ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;color:var(--muted)}
+input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:26px;margin:0;background:transparent;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--accent) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--accent) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:26px;margin-top:-10px;background:var(--surface);border:2px solid var(--ink);border-radius:0;box-shadow:2px 2px 0 var(--shadow)}
+input[type=range]::-moz-range-thumb{width:14px;height:22px;background:var(--surface);border:2px solid var(--ink);border-radius:0;box-shadow:2px 2px 0 var(--shadow)}
+select{font:inherit;background:var(--surface);color:var(--ink);border:2px solid var(--ink);padding:5px 10px}
+.check{display:flex;align-items:center;gap:10px;margin:20px 0}
+.check input{width:20px;height:20px;margin:0;accent-color:var(--accent)}
+.codehead{display:flex;align-items:center;justify-content:space-between}
+.codehead h2{margin:26px 0 10px}
+.copy{border:2px solid var(--ink);background:transparent;padding:3px 12px;font-size:13px}
+pre{margin:0;padding:14px;background:var(--surface);border:2px solid var(--ink);overflow:auto;font:12px/1.7 ui-monospace,Menlo,monospace;color:var(--ink)}
+.dock{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px;padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:2px solid var(--ink)}
+.dock span{font-size:13px;color:var(--muted)}
+.apply{font:inherit;font-weight:700;border:2px solid var(--ink);background:var(--accent);color:var(--on);padding:9px 22px;box-shadow:3px 3px 0 var(--shadow);cursor:pointer}
+.apply:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.apply[data-clean]{background:transparent;color:var(--ink)}
+@media(min-width:900px){
+main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:44px;align-items:start}
+.top{max-width:1120px;margin:0 auto;padding:18px 28px}
+.stage-col{top:16px;padding:0}
+.stage{height:min(68vh,560px)}
+.panel{padding:0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><div class="wordmark">PDS — Configuration Lab</div><nav><a href="./index.html">Demo</a><a href="https://github.com/GSvegetable/pixel-daylight-switch">Source</a><a href="./README.md">Docs</a></nav></header>
-<section class="intro">
-<div><div class="kicker">COMPONENT STUDY / 01 — V1.2.0</div><h1>Shape the<br>daylight.</h1><p>为昼夜开关调节运动、玻璃与世界参数。先调整数值，再应用到独立预览；确认效果后复制 HTML。</p></div>
-<aside>预览使用独立渲染页面。调节滑块不会反复销毁 WebGL 上下文，避免白屏、卡顿和玻璃效果丢失。</aside>
+<header class="top"><div><b>像素昼夜开关</b><span>实验室</span></div><nav><a href="./index.html">演示</a><a href="https://github.com/GSvegetable/pixel-daylight-switch">源码</a><a href="./README.md">文档</a></nav></header>
+<main>
+<section class="stage-col">
+<div class="stage" id="stage"><iframe id="preview" title="开关预览"></iframe></div>
+<p class="hint">拖动开关看效果。改完参数，点「应用」重建预览。</p>
 </section>
-<div class="layout">
-<section class="preview-col">
-<div class="sectionline"><strong>01 / Preview</strong><span id="status">READY · DEFAULT CONFIG</span></div>
-<div class="stage" id="stage"><iframe id="preview" title="Pixel Daylight Switch preview" src="./preview.html" loading="eager"></iframe></div>
-<div class="previewfoot"><span>拖动开关，观察昼夜变化</span><span>ISOLATED CANVAS</span></div>
-<div class="sectionline"><strong>Presets</strong><span>STARTING POINTS</span></div>
-<div class="presets">
-<button class="preset" data-preset="default" aria-pressed="true">原始状态</button>
-<button class="preset" data-preset="cinematic" aria-pressed="false">电影玻璃</button>
-<button class="preset" data-preset="snow" aria-pressed="false">雪夜</button>
-<button class="preset" data-preset="frozen" aria-pressed="false">时间冻结</button>
-</div>
-<button class="apply" id="apply">应用参数 ↗</button>
-</section>
-<section>
-<div class="sectionline"><strong>02 / Parameters</strong><span>INSTANCE SETTINGS</span></div>
-<div class="controls-col">
-<div class="group"><h2>Motion & physics / 运动与物理</h2>
-<div class="control"><div class="row"><label for="speed">基础速度 <span class="desc">SPEED</span></label><output id="speedValue">9.5</output></div><input id="speed" type="range" min="3" max="20" step=".1" value="9.5"></div>
-<div class="control"><div class="row"><label for="friction">惯性阻尼 <span class="desc">FRICTION</span></label><output id="frictionValue">0.60</output></div><input id="friction" type="range" min=".1" max=".9" step=".01" value=".6"></div>
-<div class="control"><div class="row"><label for="bounce">边缘回弹 <span class="desc">BOUNCE</span></label><output id="bounceValue">3.2</output></div><input id="bounce" type="range" min="0" max="12" step=".1" value="3.2"></div>
-</div>
-<div class="group"><h2>Liquid glass / 液态玻璃</h2>
-<div class="control"><div class="row"><label for="refraction">折射强度 <span class="desc">REFRACTION</span></label><output id="refractionValue">1.24</output></div><input id="refraction" type="range" min=".5" max="2.5" step=".01" value="1.24"></div>
-<div class="control"><div class="row"><label for="bezel">边框厚度 <span class="desc">BEZEL</span></label><output id="bezelValue">0.046</output></div><input id="bezel" type="range" min=".02" max=".09" step=".001" value=".046"></div>
-<div class="control"><div class="row"><label for="dispersion">边缘色散 <span class="desc">DISPERSION</span></label><output id="dispersionValue">0.050</output></div><input id="dispersion" type="range" min="0" max=".25" step=".005" value=".05"></div>
-<div class="control"><div class="row"><label for="shine">表面高光 <span class="desc">SHINE</span></label><output id="shineValue">0.44</output></div><input id="shine" type="range" min="0" max="1.5" step=".01" value=".44"></div>
-</div>
-<div class="group"><h2>World / 像素世界</h2>
-<div class="control"><div class="row"><label for="timeSpeed">时间倍率 <span class="desc">TIME SPEED</span></label><output id="timeSpeedValue">1.00×</output></div><input id="timeSpeed" type="range" min="0" max="4" step=".05" value="1"></div>
-<div class="control"><div class="row"><label for="weather">天气 <span class="desc">WEATHER</span></label><select id="weather"><option value="default">默认</option><option value="snow">飘雪</option></select></div></div>
-<label class="toggle"><input id="startNight" type="checkbox"> 从夜晚开始 · START IN NIGHT</label>
-</div>
-</div>
-<div class="actions"><small>滑块只更新数值；点击应用后才重建预览。</small><button class="apply" id="applyBottom">应用参数 ↗</button></div>
-</section>
-</div>
-<section class="code">
-<div class="codehead"><strong>03 / Embed code</strong><button class="copy" id="copy">复制 HTML</button></div>
+<section class="panel">
+<h2>场景</h2><div class="chips" id="chips"></div>
+<h2>参数</h2>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div id="panes"></div>
+<div class="codehead"><h2>嵌入代码</h2><button class="copy" id="copy">复制代码</button></div>
 <pre id="snippet"></pre>
+<div class="dock"><span id="status"></span><button class="apply" id="apply">应用</button></div>
 </section>
-<footer><span>PIXEL DAYLIGHT SWITCH / V1.2.0 — UNRELEASED</span><span>BUILT FOR THE WEB.</span></footer>
-</div>
+</main>
 <script>
-(() => {
- const $=id=>document.getElementById(id);
- const fields=['speed','friction','bounce','refraction','bezel','dispersion','shine','timeSpeed','weather','startNight'];
- const attr={speed:'speed',friction:'friction',bounce:'bounce',refraction:'refraction',bezel:'bezel',dispersion:'dispersion',shine:'shine',timeSpeed:'time-speed',weather:'weather',startNight:'start-night'};
- const defaults={speed:9.5,friction:.6,bounce:3.2,refraction:1.24,bezel:.046,dispersion:.05,shine:.44,timeSpeed:1,weather:'default',startNight:false};
- const presets={
-  default:{...defaults},
-  cinematic:{speed:8.5,friction:.72,bounce:2.4,refraction:1.75,bezel:.055,dispersion:.16,shine:.82,timeSpeed:.8,weather:'default',startNight:false},
-  snow:{speed:9.5,friction:.58,bounce:3.5,refraction:1.45,bezel:.046,dispersion:.1,shine:.58,timeSpeed:1.2,weather:'snow',startNight:true},
-  frozen:{...defaults,timeSpeed:0,weather:'snow',startNight:true}
+(()=>{
+const $=id=>document.getElementById(id);
+const groups=[
+ ['运动',[['speed','基础速度',3,20,.1],['friction','惯性阻尼',.1,.9,.01],['bounce','边缘回弹',0,12,.1]]],
+ ['玻璃',[['refraction','折射强度',.5,2.5,.01],['bezel','边框厚度',.02,.09,.001],['dispersion','边缘色散',0,.25,.005],['shine','表面高光',0,1.5,.01]]],
+ ['世界',[['timeSpeed','时间倍率',0,4,.05]]]
+];
+const nums=groups.flatMap(g=>g[1]);
+const fields=[...nums.map(n=>n[0]),'weather','startNight'];
+const attr={speed:'speed',friction:'friction',bounce:'bounce',refraction:'refraction',bezel:'bezel',dispersion:'dispersion',shine:'shine',timeSpeed:'time-speed',weather:'weather',startNight:'start-night'};
+const defaults={speed:9.5,friction:.6,bounce:3.2,refraction:1.24,bezel:.046,dispersion:.05,shine:.44,timeSpeed:1,weather:'default',startNight:false};
+const presets={
+ default:{...defaults},
+ cinematic:{speed:8.5,friction:.72,bounce:2.4,refraction:1.75,bezel:.055,dispersion:.16,shine:.82,timeSpeed:.8,weather:'default',startNight:false},
+ snow:{speed:9.5,friction:.58,bounce:3.5,refraction:1.45,bezel:.046,dispersion:.1,shine:.58,timeSpeed:1.2,weather:'snow',startNight:true},
+ frozen:{...defaults,timeSpeed:0,weather:'snow',startNight:true}
+};
+const names={default:'原始状态',cinematic:'电影玻璃',snow:'雪夜',frozen:'时间冻结'};
+let applied=null,busy=false;
+
+$('chips').innerHTML=Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='default'}">${names[k]}</button>`).join('');
+$('tabs').innerHTML=groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
+$('panes').innerHTML=groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
+ g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
+ (i===2?`<div class="ctl"><div class="row"><label for="weather">天气</label><select id="weather"><option value="default">默认</option><option value="snow">飘雪</option></select></div></div><label class="check"><input id="startNight" type="checkbox">从夜晚开始</label>`:'')+
+ '</div>').join('');
+
+const fmt=(n,v)=>Number(v).toFixed((String(n[4]).split('.')[1]||'').length)+(n[0]==='timeSpeed'?'×':'');
+const read=()=>{const c={};for(const id of fields)c[id]=id==='weather'?$(id).value:id==='startNight'?$(id).checked:Number($(id).value);return c};
+const set=c=>{for(const id of fields){if(id==='startNight')$(id).checked=!!c[id];else $(id).value=c[id]}refresh()};
+
+function code(){
+ const c=read(),a=fields.filter(id=>c[id]!==defaults[id]).map(id=>`  data-${attr[id]}="${c[id]}"`);
+ const el=a.length?['<div','  data-ld-part="toggle-daylight"',...a,'></div>'].join('\n'):'<div data-ld-part="toggle-daylight"></div>';
+ $('snippet').textContent=el+'\n<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><\/script>';
+}
+function mark(){
+ const dirty=JSON.stringify(read())!==JSON.stringify(applied);
+ $('status').textContent=busy?'正在重建预览…':dirty?'有改动，尚未应用':'预览已是最新';
+ $('apply').toggleAttribute('data-clean',!dirty&&!busy);
+}
+function refresh(){
+ for(const n of nums){const el=$(n[0]);$(n[0]+'Out').textContent=fmt(n,el.value);el.style.setProperty('--p',(el.value-n[2])/(n[3]-n[2])*100+'%')}
+ code();mark();
+}
+function night(on){
+ document.documentElement.dataset.night=on?'1':'0';
+ document.querySelector('meta[name=theme-color]').content=on?'#141936':'#dbe6ee';
+}
+function apply(){
+ const c=read(),p=new URLSearchParams();
+ for(const id of fields){if(id==='startNight'){if(c[id])p.set('start-night','true')}else p.set(attr[id],String(c[id]))}
+ applied=c;busy=true;$('stage').classList.add('busy');night(c.startNight);
+ const f=$('preview');
+ f.onload=()=>{
+  busy=false;$('stage').classList.remove('busy');
+  try{f.contentDocument.addEventListener('daylight:change',e=>night(e.detail.night))}catch{}
+  mark();
  };
- let applied={...defaults};
- const fmt=(id,v)=>id==='friction'?Number(v).toFixed(2):id==='timeSpeed'?Number(v).toFixed(2)+'×':id==='bezel'||id==='dispersion'?Number(v).toFixed(3):String(v);
- function read(){const c={};for(const id of fields)c[id]=id==='weather' ? $('weather').value : id==='startNight' ? $('startNight').checked : Number($(id).value);return c;}
- function set(c){for(const id of fields)$(id).value=id==='weather'?c[id]:id==='startNight'?(c[id]?'true':'false'):c[id];$('startNight').checked=!!c.startNight;refresh();}
- function refresh(){for(const id of fields)if(id!=='weather'&&id!=='startNight')$(id+'Value').textContent=fmt(id,$(id).value);renderCode();}
- function renderCode(){
-  const c=read(),lines=['<div','  data-ld-part="toggle-daylight"'];
-  for(const id of fields){if(id==='startNight'){if(c.startNight)lines.push('  data-start-night="true"');continue;}lines.push('  data-'+attr[id]+'="'+c[id]+'"');}
-  lines.push('></div>','<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><'+'/script>');
-  $('snippet').textContent=lines.join('\n');
- }
- function apply(){
-  const c=read(),params=new URLSearchParams();
-  for(const id of fields){if(id==='startNight'){if(c[id])params.set('start-night','true');}else params.set(attr[id],String(c[id]));}
-  const frame=$('preview');$('stage').classList.add('loading');$('status').textContent='RENDERING · PLEASE WAIT';
-  frame.onload=()=>{$('stage').classList.remove('loading');$('status').textContent='READY · CONFIG APPLIED';};
-  frame.src='./preview.html?'+params.toString();
-  applied=c;
- }
- fields.forEach(id=>$(id).addEventListener(id==='weather'||id==='startNight'?'change':'input',refresh));
- document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{
-  const p=presets[btn.dataset.preset];set(p);
-  document.querySelectorAll('[data-preset]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
-  apply();
- }));
- $('apply').addEventListener('click',apply);$('applyBottom').addEventListener('click',apply);
- $('copy').addEventListener('click',async()=>{
-  try{await navigator.clipboard.writeText($('snippet').textContent);$('copy').textContent='已复制';}
-  catch{$('copy').textContent='复制失败，请手动复制';}
-  setTimeout(()=>$('copy').textContent='复制 HTML',1500);
+ f.src='./preview.html?'+p;mark();
+}
+const unpress=()=>document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+
+fields.forEach(id=>$(id).addEventListener(id==='weather'||id==='startNight'?'change':'input',()=>{unpress();refresh()}));
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+ set(presets[b.dataset.p]);unpress();b.setAttribute('aria-pressed','true');apply();
+}));
+const tabs=[...document.querySelectorAll('.tabs button')];
+tabs.forEach((t,i)=>{
+ t.addEventListener('click',()=>tabs.forEach((x,j)=>{x.setAttribute('aria-selected',j===i);$('p'+j).hidden=j!==i}));
+ t.addEventListener('keydown',e=>{
+  const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+  if(d){const n=tabs[(i+d+tabs.length)%tabs.length];n.focus();n.click()}
  });
- set(defaults);apply();
+});
+$('apply').addEventListener('click',apply);
+$('copy').addEventListener('click',async()=>{
+ const b=$('copy');
+ try{await navigator.clipboard.writeText($('snippet').textContent);b.textContent='已复制'}
+ catch{b.textContent='复制失败，请手动选中'}
+ setTimeout(()=>b.textContent='复制代码',1600);
+});
+set(defaults);apply();
 })();
 </script>
 </body>
