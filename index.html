@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>像素昼夜开关</title>
+<meta name="description" content="像素小人居住在可拖动的昼夜开关里。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<div data-ld-part="toggle-daylight" lang="zh-CN">
+  <canvas class="scene" aria-hidden="true"></canvas>
+  <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
+  <span class="vh" role="status" aria-live="polite" data-status></span>
+  <span class="probe" aria-hidden="true"></span>
+</div>
+</main>
+
+<footer>
+  <span class="kicker">Pixel</span>
+  <span class="name">昼夜开关</span>
+  <span class="sep">/</span>
+  <span>拖动切换昼夜 · 点击快速切换</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
