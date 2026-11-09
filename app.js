@@ -553,3 +553,26 @@ if (toggleEl) {
   toggleEl.dispatchEvent(new CustomEvent('daylight:change', { detail: { night: isNight } }));
 }
 })();
+  return {
+    toggle: () => { toggle(); },
+    setNight: (isNight) => { target = isNight ? 1 : 0; moving = true; wake(); },
+    destroy: () => {
+      stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); 
+      for (const off of cleanups) off(); 
+      if (gl && ready) { 
+        gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); 
+        gl.deleteTexture(texWorld); gl.deleteTexture(texNear); 
+        const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); 
+      }
+    }
+  };
+}
+
+// 大厂标准做法：自动寻找页面上的容器，自动挂载，并暴露全局 API
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.querySelector('[data-ld-part="toggle-daylight"]');
+  if (el) {
+    window.DaylightSwitch = mount(el);
+  }
+});
+})();
