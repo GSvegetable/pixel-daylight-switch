@@ -151,26 +151,26 @@ const groups=[
 ];
 
 const nums = groups.flatMap(g=>g[1]);
-const fields = [...nums.map(n=>n[0]), 'weather', 'startNight'];
+const fields = [...nums.map(n=>n[0]), 'weather', 'scene', 'startNight'];
 const attr = {
   speed:'speed', friction:'friction', bounce:'bounce', 
   refraction:'refraction', bezel:'bezel', dispersion:'dispersion', shine:'shine', 
-  timeSpeed:'time-speed', weather:'weather', startNight:'start-night'
+  timeSpeed:'time-speed', weather:'weather', scene:'scene', startNight:'start-night'
 };
 
 const defaults = {
   speed:9.5, friction:0.6, bounce:3.2, 
   refraction:1.24, bezel:0.046, dispersion:0.05, shine:0.44, 
-  timeSpeed:1, weather:'default', startNight:false
+  timeSpeed:1, weather:'default', scene:'countryside', startNight:false
 };
 
 const presets = {
   default: {...defaults},
   cinematic: { speed:10, friction:0.8, bounce:5, refraction:2.2, bezel:0.08, dispersion:0.25, shine:1.2, timeSpeed:0.5, weather:'default', startNight:false },
   snow: { speed:9.5, friction:0.5, bounce:6, refraction:1.5, bezel:0.05, dispersion:0.15, shine:0.6, timeSpeed:1.5, weather:'snow', startNight:true },
-  frozen: { ...defaults, timeSpeed:0, weather:'snow', startNight:true }
+  frozen: { ...defaults, timeSpeed:0, weather:'snow', scene:'mountain-cabin', startNight:true }
 };
-const names = { default:'原始状态', cinematic:'夸张玻璃', snow:'极寒雪夜', frozen:'时间冻结' };
+const names = { default:'乡村小屋', cinematic:'电影玻璃', snow:'雪夜', frozen:'山间木屋' };
 
 let applied = null;
 
@@ -178,10 +178,10 @@ $('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="$
 $('tabs').innerHTML = groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
 $('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
  g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
- (i===2?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
+ (i===2?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div><div class="ctl"><div class="row"><label for="scene">真实场景</label><select id="scene"><option value="countryside">乡村小屋</option><option value="japanese-street">日本街道</option><option value="apartment">现代公寓</option><option value="seaside">海边灯塔</option><option value="mountain-cabin">山间木屋</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
  '</div>').join('');
 
-const read = ()=>{ const c={}; for(const id of fields) c[id] = id==='weather'?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
+const read = ()=>{ const c={}; for(const id of fields) c[id] = (id==='weather'||id==='scene')?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
 const set = c=>{ for(const id of fields){ if(id==='startNight') $(id).checked=!!c[id]; else $(id).value=c[id]; } updateUI(); mark(); };
 
 function updateUI() {
@@ -292,7 +292,7 @@ async function executeApply() {
     if (id === 'startNight') {
       if (c[id]) targetRoot.setAttribute('data-start-night', 'true');
       else targetRoot.removeAttribute('data-start-night');
-    } else if (id === 'weather') {
+    } else if (id === 'weather' || id === 'scene') {
       if (c[id] !== 'default') targetRoot.setAttribute('data-weather', c[id]);
       else targetRoot.removeAttribute('data-weather');
     } else {
@@ -353,7 +353,7 @@ async function executeApply() {
 
 fields.forEach(id => {
   const el = $(id);
-  if (id === 'weather' || id === 'startNight') {
+  if (id === 'weather' || id === 'scene' || id === 'startNight') {
     el.addEventListener('change', () => { handleInput(); handleChange(); });
   } else {
     el.addEventListener('input', handleInput);
