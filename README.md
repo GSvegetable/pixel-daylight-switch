@@ -62,7 +62,7 @@ For a self-inserting embed, add this script where you want the component to appe
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader inserts one responsive instance and loads only the component runtime. Its styles are isolated to the component and do not reset or modify your page's `body`, `main`, or other global elements. For custom scenes, weather, multiple instances or exact placement, use the mount-point approach above.
+The loader inserts one responsive instance and loads only the component runtime. Its styles are isolated to the component and do not reset or modify your page's `body`, `main`, or other global elements. You can set `data-scene`, `data-weather`, `data-start-night` and the other documented `data-*` options directly on the script tag. For multiple instances or exact placement, use the mount-point approach above.
 
 ## Install from npm
 
