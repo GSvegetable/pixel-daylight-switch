@@ -42,7 +42,8 @@
     "index.mjs",
     "README.md",
     "LICENSE",
-    "llms.txt"
+    "llms.txt",
+    "INTEGRATIONS.md"
   ],
   "sideEffects": [
     "./app.js"
