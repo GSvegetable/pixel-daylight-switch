@@ -176,7 +176,7 @@ Capacitor 8 アプリには、田園の家、日本の街並み、モダンな�
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-スタイルとデフォルトシーンのスイッチを自動挿入します。シーンや天気のカスタマイズ、複数インスタンス、配置の制御には、上記の npm API と `data-scene` / `data-weather` 属性を使用してください。
+レスポンシブなデフォルトシーンのスイッチを自動作成してランタイムを読み込みます。デモページ用スタイルは挿入せず、サイトのグローバルスタイルも変更しません。シーンや天気のカスタマイズ、複数インスタンス、配置の制御には、上記の npm API と `data-scene` / `data-weather` 属性を使用してください。
 
 ### 独自の Android / iOS Capacitor アプリへの統合
 
