@@ -50,5 +50,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "test": "node tests/package-smoke.cjs"
   }
 }
