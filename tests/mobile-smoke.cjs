@@ -50,7 +50,7 @@ assert.match(rendererSource, /Canvas 2D Failed/);
 const renderer = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.equal(renderer, fs.readFileSync(path.join(root, 'app.js'), 'utf8'), 'Mobile build must use the exact shared renderer');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-assert.equal(pkg.version, '3.0.0');
+assert.equal(pkg.version, '3.0.1');
 const os = require('node:os');
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pds-android-version-'));
 try {
@@ -59,8 +59,8 @@ try {
   const versionRun = spawnSync(process.execPath, [path.join(root, 'scripts/set-android-version.cjs'), gradlePath], { cwd: root, encoding: 'utf8' });
   assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
   const gradle = fs.readFileSync(gradlePath, 'utf8');
-  assert.match(gradle, /versionCode 30000/);
-  assert.match(gradle, /versionName "3\.0\.0"/);
+  assert.match(gradle, /versionCode 30100/);
+  assert.match(gradle, /versionName "3\.0\.1"/);
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
 }
