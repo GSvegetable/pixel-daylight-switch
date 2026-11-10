@@ -1,3 +1,5 @@
+'use strict';
+const { test, expect } = require('@playwright/test');
 
 test('renders a Manifest v2 scene with layered pixel assets and motion', async ({ page }) => {
   const errors = [];
@@ -37,9 +39,6 @@ test('renders a Manifest v2 scene with layered pixel assets and motion', async (
   expect(result.unregister).toBeTruthy();
   expect(errors).toEqual([]);
 });
-
-'use strict';
-const { test, expect } = require('@playwright/test');
 
 
 test('registers and renders a community pixel scene through the shared switch renderer', async ({ page }) => {
