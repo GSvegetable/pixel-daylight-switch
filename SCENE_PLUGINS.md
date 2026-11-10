@@ -50,7 +50,7 @@ The one-line `embed.js` loader loads the registry before the renderer, but it do
 
 Required fields:
 
-- `schemaVersion`: currently `1`.
+- `schemaVersion`: `1` for the original single-matrix format or `2` for layered pixel assets and motion.
 - `id`: unique lowercase ID, 3–64 characters. Built-in scene IDs are reserved.
 - `name`, `author`, `license`: scene metadata.
 - `canvas`: width 1–192 and height 1–112.
@@ -89,6 +89,6 @@ Registration rejects duplicate IDs, built-in IDs, malformed dimensions, invalid 
 
 ## Scope and safety
 
-Manifest v1 supports palette-driven pixel maps. It intentionally does not execute plugin JavaScript, evaluate expressions, or load arbitrary code. External image/sprite assets, layered tile maps and custom animation tracks are not part of v1; they should be introduced through a separately versioned schema extension with explicit asset limits and lifecycle rules.
+Manifest v1 supports palette-driven pixel maps; Manifest v2 adds bounded pixel-matrix assets, ordered layers and declarative drift/bob tracks. Neither version executes plugin JavaScript, evaluates expressions, loads arbitrary code or downloads external images. Raster image imports and tile-atlas tooling are outside the v3.0.1 scope.
 
 All five built-in scenes continue to use their original hand-authored painters and scene-specific live behavior. Community scenes use the data-driven renderer and do not replace or mutate built-in scene definitions.
