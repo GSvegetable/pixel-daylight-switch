@@ -12,6 +12,8 @@ const integrations = fs.readFileSync(path.join(root, 'INTEGRATIONS.md'), 'utf8')
 assert.match(embed, /data-ld-part/);
 assert.match(embed, /aspect-ratio:1\.6439/);
 assert.match(embed, /width:min\(100%, 800px\)/);
+assert.match(embed, /pixel-daylight-switch\/scene-plugin\.js/);
+assert.match(embed, /plugins\.onload = loadRuntime/);
 assert.match(embed, /pixel-daylight-switch\/app\.js/);
 assert.doesNotMatch(embed, /createElement\(['"]link['"]\)|\.href\s*=|rel\s*=\s*['"]stylesheet['"]/, 'The embed loader must not inject a global stylesheet.');
 assert.doesNotMatch(embed, /document\.body\.style|document\.documentElement\.style/, 'The embed loader must not mutate host page global styles.');
