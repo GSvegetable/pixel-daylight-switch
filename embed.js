@@ -1,9 +1,8 @@
 (function () {
   'use strict';
 
-  // The renderer injects its own component-scoped CSS. Do not load style.css here:
-  // that file also contains demo-page styles (body/main/footer) and would leak into
-  // the host website.
+  // The renderer injects component-scoped CSS. Loading the repository demo stylesheet
+  // here would leak body/main/footer rules into the host website.
   const script = document.currentScript;
   const wrapper = document.createElement('div');
   wrapper.className = 'pds-embed';
