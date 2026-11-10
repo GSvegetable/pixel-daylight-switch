@@ -88,6 +88,25 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
   await expect(page.locator('#previewA canvas.scene')).toHaveCount(1);
 });
 
+
+test('playground language selector is visible, switches all supported locales, and stays within mobile width', async ({ page }) => {
+  await page.setViewportSize({width:360,height:800});
+  await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
+    status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
+  }));
+  await page.goto('/playground.html');
+  const language = page.locator('#language');
+  await expect(language).toBeVisible();
+  for (const [locale, title] of [['en','Pixel Daylight Switch'],['zh-CN','像素昼夜开关'],['ja','昼夜スイッチ']]) {
+    await language.selectOption(locale);
+    await expect(page.locator('.top b')).toHaveText(title);
+    await expect(page.locator('html')).toHaveAttribute('lang', locale);
+  }
+  const widths = await page.evaluate(() => ({viewport:document.documentElement.clientWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
+  expect(widths.document).toBeLessThanOrEqual(widths.viewport + 1);
+  expect(widths.body).toBeLessThanOrEqual(widths.viewport + 1);
+});
+
 test('removes all component-owned event listeners on unmount', async ({ page }) => {
   await page.addInitScript(() => {
     const originalAdd = EventTarget.prototype.addEventListener;
