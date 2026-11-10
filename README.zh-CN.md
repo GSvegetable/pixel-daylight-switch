@@ -61,7 +61,7 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-加载器会自动插入容器、样式和运行脚本。目前它创建一个默认实例，并使用固定的最大展示尺寸；如果需要精确控制布局或配置属性，请使用上面的挂载节点方式。
+加载器会自动创建响应式实例并加载运行时。组件样式仅作用于组件本身，不会重置或修改宿主网页的 `body`、`main` 等全局元素。若要自定义场景、天气、创建多个实例或精确控制位置，请使用上面的挂载节点方式。
 
 ## 通过 npm 安装
 
@@ -176,7 +176,7 @@ Capacitor 移动端现已提供完整的场景控制界面：可在乡间小屋�
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-这是一键式基础嵌入，当前展示单个默认场景开关；如果需要自定义场景、天气或多个实例，请使用上面的 npm API（`data-scene`、`data-weather` 等参数）。
+这是一键式基础嵌入，会创建响应式的默认场景开关；不会注入演示页面样式，也不会修改网站全局样式。如果需要自定义场景、天气或多个实例，请使用上面的 npm API（`data-scene`、`data-weather` 等参数）。
 
 ### 集成到自己的 Android / iOS Capacitor 工程
 
