@@ -1374,7 +1374,7 @@ if (typeof window !== 'undefined' && window.PixelDaylightSwitchScenePlugins) {
   api.getScene = sceneApi.getScene;
   api.listScenes = sceneApi.listScenes;
 }
-if (typeof document !== 'undefined') {
+if (typeof document !== 'undefined' && !(typeof window !== 'undefined' && window.__PDS_DEFER_AUTO_MOUNT__)) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true });
   else mountAll();
 }
