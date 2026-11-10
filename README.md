@@ -166,6 +166,31 @@ GitHub Actions runs package and SSR checks on Node.js 18, 20 and 22, plus Chromi
 
 The Capacitor app includes a native-friendly control surface for all five worlds (countryside, Japanese street, apartment, seaside and mountain cabin), plus an optional snowfall effect. Scene and weather changes reuse the shared renderer; the glass shader and day/night interaction remain the same. The app shell detects English, Simplified Chinese and Japanese from the device language. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml).
 
+
+
+### Embed in a web page
+
+For one basic day/night switch, no package installation is required. Paste this single line into your HTML:
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+```
+
+The loader injects its styles and one default-scene switch. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
+
+### Integrate with your own Android / iOS Capacitor app
+
+This repository currently ships a **Capacitor app template and build scripts**, not a separately installable native UI plugin. For an existing Capacitor 8 project, integrate this repository's `mobile/`, `app.js`, `style.css` and `scripts/prepare-mobile.cjs`, then run:
+
+```bash
+npm install
+npm run mobile:prepare
+npm run mobile:android:init  # first-time Android project creation
+npm run mobile:android      # sync subsequent updates
+```
+
+For iOS, use `npm run mobile:ios:init` once and `npm run mobile:ios` for later syncs; macOS and Xcode are required. Open the native projects with `npm run mobile:open:android` or `npm run mobile:open:ios`. See [package.json](package.json) for the exact scripts.
+
 ## Repository map
 
 ```text
