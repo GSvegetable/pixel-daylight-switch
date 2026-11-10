@@ -1,7 +1,7 @@
 {
   "name": "pixel-daylight-switch-gsvegetable",
-  "version": "3.0.0",
-  "description": "A draggable pixel-art day/night switch with a community-extensible scene plugin system.",
+  "version": "3.0.1",
+  "description": "A draggable pixel-art day/night switch with layered, animated community scenes.",
   "keywords": [
     "pixel-art",
     "day-night",
