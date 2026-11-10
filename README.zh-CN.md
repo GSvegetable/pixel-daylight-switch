@@ -62,6 +62,12 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
+也可以直接在 script 标签上配置场景和天气：
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+```
+
 加载器会自动创建响应式实例并加载运行时。组件样式仅作用于组件本身，不会重置或修改宿主网页的 `body`、`main` 等全局元素。你也可以直接在 script 标签上设置 `data-scene`、`data-weather`、`data-start-night` 等参数。若要创建多个实例或精确控制位置，请使用上面的挂载节点方式。
 
 ## 通过 npm 安装
