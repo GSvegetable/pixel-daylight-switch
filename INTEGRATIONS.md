@@ -81,6 +81,12 @@ For one default switch with no build step, use the one-line embed:
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
+Set supported options on the script tag when you want a particular scene or weather:
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+```
+
 For custom configuration, place a root element where you want it and load the runtime:
 
 ```html
