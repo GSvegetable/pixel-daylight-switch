@@ -92,22 +92,33 @@ test('removes all component-owned event listeners on unmount', async ({ page }) 
   await page.addInitScript(() => {
     const originalAdd = EventTarget.prototype.addEventListener;
     const originalRemove = EventTarget.prototype.removeEventListener;
-    window.__eventCounts = {added:0,removed:0};
-    EventTarget.prototype.addEventListener = function(...args) {
-      window.__eventCounts.added++;
-      return originalAdd.apply(this,args);
+    const listeners = new WeakMap();
+    const captureOf = options => typeof options === 'boolean' ? options : !!(options && options.capture);
+    EventTarget.prototype.addEventListener = function(type, listener, options) {
+      if (listener) {
+        const entries = listeners.get(this) || [];
+        if (!entries.some(x => x.type === type && x.listener === listener && x.capture === captureOf(options))) {
+          entries.push({type,listener,capture:captureOf(options)});
+          listeners.set(this,entries);
+        }
+      }
+      return originalAdd.call(this,type,listener,options);
     };
-    EventTarget.prototype.removeEventListener = function(...args) {
-      window.__eventCounts.removed++;
-      return originalRemove.apply(this,args);
+    EventTarget.prototype.removeEventListener = function(type, listener, options) {
+      const entries = listeners.get(this) || [];
+      const index = entries.findIndex(x => x.type === type && x.listener === listener && x.capture === captureOf(options));
+      if (index >= 0) entries.splice(index,1);
+      return originalRemove.call(this,type,listener,options);
     };
+    window.__activeListeners = target => (listeners.get(target) || []).length;
   });
   await page.goto('/tests/fixture.html');
-  const before = await page.evaluate(() => ({...window.__eventCounts}));
+  const button = page.locator('#switch-a button.hit');
+  const before = await button.evaluate(el => window.__activeListeners(el));
+  expect(before).toBeGreaterThan(0);
   await page.evaluate(() => window.PixelDaylightSwitch.unmount(document.querySelector('#switch-a')));
-  const after = await page.evaluate(() => ({...window.__eventCounts}));
-  expect(after.added - before.added).toBeGreaterThan(0);
-  expect(after.removed - before.removed).toBe(after.added - before.added);
+  const after = await button.evaluate(el => window.__activeListeners(el));
+  expect(after).toBe(0);
 });
 
 test('accepts touch input in a mobile browser context', async ({ browser }) => {
