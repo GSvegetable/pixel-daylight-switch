@@ -1,31 +1,59 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>像素昼夜开关</title>
-<meta name="description" content="像素小人居住在可拖动的昼夜开关里。">
+<title>Pixel Daylight Switch</title>
+<meta name="description" content="A tiny pixel world inside a draggable refractive glass day/night switch.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<div data-ld-part="toggle-daylight" lang="zh-CN">
+<div data-ld-part="toggle-daylight" lang="en">
   <canvas class="scene" aria-hidden="true"></canvas>
-  <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
+  <button class="hit" type="button" role="switch" aria-checked="false" aria-label="Day/night switch"></button>
   <span class="vh" role="status" aria-live="polite" data-status></span>
   <span class="probe" aria-hidden="true"></span>
 </div>
 </main>
-
 <footer>
   <span class="kicker">Pixel</span>
-  <span class="name">昼夜开关</span>
+  <span class="name" data-i18n="name">Daylight Switch</span>
   <span class="sep">/</span>
-  <span>拖动切换昼夜 · 点击快速切换</span>
-  <a href="./playground.html">参数实验室 Playground</a>
+  <span data-i18n="hint">Drag to move through the day · Tap to switch instantly</span>
+  <a href="./playground.html" data-i18n="playground">Interactive Playground</a>
+  <label class="language-control"><span class="vh" id="language-label">Language</span>
+    <select id="language" aria-labelledby="language-label">
+      <option value="en">English</option><option value="zh-CN">简体中文</option><option value="ja">日本語</option>
+    </select>
+  </label>
 </footer>
-
+<script>
+(function(){
+  const messages={
+    en:{name:"Daylight Switch",hint:"Drag to move through the day · Tap to switch instantly",playground:"Interactive Playground"},
+    "zh-CN":{name:"昼夜开关",hint:"拖动切换昼夜 · 点击快速切换",playground:"参数实验室"},
+    ja:{name:"昼夜スイッチ",hint:"ドラッグして昼夜を切り替え · タップですぐに切り替え",playground:"インタラクティブ・プレイグラウンド"}
+  };
+  const select=document.getElementById("language");
+  const supported=["en","zh-CN","ja"];
+  const saved=localStorage.getItem("pds-language");
+  const initial=supported.includes(saved)?saved:(navigator.language==="ja"?"ja":navigator.language.toLowerCase().startsWith("zh")?"zh-CN":"en");
+  function applyLanguage(lang){
+    const chosen=supported.includes(lang)?lang:"en";
+    document.documentElement.lang=chosen;
+    document.querySelector('[data-ld-part="toggle-daylight"]').lang=chosen;
+    document.title=chosen==="ja"?"昼夜スイッチ | Pixel Daylight Switch":chosen==="zh-CN"?"像素昼夜开关":"Pixel Daylight Switch";
+    document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=messages[chosen][el.dataset.i18n]);
+    const button=document.querySelector(".hit");
+    if(button)button.setAttribute("aria-label",chosen==="ja"?"昼夜スイッチ":chosen==="zh-CN"?"昼夜开关":"Day/night switch");
+    select.value=chosen;localStorage.setItem("pds-language",chosen);
+  }
+  select.addEventListener("change",()=>applyLanguage(select.value));
+  applyLanguage(initial);
+})();
+</script>
 <script src="app.js"></script>
 </body>
 </html>
