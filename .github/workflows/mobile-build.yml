@@ -98,6 +98,7 @@ jobs:
           arch: x86_64
           profile: pixel_tablet
           script: |
+            python3 -m pip install --quiet pillow
             adb install artifacts/app-debug.apk
             adb logcat -c
             adb shell monkey -p com.gsvegetable.pixeldayswitch 1
