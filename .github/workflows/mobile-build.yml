@@ -160,8 +160,8 @@ jobs:
             adb logcat -c
             adb shell monkey -p com.gsvegetable.pixeldayswitch 1
             sleep 12
-            adb shell screencap -p /sdcard/pixel-daylight-switch.png
-            adb pull /sdcard/pixel-daylight-switch.png pixel-daylight-switch.png
+            adb shell screencap -p /data/local/tmp/pixel-daylight-switch.png
+            adb pull /data/local/tmp/pixel-daylight-switch.png pixel-daylight-switch.png
             adb logcat -d > android-logcat.txt
             python3 - <<'PY'
             from PIL import Image
