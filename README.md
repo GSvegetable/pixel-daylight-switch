@@ -61,7 +61,7 @@ For a self-inserting embed, add this script where you want the component to appe
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader inserts its own container, stylesheet and runtime. It currently creates one default instance with a fixed maximum display size; use the mount-point approach above when you need precise layout or custom attributes.
+The loader inserts one responsive instance and loads only the component runtime. Its styles are isolated to the component and do not reset or modify your page's `body`, `main`, or other global elements. For custom scenes, weather, multiple instances or exact placement, use the mount-point approach above.
 
 ## Install from npm
 
@@ -176,7 +176,7 @@ For one basic day/night switch, no package installation is required. Paste this 
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader injects its styles and one default-scene switch. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
+The loader creates a responsive default-scene switch and loads the runtime. It does not inject the demo page stylesheet or alter your site's global styles. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
 
 ### Integrate with your own Android / iOS Capacitor app
 
