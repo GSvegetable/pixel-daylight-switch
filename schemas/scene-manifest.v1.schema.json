@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://gsvegetable.github.io/pixel-daylight-switch/schemas/scene-manifest.v1.json",
-  "title": "Pixel Daylight Switch Scene Manifest",
+  "$id": "https://gsvegetable.github.io/pixel-daylight-switch/schemas/scene-manifest.v1.schema.json",
+  "title": "Pixel Daylight Switch Scene Manifest v1",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "id", "name", "author", "license", "canvas", "pixels", "palettes", "timeCycle"],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$" },
+    "id": { "type": "string", "minLength": 3, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$" },
     "name": { "type": "string", "minLength": 1, "maxLength": 80 },
     "author": { "type": "string", "minLength": 1, "maxLength": 80 },
     "license": { "type": "string", "minLength": 1, "maxLength": 64 },
@@ -23,14 +23,22 @@
     "pixels": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string" }
+      "maxItems": 112,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 192,
+        "pattern": "^[\\u0020-\\u007E]+$"
+      }
     },
     "palettes": {
       "type": "object",
       "minProperties": 1,
+      "maxProperties": 8,
       "additionalProperties": {
         "type": "object",
-        "propertyNames": { "minLength": 1, "maxLength": 1 },
+        "maxProperties": 64,
+        "propertyNames": { "type": "string", "minLength": 1, "maxLength": 1, "pattern": "^[\\u0020-\\u007E]$" },
         "additionalProperties": { "type": "string", "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" }
       }
     },
