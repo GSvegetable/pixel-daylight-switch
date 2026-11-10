@@ -23,6 +23,7 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 | コンポーネントを見る | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | Web サイトに埋め込む | [embed.js](embed.js) |
 | JavaScript プロジェクトで使う | [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
+| React / Vue の導入例 | [フレームワーク統合ガイド](INTEGRATIONS.md) |
 | 実装を読む | [app.js](app.js) · [style.css](style.css) |
 | モバイルビルド | [ビルド情報](builds/README.md) · [GitHub Actions](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | テスト結果 | [CI ワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
