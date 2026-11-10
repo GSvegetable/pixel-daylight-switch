@@ -237,3 +237,51 @@ pixel-daylight-switch/
 ## 许可证
 
 项目采用 [Unlicense](LICENSE)。你可以自由复制、修改、发布、分发，并用于个人或商业项目，无需署名。软件按现状提供，不附带任何担保。
+
+
+## 社区场景插件（v3.0.0）
+
+v3.0.0 引入数据驱动的场景插件 API。社区场景使用 JSON Manifest 描述，不会在渲染器中执行第三方 JavaScript。
+
+### 注册自定义场景
+
+使用 CDN 时，先加载注册表，再加载渲染器：
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+```
+
+在组件挂载前注册场景：
+
+```js
+const unregister = PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
+PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
+```
+
+使用 npm：
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import sakura from './sakura-evening.json';
+
+registerScene(sakura);
+PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
+```
+
+### Manifest v1 规范
+
+Manifest 由固定尺寸的字符像素矩阵、多个命名调色板和 24 小时昼夜时间轴组成。渲染器会在时间轴节点之间插值颜色，场景几何结构保持不变。
+
+- 画布最大尺寸：192 × 112 像素。
+- 像素矩阵的行数和每行字符数必须与画布尺寸一致。
+- 像素矩阵中出现的每个字符，都必须在每套调色板中定义颜色。
+- 颜色支持 `#RGB` 或 `#RRGGBB`。
+- 时间轴节点必须严格递增，时间范围为 0 至 24 小时。
+- 内置场景 ID 为保留名称；社区场景 ID 必须唯一。
+- 运行时只接受声明式数据。注册时会校验并复制 Manifest，不执行其中的脚本。
+
+规范见 [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)，示例见 [樱花黄昏场景](examples/scenes/sakura-evening.json)。公开 API 包括 `registerScene(manifest)`、`validateScene(manifest)`、`getScene(id)` 和 `listScenes()`。注册函数会返回一个可用于注销该场景的函数。
+
+首个 Manifest 版本聚焦于调色板驱动的像素世界。Sprite 素材、分层 Tile Map 和声明式动画轨道会作为兼容的后续 Schema 扩展，而不是开放任意可执行插件代码。
