@@ -42,7 +42,11 @@ CommonJS: `const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetabl
 
 The package is safe to import during SSR; mount only after the target DOM element exists. `mount(element)` is idempotent and returns a cleanup function on success (or null on failure). `unmount(element)` stops rendering and removes observers/listeners; it does not remove the DOM root or forcibly invalidate the canvas context.
 
-Framework lifecycle examples are in [INTEGRATIONS.md](INTEGRATIONS.md).
+Framework lifecycle examples are in [INTEGRATIONS.md](INTEGRATIONS.md). Scene plugin authoring, manifest constraints and API examples are in [SCENE_PLUGINS.md](SCENE_PLUGINS.md).
+
+## Community scene plugins (v3.0.0)
+
+The optional `scene-plugin.js` registry exposes `registerScene(manifest)`, `validateScene(manifest)`, `getScene(id)` and `listScenes()`. Load the registry before `app.js` in a browser, or import `registerScene` from the npm package. Register a scene before mounting its root. Manifest v1 uses a 1–192 by 1–112 printable-ASCII pixel map, up to 8 named palettes, and a 24-hour timeline that starts at 0 and ends at 24. Every used pixel symbol must have a valid `#RGB` or `#RRGGBB` color in every palette. Data is copied and deeply frozen on registration. Arbitrary plugin JavaScript is never executed. External image/sprite assets, layered tile maps and custom animation tracks are not supported in v1; they are reserved for a future schema extension. See [SCENE_PLUGINS.md](SCENE_PLUGINS.md), the [v1 JSON Schema](schemas/scene-manifest.v1.schema.json), and the [Sakura example](examples/scenes/sakura-evening.json).
 
 ## Scenes and weather
 
