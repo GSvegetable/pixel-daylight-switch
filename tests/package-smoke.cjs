@@ -36,7 +36,7 @@ async function main() {
   assert.equal(pkg.browser, './browser.mjs');
 
   const allowed = new Set(pkg.files);
-  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'browser.mjs', 'README.md', 'INTEGRATIONS.md', 'SCENE_PLUGINS.md', 'LICENSE', 'llms.txt']) {
+  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'browser.mjs', 'SCENE_PLUGINS.md', 'README.md', 'INTEGRATIONS.md', 'SCENE_PLUGINS.md', 'LICENSE', 'llms.txt']) {
     assert.ok(allowed.has(required), 'Missing package file: ' + required);
     assert.ok(fs.existsSync(path.join(__dirname, '..', required)), 'Missing source file: ' + required);
   }
