@@ -272,25 +272,3 @@ pixel-daylight-switch/
 ## ライセンス
 
 [Unlicense](LICENSE) に基づき公開されています。個人・商用を問わず、帰属表示なしで自由にコピー、変更、公開、配布、利用できます。無保証で提供されます。
-
-## コミュニティシーンプラグイン（v3.0.0）
-
-v3 では JSON Manifest による宣言型シーンプラグイン API を追加しました。プラグインのデータは検証され、レンダラー内で第三者 JavaScript は実行されません。
-
-```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
-<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
-```
-
-レンダリング前にシーンを登録します。
-
-```js
-const unregister = PixelDaylightSwitch.registerScene(sceneManifest);
-PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
-```
-
-Manifest v1 は最大 192 × 112 の文字ピクセルマップ、複数のカラーパレット、0〜24 時のタイムラインで構成されます。各パレットの色は `#RGB` または `#RRGGBB` です。詳細は [JSON Schema](schemas/scene-manifest.v1.schema.json) と [サンプル](examples/scenes/sakura-evening.json) を参照してください。
-
-npm API は `registerScene`、`validateScene`、`getScene`、`listScenes` を提供します。登録関数はシーンを解除する関数を返します。画像スプライト、レイヤー、宣言型アニメーションは将来の互換拡張として設計し、任意の実行コードは許可しません。
-
