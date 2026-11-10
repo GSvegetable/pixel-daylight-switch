@@ -18,9 +18,12 @@ for (const file of ['index.html', 'app.js', 'style.css', 'mobile.css']) {
 }
 const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
 assert.equal(config.webDir, 'mobile/www');
+assert.equal(config.backgroundColor, '#eef1f5');
+assert.equal(config.android.backgroundColor, '#eef1f5');
 assert.ok(typeof config.appId === 'string' && config.appId.includes('.') && /^[a-z0-9.]+$/.test(config.appId));
 const html = fs.readFileSync(path.join(output, 'index.html'), 'utf8');
 assert.match(html, /viewport-fit=cover/);
+assert.match(html, /theme-color\" content=\"#eef1f5/);
 assert.match(html, /mobile\.css/);
 assert.match(html, /data-ld-part="toggle-daylight"/);
 assert.match(html, /app\.js/);
@@ -29,10 +32,27 @@ assert.match(html, /__PDS_DIAG__/);
 assert.match(html, /Resource Load Failed/);
 const mobileCss = fs.readFileSync(path.join(output, 'mobile.css'), 'utf8');
 assert.match(mobileCss, /#pds-diagnostic/);
+assert.match(mobileCss, /background:\s*#eef1f5/);
+assert.doesNotMatch(mobileCss, /#f5ecd9/);
 const rendererSource = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.match(rendererSource, /WebGL2 Failed/);
 assert.match(rendererSource, /Vertex Shader/);
 assert.match(rendererSource, /Canvas 2D Failed/);
 const renderer = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.equal(renderer, fs.readFileSync(path.join(root, 'app.js'), 'utf8'), 'Mobile build must use the exact shared renderer');
-console.log('Mobile shell smoke checks passed.');
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+assert.equal(pkg.version, '2.1.0');
+const os = require('node:os');
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pds-android-version-'));
+try {
+  const gradlePath = path.join(tempDir, 'build.gradle');
+  fs.writeFileSync(gradlePath, "android { defaultConfig { versionCode 1; versionName '1.0' } }");
+  const versionRun = spawnSync(process.execPath, [path.join(root, 'scripts/set-android-version.cjs'), gradlePath], { cwd: root, encoding: 'utf8' });
+  assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
+  const gradle = fs.readFileSync(gradlePath, 'utf8');
+  assert.match(gradle, /versionCode 20100/);
+  assert.match(gradle, /versionName "2\.1\.0"/);
+} finally {
+  fs.rmSync(tempDir, { recursive: true, force: true });
+}
+console.log('Mobile shell, neutral theme, and Android version checks passed.');
