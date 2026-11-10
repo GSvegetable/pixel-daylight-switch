@@ -43,16 +43,25 @@
       (document.body || document.documentElement).appendChild(wrapper);
     }
 
-    const runtime = document.createElement('script');
-    runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
-    runtime.async = true;
-    runtime.onerror = function () {
+    const loadRuntime = function () {
+      const runtime = document.createElement('script');
+      runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
+      runtime.async = true;
+      runtime.onerror = showLoadError;
+      (document.body || document.documentElement).appendChild(runtime);
+    };
+    const showLoadError = function () {
       const message = document.createElement('p');
       message.textContent = 'Pixel Daylight Switch could not load. Please check your network connection.';
       message.style.cssText = 'padding:16px;color:#9b1c1c;font:14px/1.5 system-ui,sans-serif;';
       wrapper.replaceChildren(message);
     };
-    (document.body || document.documentElement).appendChild(runtime);
+    const plugins = document.createElement('script');
+    plugins.src = 'https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js';
+    plugins.async = true;
+    plugins.onload = loadRuntime;
+    plugins.onerror = showLoadError;
+    (document.body || document.documentElement).appendChild(plugins);
   };
 
   if (document.body) insertAndLoad();

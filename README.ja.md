@@ -96,6 +96,41 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 
 ESM と CommonJS の両方を提供します。SSR 環境でもインポートできますが、`mount()` はブラウザー上で対象要素が存在してから呼び出してください。
 
+## コミュニティシーンプラグイン（v3.0.0）
+
+3.0.0 では JSON Manifest によるカスタムピクセルワールドの登録に対応しました。初めての方はピクセルマップをそのまま使い、昼夜パレットの色だけを変更できます。上級者はピクセルマップと時間パレットを自由に設計できます。プラグインは宣言型データのみを受け取り、レンダラー内で第三者 JavaScript を実行しません。
+
+**ブラウザーで使用：**
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+<script>
+  PixelDaylightSwitch.registerScene(sceneManifest);
+</script>
+```
+
+コンポーネントをマウントする前に Manifest を登録してください。npm の場合：
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import myScene from './my-scene.json';
+
+const unregister = registerScene(myScene);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = myScene.id;
+PixelDaylightSwitch.mount(root);
+```
+
+Manifest v1 はシーン ID、作者・ライセンス、ピクセルキャンバス、文字ベースのピクセルマップ、複数の昼夜パレット、24 時間のタイムラインで構成されます。キャンバスは最大 192 × 112 ピクセルです。すべてのピクセル記号に各パレットの色を定義する必要があります。時間ノード間の色はレンダラーが補間します。
+
+- [プラグイン開発ガイド](SCENE_PLUGINS.md)
+- [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
+- [Sakura Evening サンプル](examples/scenes/sakura-evening.json)
+
+v1 は外部画像/Sprite、レイヤー式 Tile Map、独自アニメーショントラックにはまだ対応していません。これらは任意コードの実行を許可せず、将来の独立した Schema 拡張として追加します。5 つの組み込みシーンは従来の描画・アニメーション実装を維持します。
+
 ## 設定属性
 
 すべて任意の設定で、マウント要素に指定します。省略時または無効な値の場合はデフォルト値が使われます。

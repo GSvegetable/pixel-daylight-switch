@@ -24,6 +24,7 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | Framework integration recipes | [React and Vue examples](INTEGRATIONS.md) |
+| Scene plugin authoring guide | [Scene plugin guide](SCENE_PLUGINS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
 | Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | Check tests | [CI workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -95,6 +96,53 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 ```
 
 The package exposes ESM and CommonJS entry points. Importing is safe in an SSR environment; call `mount()` only in a browser after the target element exists. The package's published file list is defined in [package.json](package.json).
+
+## Community scene plugins (v3.0.0)
+
+Version 3 introduces a data-driven scene plugin API. Community scenes use a JSON manifest; they do not execute third-party JavaScript inside the renderer.
+
+### Register a scene
+
+Load the registry before the renderer when using script tags:
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+```
+
+Register a manifest before mounting the component:
+
+```js
+const unregister = PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
+PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
+```
+
+With npm:
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import sakura from './sakura-evening.json';
+
+registerScene(sakura);
+PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
+```
+
+### Manifest v1
+
+A manifest contains a fixed-size character pixel map, named color palettes and a 24-hour palette timeline. The renderer interpolates colors between timeline stops while keeping the same scene geometry.
+
+- Canvas limit: 192 × 112 pixels.
+- Pixel rows must match the declared width and height.
+- Every symbol used by the pixel map must have a color in every palette.
+- Colors use `#RGB` or `#RRGGBB`.
+- Timeline stops are strictly increasing and range from 0 to 24 hours.
+- Built-in scene IDs are reserved; community IDs must be unique.
+- The runtime accepts declarative data only. Manifest data is validated and copied on registration; it cannot run scripts.
+
+See the [v1 JSON Schema](schemas/scene-manifest.v1.schema.json) and [Sakura Evening example](examples/scenes/sakura-evening.json). The public API is `registerScene(manifest)`, `validateScene(manifest)`, `getScene(id)`, and `listScenes()`. The returned unregister function removes that registration.
+
+The first manifest release focuses on palette-driven pixel worlds. Sprite assets, layered tile maps and declarative animation tracks are planned as compatible schema extensions rather than arbitrary executable plugin code.
 
 ## Configuration
 

@@ -5,7 +5,7 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'mobile', 'www');
-const required = ['app.js', 'style.css', 'mobile/index.html', 'mobile/mobile.css', 'capacitor.config.json'];
+const required = ['app.js', 'scene-plugin.js', 'style.css', 'mobile/index.html', 'mobile/mobile.css', 'capacitor.config.json'];
 const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
 if (config.webDir !== 'mobile/www') throw new Error('Capacitor webDir must target the generated mobile/www directory');
 const appIdParts = typeof config.appId === 'string' ? config.appId.split('.') : [];
@@ -20,6 +20,7 @@ for (const file of required) {
 fs.rmSync(output, { recursive: true, force: true });
 fs.mkdirSync(output, { recursive: true });
 fs.copyFileSync(path.join(root, 'app.js'), path.join(output, 'app.js'));
+fs.copyFileSync(path.join(root, 'scene-plugin.js'), path.join(output, 'scene-plugin.js'));
 fs.copyFileSync(path.join(root, 'style.css'), path.join(output, 'style.css'));
 fs.copyFileSync(path.join(root, 'mobile/index.html'), path.join(output, 'index.html'));
 fs.copyFileSync(path.join(root, 'mobile/mobile.css'), path.join(output, 'mobile.css'));

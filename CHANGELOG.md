@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0] — Community scene plugins
+
+- Add a validated, data-only Scene Manifest v1 and public scene registry API.
+- Render registered pixel-matrix scenes through the existing refractive glass renderer with interpolated 24-hour palettes.
+- Expose scene registration from CommonJS and ESM package entry points.
+- Add CDN registry loading, a Sakura Evening example, JSON Schema, documentation and automated tests.
+- Preserve all five built-in scene implementations and their dedicated live animation systems.
+
+
 All notable changes to Pixel Daylight Switch are documented here.
 
 ## [Unreleased] — Developer integration

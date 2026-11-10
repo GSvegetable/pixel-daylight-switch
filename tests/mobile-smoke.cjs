@@ -13,7 +13,7 @@ const run = spawnSync(process.execPath, [path.join(root, 'scripts/prepare-mobile
 assert.equal(run.status, 0, run.stderr || run.stdout);
 
 const output = path.join(root, 'mobile/www');
-for (const file of ['index.html', 'app.js', 'style.css', 'mobile.css']) {
+for (const file of ['index.html', 'app.js', 'scene-plugin.js', 'style.css', 'mobile.css']) {
   assert.ok(fs.existsSync(path.join(output, file)), `Missing generated mobile asset: ${file}`);
 }
 const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
@@ -31,6 +31,8 @@ assert.match(html, /weather-toggle/);
 assert.match(html, /PixelDaylightSwitch\.unmount\(root\)/);
 assert.match(html, /PixelDaylightSwitch\.mount\(root\)/);
 assert.match(html, /daylight:change/);
+assert.match(html, /scene-plugin\.js/);
+assert.match(html, /pluginScript\.onload = loadApp/);
 assert.match(html, /app\.js/);
 assert.match(html, /unhandledrejection/);
 assert.match(html, /__PDS_DIAG__/);
@@ -48,7 +50,7 @@ assert.match(rendererSource, /Canvas 2D Failed/);
 const renderer = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.equal(renderer, fs.readFileSync(path.join(root, 'app.js'), 'utf8'), 'Mobile build must use the exact shared renderer');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-assert.equal(pkg.version, '2.2.0');
+assert.equal(pkg.version, '3.0.0');
 const os = require('node:os');
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pds-android-version-'));
 try {
@@ -57,8 +59,8 @@ try {
   const versionRun = spawnSync(process.execPath, [path.join(root, 'scripts/set-android-version.cjs'), gradlePath], { cwd: root, encoding: 'utf8' });
   assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
   const gradle = fs.readFileSync(gradlePath, 'utf8');
-  assert.match(gradle, /versionCode 20200/);
-  assert.match(gradle, /versionName "2\.2\.0"/);
+  assert.match(gradle, /versionCode 30000/);
+  assert.match(gradle, /versionName "3\.0\.0"/);
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
 }
