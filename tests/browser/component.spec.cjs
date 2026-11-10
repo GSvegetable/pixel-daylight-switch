@@ -84,7 +84,7 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
   expect(widths.body).toBeLessThanOrEqual(widths.viewport + 1);
   await page.locator('#speed').evaluate(el => { el.value = '12'; el.dispatchEvent(new Event('input', {bubbles:true})); el.dispatchEvent(new Event('change', {bubbles:true})); });
   await page.locator('#apply').click();
-  await expect(page.locator('#status')).toContainText('参数已是最新', {timeout:10000});
+  await expect(page.locator('#status')).toContainText('Settings are up to date', {timeout:10000});
   await expect(page.locator('#previewA canvas.scene')).toHaveCount(1);
 });
 
@@ -179,4 +179,17 @@ test('range sliders preserve vertical page scrolling on touch devices', async ({
   await page.goto('/playground.html');
   const touchAction = await page.locator('#speed').evaluate(el => getComputedStyle(el).touchAction);
   expect(touchAction).toBe('pan-y');
+});
+
+
+test('playground remains vertically scrollable on a narrow mobile viewport', async ({ page }) => {
+  await page.setViewportSize({width:360,height:800});
+  await page.goto('/playground.html');
+  const before = await page.evaluate(() => ({height:document.documentElement.scrollHeight, viewport:window.innerHeight}));
+  expect(before.height).toBeGreaterThan(before.viewport);
+  await page.mouse.move(330, 700);
+  await page.mouse.wheel(0, 520);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  const stagePosition = await page.locator('.stage-col').evaluate(el => getComputedStyle(el).position);
+  expect(stagePosition).toBe('relative');
 });
