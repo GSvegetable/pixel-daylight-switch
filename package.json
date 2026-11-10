@@ -34,6 +34,7 @@
   "browser": "./browser.mjs",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "browser": "./browser.mjs",
       "import": "./index.mjs",
       "require": "./index.cjs"
@@ -57,7 +58,8 @@
     "scene-plugin.js",
     "schemas",
     "examples",
-    "browser.mjs"
+    "browser.mjs",
+    "index.d.ts"
   ],
   "sideEffects": [
     "./app.js"
@@ -84,5 +86,6 @@
     "@capacitor/core": "8.6.0",
     "@capacitor/android": "8.6.0",
     "@capacitor/ios": "8.6.0"
-  }
+  },
+  "types": "./index.d.ts"
 }
