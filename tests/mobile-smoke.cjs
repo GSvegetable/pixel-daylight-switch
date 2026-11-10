@@ -26,6 +26,11 @@ assert.match(html, /viewport-fit=cover/);
 assert.match(html, /theme-color\" content=\"#eef1f5/);
 assert.match(html, /mobile\.css/);
 assert.match(html, /data-ld-part="toggle-daylight"/);
+assert.equal((html.match(/data-scene-choice=/g) || []).length, 5);
+assert.match(html, /weather-toggle/);
+assert.match(html, /PixelDaylightSwitch\.unmount\(root\)/);
+assert.match(html, /PixelDaylightSwitch\.mount\(root\)/);
+assert.match(html, /daylight:change/);
 assert.match(html, /app\.js/);
 assert.match(html, /unhandledrejection/);
 assert.match(html, /__PDS_DIAG__/);
@@ -33,6 +38,8 @@ assert.match(html, /Resource Load Failed/);
 const mobileCss = fs.readFileSync(path.join(output, 'mobile.css'), 'utf8');
 assert.match(mobileCss, /#pds-diagnostic/);
 assert.match(mobileCss, /background:\s*#eef1f5/);
+assert.match(mobileCss, /\.scene-picker/);
+assert.match(mobileCss, /\.world-tools/);
 assert.doesNotMatch(mobileCss, /#f5ecd9/);
 const rendererSource = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.match(rendererSource, /WebGL2 Failed/);
@@ -41,7 +48,7 @@ assert.match(rendererSource, /Canvas 2D Failed/);
 const renderer = fs.readFileSync(path.join(output, 'app.js'), 'utf8');
 assert.equal(renderer, fs.readFileSync(path.join(root, 'app.js'), 'utf8'), 'Mobile build must use the exact shared renderer');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-assert.equal(pkg.version, '2.1.0');
+assert.equal(pkg.version, '2.2.0');
 const os = require('node:os');
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pds-android-version-'));
 try {
@@ -50,7 +57,7 @@ try {
   const versionRun = spawnSync(process.execPath, [path.join(root, 'scripts/set-android-version.cjs'), gradlePath], { cwd: root, encoding: 'utf8' });
   assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
   const gradle = fs.readFileSync(gradlePath, 'utf8');
-  assert.match(gradle, /versionCode 20100/);
+  assert.match(gradle, /versionCode 20200/);
   assert.match(gradle, /versionName "2\.1\.0"/);
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });

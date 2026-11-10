@@ -164,7 +164,7 @@ GitHub Actions は Node.js 18、20、22 でパッケージと SSR のチェッ�
 
 ## Android / iOS
 
-Capacitor 8 のビルドフローが含まれ、Web と同じランタイムを使用します。GitHub Actions は Android Debug APK と未署名の iOS Simulator アーカイブを生成します。これらは開発用成果物であり、ストア公開用ではありません。Android APK は Play Store リリースではなく、iOS Simulator 版は実機の iPhone / iPad にはインストールできません。[モバイルビルド情報](builds/README.md) と [ビルドワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) を参照してください。
+Capacitor 8 アプリには、田園の家、日本の街並み、モダンな部屋、海辺の灯台、山小屋の 5 シーンを切り替えるコントロールと、雪を降らせるオプションを追加しました。共通レンダラーを再利用し、ガラスシェーダーと昼夜のドラッグ操作はそのまま維持します。端末の言語に応じて日本語、簡体字中国語、英語を表示します。GitHub Actions は Android Debug APK と未署名の iOS Simulator アーカイブを生成します。これらは開発用成果物であり、ストア公開用ではありません。Android APK は Play Store リリースではなく、iOS Simulator 版は実機の iPhone / iPad にはインストールできません。[モバイルビルド情報](builds/README.md) と [ビルドワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) を参照してください。
 
 ## リポジトリ構成
 

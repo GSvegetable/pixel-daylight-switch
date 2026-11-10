@@ -164,7 +164,7 @@ GitHub Actions runs package and SSR checks on Node.js 18, 20 and 22, plus Chromi
 
 ## Android and iOS
 
-The repository includes Capacitor 8 build workflows that reuse the web runtime. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator app archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml).
+The Capacitor app includes a native-friendly control surface for all five worlds (countryside, Japanese street, apartment, seaside and mountain cabin), plus an optional snowfall effect. Scene and weather changes reuse the shared renderer; the glass shader and day/night interaction remain the same. The app shell detects English, Simplified Chinese and Japanese from the device language. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml).
 
 ## Repository map
 
