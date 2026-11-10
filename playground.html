@@ -13,6 +13,181 @@ a{color:inherit;text-underline-offset:3px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
 .top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
+.top nav{display:flex;gap:16px;font-size:14px;align-items:center}.language-control select{font:inherit;padding:4px 8px}.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ===== 双缓冲交叉淡化预览区 ===== */
+.stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:24px 18px 12px;transition:background-color .3s}
+.stage{position:relative; display:flex; justify-content:center; align-items:center; min-height:280px; width:100%; max-width:640px; margin:0 auto;}
+.layer{
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
+  transition:opacity 0.4s ease; /* 平滑过渡，绝无闪烁 */
+  will-change:opacity;
+}
+.layer.active{opacity:1; z-index:2; pointer-events:auto;}
+.layer.inactive{opacity:0; z-index:1; pointer-events:none;}
+.hint{margin:10px 0 0;font-size:13px;color:var(--muted);text-align:center}
+
+.panel{padding:0 18px}
+h2{font-size:14px;margin:22px 0 10px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px}
+.chip,.tabs button,.copy{font:inherit;color:var(--ink);cursor:pointer}
+.chip{flex:none;border:2px solid var(--ink);background:transparent;padding:6px 12px;font-size:13px;transition:all .2s}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--surface)}
+.tabs{display:flex;border:2px solid var(--ink)}
+.tabs button{flex:1;border:0;background:transparent;padding:8px 0}
+.tabs button+button{border-left:2px solid var(--ink)}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--surface)}
+
+/* ===== 修复滑块滑动被拦截的问题 ===== */
+.ctl{margin:20px 0; touch-action: pan-y; overscroll-behavior: contain;}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+output{font:13px ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;color:var(--accent);font-weight:bold}
+input[type=range]{
+  -webkit-appearance:none; appearance:none; display:block; width:100%; height:30px; margin:0;
+  background:transparent; cursor:pointer; --p:50%;
+  touch-action: pan-x; /* 核心修复：只允许水平拖动，不触发页面滚动 */
+}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
+input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:20px; height:26px; margin-top:-10px; background:var(--surface);
+  border:2px solid var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--line); pointer-events: auto;
+}
+input[type=range]::-moz-range-thumb{
+  width:16px; height:22px; background:var(--surface); border:2px solid var(--ink);
+  border-radius:0; box-shadow:2px 2px 0 var(--line); pointer-events: auto;
+}
+
+select{font:inherit;background:var(--surface);color:var(--ink);border:2px solid var(--ink);padding:5px 10px}
+.check{display:flex;align-items:center;gap:10px;margin:20px 0}
+.check input{width:20px;height:20px;margin:0;accent-color:var(--accent)}
+
+.codehead{display:flex;align-items:center;justify-content:space-between}
+.codehead h2{margin:26px 0 10px}
+.copy{border:2px solid var(--ink);background:transparent;padding:3px 12px;font-size:13px;transition:all .2s}
+.copy:hover{background:var(--ink);color:var(--surface)}
+pre{margin:0;padding:14px;background:var(--surface);border:2px solid var(--ink);overflow:auto;font:12px/1.7 ui-monospace,Menlo,monospace;color:var(--ink)}
+
+.dock{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px;padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:2px solid var(--line)}
+.dock span{font-size:13px;color:var(--muted)}
+.apply{font:inherit;font-weight:700;border:2px solid var(--ink);background:var(--accent);color:#fff;padding:9px 22px;box-shadow:3px 3px 0 var(--ink);cursor:pointer;transition:all .1s}
+.apply:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.apply[data-clean]{background:transparent;color:var(--ink);box-shadow:3px 3px 0 var(--line)}
+
+@media(min-width:900px){
+main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,1fr);gap:44px;align-items:start}
+.top{max-width:1120px;margin:0 auto;padding:18px 28px}
+.stage-col{top:16px;padding:0}
+.panel{padding:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><b>像素昼夜开关</b><span>实验室</span></div>
+  <nav><a href="./index.html">Back to demo</a><a href="./README.md">Documentation</a><label class="language-control"><span class="vh" id="language-label">Language</span><select id="language" aria-labelledby="language-label"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="ja">日本語</option></select></label></nav>
+</header>
+
+<main>
+<section class="stage-col">
+  <!-- 双容器重叠结构 -->
+  <div class="stage" id="stage">
+    <div class="layer active" id="layerA">
+      <div id="previewA" data-ld-part="toggle-daylight" style="width: 100%;"></div>
+    </div>
+    <div class="layer inactive" id="layerB">
+      <div id="previewB" data-ld-part="toggle-daylight" style="width: 100%;"></div>
+    </div>
+  </div>
+  <p class="hint">拖动滑块调节数值，点「应用参数」生效。</p>
+</section>
+
+<section class="panel">
+  <h2>预设场景</h2>
+  <div class="chips" id="chips"></div>
+  
+  <h2>详细参数</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="panes"></div>
+  
+  <div class="codehead"><h2>嵌入代码</h2><button class="copy" id="copy">复制代码</button></div>
+  <pre id="snippet"></pre>
+  
+  <div class="dock">
+    <span id="status"></span>
+    <button class="apply" id="apply">应用参数</button>
+  </div>
+</section>
+</main>
+
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const translations={
+ en:{title:"Pixel Daylight Switch",sub:"Playground",back:"Back to demo",docs:"Documentation",hint:"Drag the sliders to adjust values, then apply your settings.",presets:"Presets",details:"Parameters",embed:"Embed code",copy:"Copy code",copied:"Copied",copyFailed:"Copy failed",apply:"Apply settings",groups:["Motion","Glass optics","World timing","Environment"],params:["Drag response speed","Release inertia","Edge bounce","Lens refraction","Glass edge thickness","Edge dispersion","Surface highlight","World time scale"],weather:"Weather effect",none:"None",snow:"Snowfall",scene:"Scene",startNight:"Start at night",pending:"Settings changed, not yet applied",current:"Settings are up to date",preparing:"Preparing renderer…",failed:"Renderer not ready. Previous preview kept; please try again.",scenes:["Countryside cottage","Japanese street","Modern apartment","Seaside lighthouse","Mountain cabin"]},
+ "zh-CN":{title:"像素昼夜开关",sub:"参数实验室",back:"返回演示",docs:"项目文档",hint:"拖动滑块调节数值，然后应用参数。",presets:"预设场景",details:"详细参数",embed:"嵌入代码",copy:"复制代码",copied:"已复制",copyFailed:"复制失败",apply:"应用参数",groups:["运动反馈","玻璃光学","世界节奏","场景环境"],params:["滑动响应速度","松手后的惯性","边缘回弹力度","镜片折射率","玻璃边缘厚度","边缘色散强度","表面反射高光","世界时间倍率"],weather:"天气特效",none:"无",snow:"飘雪",scene:"真实场景",startNight:"默认从夜晚开始",pending:"参数有变动，尚未应用",current:"参数已是最新",preparing:"正在准备渲染…",failed:"渲染未就绪，已保留原画面，请重试",scenes:["乡村小屋","日本街道","现代公寓","海边灯塔","山间木屋"]},
+ ja:{title:"昼夜スイッチ",sub:"プレイグラウンド",back:"デモに戻る",docs:"ドキュメント",hint:"スライダーで値を調整し、「設定を適用」を押してください。",presets:"プリセットシーン",details:"詳細設定",embed:"埋め込みコード",copy:"コードをコピー",copied:"コピーしました",copyFailed:"コピーに失敗しました",apply:"設定を適用",groups:["動き","ガラス光学","ワールド時間","環境"],params:["ドラッグ応答速度","リリース後の慣性","端のバウンス","レンズの屈折率","ガラス縁の厚さ","縁の色分散","表面ハイライト","ワールド時間倍率"],weather:"天候効果",none:"なし",snow:"雪",scene:"シーン",startNight:"夜の状態から開始",pending:"設定が変更されています（未適用）",current:"設定は最新です",preparing:"描画を準備しています…",failed:"描画の準備ができません。前のプレビューを保持しました。",scenes:["田舎のコテージ","日本の街並み","モダンなアパート","海辺の灯台","山小屋"]}
+};
+const supported=["en","zh-CN","ja"];
+const saved=localStorage.getItem("pds-language");
+let locale=supported.includes(saved)?saved:(navigator.language==="ja"?"ja":navigator.language.toLowerCase().startsWith("zh")?"zh-CN":"en");
+const tr=()=>translations[locale];
+function applyLanguage(next){
+ locale=supported.includes(next)?next:"en";localStorage.setItem("pds-language",locale);
+ document.documentElement.lang=locale;document.title=tr().title+" · "+tr().sub;
+ document.querySelector(".top b").textContent=tr().title;document.querySelector(".top span").textContent=tr().sub;
+ const nav=document.querySelectorAll(".top nav a");nav[0].textContent=tr().back;nav[1].textContent=tr().docs;
+ document.querySelector(".hint").textContent=tr().hint;
+ const headings=document.querySelectorAll(".panel h2");headings[0].textContent=tr().presets;headings[1].textContent=tr().details;headings[2].textContent=tr().embed;
+ $("copy").textContent=tr().copy;$("apply").textContent=tr().apply;
+ renderControls();
+}
+const languageSelect=$("language");
+languageSelect.value=locale;languageSelect.addEventListener("change",()=>applyLanguage(languageSelect.value));
+
+// 双缓冲状态管理
+let activeRoot = $('previewA');
+let inactiveRoot = $('previewB');
+let activeLayer = $('layerA');
+let inactiveLayer = $('layerB');
+
+const groupData=[
+ [['speed',3,25,.1],['friction',0.1,0.9,.01],['bounce',0,12,.2]],
+ [['refraction',0.8,3.0,.01],['bezel',0.01,0.12,.001],['dispersion',0,0.25,.005],['shine',0,1.5,.02]],
+ [['timeSpeed',0,8,.1]],
+ []
+];
+const paramKeys=["speed","friction","bounce","refraction","bezel","dispersion","shine","timeSpeed"];
+let groups=[];
+function renderControls(){
+ groups=groupData.map((items,i)=>[tr().groups[i],items.map((item,j)=>[item[0],tr().params[paramKeys.indexOf(item[0])],...item.slice(1)])]);
+ const currentValues=typeof read==="function"?read():null;
+ $('chips').innerHTML=Object.keys(names).map((k,i)=>`<button class="chip" data-p="${k}" aria-pressed="${k==='countryside'}">${tr().scenes[i]}</button>`).join('');
+ $('tabs').innerHTML=groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
+ $('panes').innerHTML=groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
+  g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
+  (i===3?`<div class="ctl"><div class="row"><label for="weather">${tr().weather}</label><select id="weather"><option value="default">${tr().none}</option><option value="snow">${tr().snow}</option></select></div><div class="ctl"><div class="row"><label for="scene">${tr().scene}</label><select id="scene"><option value="countryside">${tr().scenes[0]}</option><option value="japanese-street">${tr().scenes[1]}</option><option value="apartment">${tr().scenes[2]}</option><option value="seaside">${tr().scenes[3]}</option><option value="mountain-cabin">${tr().scenes[4]}</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">${tr().startNight}</label>`:'')+
+  '</div>').join('');
+ if(currentValues) set(currentValues);
+}
+const names = {countryside:'',japanese:'',apartment:'',seaside:'',mountain:''};doctype html>
+<html lang="zh-CN" data-night="0">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>像素昼夜开关 · 实验室</title>
+<style>
+:root{--bg:#dbe6ee;--surface:#f4f8fa;--ink:#1b2146;--muted:#566680;--line:#b4c4d2;--accent:#efa02c;color-scheme:light}
+:root[data-night="1"]{--bg:#141936;--surface:#1d2347;--ink:#ecebf7;--muted:#9aa3c7;--line:#36406f;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;transition:background-color .3s,color .3s; overflow-x:hidden; overscroll-behavior-y: none;}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
+.top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
 .top nav{display:flex;gap:16px;font-size:14px}
 
 /* ===== 双缓冲交叉淡化预览区 ===== */
@@ -126,6 +301,27 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 <script>
 (()=>{
 const $=id=>document.getElementById(id);
+const translations={
+ en:{title:"Pixel Daylight Switch",sub:"Playground",back:"Back to demo",docs:"Documentation",hint:"Drag the sliders to adjust values, then apply your settings.",presets:"Presets",details:"Parameters",embed:"Embed code",copy:"Copy code",copied:"Copied",copyFailed:"Copy failed",apply:"Apply settings",groups:["Motion","Glass optics","World timing","Environment"],params:["Drag response speed","Release inertia","Edge bounce","Lens refraction","Glass edge thickness","Edge dispersion","Surface highlight","World time scale"],weather:"Weather effect",none:"None",snow:"Snowfall",scene:"Scene",startNight:"Start at night",pending:"Settings changed, not yet applied",current:"Settings are up to date",preparing:"Preparing renderer…",failed:"Renderer not ready. Previous preview kept; please try again.",scenes:["Countryside cottage","Japanese street","Modern apartment","Seaside lighthouse","Mountain cabin"]},
+ "zh-CN":{title:"像素昼夜开关",sub:"参数实验室",back:"返回演示",docs:"项目文档",hint:"拖动滑块调节数值，然后应用参数。",presets:"预设场景",details:"详细参数",embed:"嵌入代码",copy:"复制代码",copied:"已复制",copyFailed:"复制失败",apply:"应用参数",groups:["运动反馈","玻璃光学","世界节奏","场景环境"],params:["滑动响应速度","松手后的惯性","边缘回弹力度","镜片折射率","玻璃边缘厚度","边缘色散强度","表面反射高光","世界时间倍率"],weather:"天气特效",none:"无",snow:"飘雪",scene:"真实场景",startNight:"默认从夜晚开始",pending:"参数有变动，尚未应用",current:"参数已是最新",preparing:"正在准备渲染…",failed:"渲染未就绪，已保留原画面，请重试",scenes:["乡村小屋","日本街道","现代公寓","海边灯塔","山间木屋"]},
+ ja:{title:"昼夜スイッチ",sub:"プレイグラウンド",back:"デモに戻る",docs:"ドキュメント",hint:"スライダーで値を調整し、「設定を適用」を押してください。",presets:"プリセットシーン",details:"詳細設定",embed:"埋め込みコード",copy:"コードをコピー",copied:"コピーしました",copyFailed:"コピーに失敗しました",apply:"設定を適用",groups:["動き","ガラス光学","ワールド時間","環境"],params:["ドラッグ応答速度","リリース後の慣性","端のバウンス","レンズの屈折率","ガラス縁の厚さ","縁の色分散","表面ハイライト","ワールド時間倍率"],weather:"天候効果",none:"なし",snow:"雪",scene:"シーン",startNight:"夜の状態から開始",pending:"設定が変更されています（未適用）",current:"設定は最新です",preparing:"描画を準備しています…",failed:"描画の準備ができません。前のプレビューを保持しました。",scenes:["田舎のコテージ","日本の街並み","モダンなアパート","海辺の灯台","山小屋"]}
+};
+const supported=["en","zh-CN","ja"];
+const saved=localStorage.getItem("pds-language");
+let locale=supported.includes(saved)?saved:(navigator.language==="ja"?"ja":navigator.language.toLowerCase().startsWith("zh")?"zh-CN":"en");
+const tr=()=>translations[locale];
+function applyLanguage(next){
+ locale=supported.includes(next)?next:"en";localStorage.setItem("pds-language",locale);
+ document.documentElement.lang=locale;document.title=tr().title+" · "+tr().sub;
+ document.querySelector(".top b").textContent=tr().title;document.querySelector(".top span").textContent=tr().sub;
+ const nav=document.querySelectorAll(".top nav a");nav[0].textContent=tr().back;nav[1].textContent=tr().docs;
+ document.querySelector(".hint").textContent=tr().hint;
+ const headings=document.querySelectorAll(".panel h2");headings[0].textContent=tr().presets;headings[1].textContent=tr().details;headings[2].textContent=tr().embed;
+ $("copy").textContent=tr().copy;$("apply").textContent=tr().apply;
+ renderControls();
+}
+const languageSelect=$("language");
+languageSelect.value=locale;languageSelect.addEventListener("change",()=>applyLanguage(languageSelect.value));
 
 // 双缓冲状态管理
 let activeRoot = $('previewA');
@@ -133,269 +329,23 @@ let inactiveRoot = $('previewB');
 let activeLayer = $('layerA');
 let inactiveLayer = $('layerB');
 
-const groups=[
- ['运动反馈',[
-   ['speed','滑动响应速度',3,25,.1],
-   ['friction','松手后的惯性',0.1,0.9,.01],
-   ['bounce','边缘回弹力度',0,12,.2]
- ]],
- ['玻璃光学',[
-   ['refraction','镜片折射率',0.8,3.0,.01],
-   ['bezel','玻璃边缘厚度',0.01,0.12,.001],
-   ['dispersion','边缘色散强度',0,0.25,.005],
-   ['shine','表面反射高光',0,1.5,.02]
- ]],
- ['世界节奏',[
-   ['timeSpeed','世界时间倍率',0,8,.1]
- ]],
- ['场景环境',[]]
+const groupData=[
+ [['speed',3,25,.1],['friction',0.1,0.9,.01],['bounce',0,12,.2]],
+ [['refraction',0.8,3.0,.01],['bezel',0.01,0.12,.001],['dispersion',0,0.25,.005],['shine',0,1.5,.02]],
+ [['timeSpeed',0,8,.1]],
+ []
 ];
-
-const nums = groups.flatMap(g=>g[1]);
-const fields = [...nums.map(n=>n[0]), 'weather', 'scene', 'startNight'];
-const attr = {
-  speed:'speed', friction:'friction', bounce:'bounce', 
-  refraction:'refraction', bezel:'bezel', dispersion:'dispersion', shine:'shine', 
-  timeSpeed:'time-speed', weather:'weather', scene:'scene', startNight:'start-night'
-};
-
-const defaults = {
-  speed:9.5, friction:0.6, bounce:3.2, 
-  refraction:1.24, bezel:0.046, dispersion:0.05, shine:0.44, 
-  timeSpeed:1, weather:'default', scene:'countryside', startNight:false
-};
-
-const presets = {
-  countryside: {...defaults, scene:'countryside'},
-  japanese: {...defaults, scene:'japanese-street'},
-  apartment: {...defaults, scene:'apartment'},
-  seaside: {...defaults, scene:'seaside'},
-  mountain: {...defaults, scene:'mountain-cabin', weather:'snow', startNight:true}
-};
-const names = {
-  countryside:'乡村小屋',
-  japanese:'日本街道',
-  apartment:'现代公寓',
-  seaside:'海边灯塔',
-  mountain:'山间木屋'
-};
-
-let applied = null;
-
-$('chips').innerHTML = Object.keys(names).map(k=>`<button class="chip" data-p="${k}" aria-pressed="${k==='countryside'}">${names[k]}</button>`).join('');
-$('tabs').innerHTML = groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
-$('panes').innerHTML = groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
- g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
- (i===3?`<div class="ctl"><div class="row"><label for="weather">天气特效</label><select id="weather"><option value="default">无</option><option value="snow">飘雪</option></select></div><div class="ctl"><div class="row"><label for="scene">真实场景</label><select id="scene"><option value="countryside">乡村小屋</option><option value="japanese-street">日本街道</option><option value="apartment">现代公寓</option><option value="seaside">海边灯塔</option><option value="mountain-cabin">山间木屋</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">默认从夜晚开始</label>`:'')+
- '</div>').join('');
-
-const read = ()=>{ const c={}; for(const id of fields) c[id] = (id==='weather'||id==='scene')?$(id).value : id==='startNight'?$(id).checked : Number($(id).value); return c; };
-const set = c=>{ for(const id of fields){ if(id==='startNight') $(id).checked=!!c[id]; else $(id).value=c[id]; } updateUI(); mark(); };
-
-function updateUI() {
-  for(const n of nums) {
-    const el=$(n[0]);
-    $(n[0]+'Out').textContent = Number(el.value).toFixed((String(n[4]).split('.')[1]||'').length);
-    el.style.setProperty('--p', (el.value-n[2])/(n[3]-n[2])*100+'%');
-  }
+const paramKeys=["speed","friction","bounce","refraction","bezel","dispersion","shine","timeSpeed"];
+let groups=[];
+function renderControls(){
+ groups=groupData.map((items,i)=>[tr().groups[i],items.map((item,j)=>[item[0],tr().params[paramKeys.indexOf(item[0])],...item.slice(1)])]);
+ const currentValues=typeof read==="function"?read():null;
+ $('chips').innerHTML=Object.keys(names).map((k,i)=>`<button class="chip" data-p="${k}" aria-pressed="${k==='countryside'}">${tr().scenes[i]}</button>`).join('');
+ $('tabs').innerHTML=groups.map((g,i)=>`<button role="tab" id="t${i}" aria-selected="${i===0}" aria-controls="p${i}">${g[0]}</button>`).join('');
+ $('panes').innerHTML=groups.map((g,i)=>`<div role="tabpanel" id="p${i}" aria-labelledby="t${i}"${i?' hidden':''}>`+
+  g[1].map(([id,name,min,max,step])=>`<div class="ctl"><div class="row"><label for="${id}">${name}</label><output id="${id}Out" for="${id}"></output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}"></div>`).join('')+
+  (i===3?`<div class="ctl"><div class="row"><label for="weather">${tr().weather}</label><select id="weather"><option value="default">${tr().none}</option><option value="snow">${tr().snow}</option></select></div><div class="ctl"><div class="row"><label for="scene">${tr().scene}</label><select id="scene"><option value="countryside">${tr().scenes[0]}</option><option value="japanese-street">${tr().scenes[1]}</option><option value="apartment">${tr().scenes[2]}</option><option value="seaside">${tr().scenes[3]}</option><option value="mountain-cabin">${tr().scenes[4]}</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">${tr().startNight}</label>`:'')+
+  '</div>').join('');
+ if(currentValues) set(currentValues);
 }
 
-function generateCode() {
-  const c = read();
-  const a = fields.filter(id=>c[id]!==defaults[id]).map(id=>`  data-${attr[id]}="${c[id]}"`);
-  const el = a.length ? ['<div','  data-ld-part="toggle-daylight"',...a,'></div>'].join('\n') : '<div data-ld-part="toggle-daylight"></div>';
-  $('snippet').textContent = el + '\n<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><\/script>';
-}
-
-function mark(){
-  const dirty = JSON.stringify(read()) !== JSON.stringify(applied);
-  $('status').textContent = dirty ? '参数有变动，尚未应用' : '参数已是最新';
-  $('apply').toggleAttribute('data-clean', !dirty);
-}
-
-let isTicking = false;
-function handleInput() {
-  document.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed','false'));
-  if (!isTicking) {
-    window.requestAnimationFrame(() => { updateUI(); isTicking = false; });
-    isTicking = true;
-  }
-}
-function handleChange() {
-  generateCode();
-  mark();
-}
-
-/* =========================================================
-   终极防闪策略：防抖 + 强制静默等待
-   ========================================================= */
-
-let applyToken = 0;
-let debounceTimer = null;
-
-// 1. 防抖包装：阻止连点造成的并发 WebGL 冲突
-function triggerApply() {
-  clearTimeout(debounceTimer);
-  // 连点时，先把状态置为脏
-  $('status').textContent = '正在准备渲染...';
-  
-  debounceTimer = setTimeout(() => {
-    executeApply();
-  }, 150); // 停下连点操作 150ms 后才真正开始切换
-}
-
-// 2. 等待机制：不仅要求出现 Canvas，还强制要求过 250ms（熬过 0.1s 的白屏期）
-function waitForStableRender(root, token, minDelay = 250) {
-  return new Promise((resolve) => {
-    let done = false;
-    const start = performance.now();
-    let rafId = 0;
-    const timer = setTimeout(() => finish(), 2000); // 超时兜底 2s
-
-    function finish() {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      if (rafId) cancelAnimationFrame(rafId);
-      resolve();
-    }
-
-    function tick() {
-      if (done) return;
-      if (token !== applyToken) return finish(); // 被新的任务取代，立刻退出
-
-      const elapsed = performance.now() - start;
-      
-      // 核心修复：必须等够 minDelay(250ms)，确保库把白屏期熬过去了，画出真实内容
-      if (elapsed >= minDelay) {
-        const canvas = root.querySelector('canvas');
-        if (canvas && canvas.width > 1 && canvas.height > 1) {
-          return finish(); // 画面真的出来了，可以切了
-        }
-      }
-      rafId = requestAnimationFrame(tick);
-    }
-    rafId = requestAnimationFrame(tick);
-  });
-}
-
-async function executeApply() {
-  const myToken = ++applyToken;
-  const c = read();
-
-  const targetRoot  = inactiveRoot;
-  const targetLayer = inactiveLayer;
-  const sourceLayer = activeLayer;
-
-  // 1. 清理目标容器（安全清理，防止残留实例干扰）
-  try {
-    if (window.PixelDaylightSwitch && window.PixelDaylightSwitch.unmount) {
-      window.PixelDaylightSwitch.unmount(targetRoot);
-    }
-  } catch (e) { console.warn('unmount 失败', e); }
-  targetRoot.innerHTML = '';
-
-  // 2. 写入新参数
-  for (const id of fields) {
-    if (id === 'startNight') {
-      if (c[id]) targetRoot.setAttribute('data-start-night', 'true');
-      else targetRoot.removeAttribute('data-start-night');
-    } else if (id === 'weather' || id === 'scene') {
-      const attribute = `data-${attr[id]}`;
-      if (c[id] !== 'default' && c[id] !== 'countryside') targetRoot.setAttribute(attribute, c[id]);
-      else targetRoot.removeAttribute(attribute);
-    } else {
-      targetRoot.setAttribute(`data-${attr[id]}`, c[id]);
-    }
-  }
-
-  // 3. 挂载
-  let mounted = false;
-  try {
-    if (window.PixelDaylightSwitch && window.PixelDaylightSwitch.mount) {
-      window.PixelDaylightSwitch.mount(targetRoot);
-      mounted = true;
-    }
-  } catch (e) {
-    console.error('mount 失败', e);
-  }
-
-  // 4. 强制等待 250ms（覆盖白屏期），且确认 canvas 存在
-  await waitForStableRender(targetRoot, myToken, 250);
-
-  // 5. 检查令牌：如果在等待期间用户又点击了，这次任务直接作废
-  if (myToken !== applyToken) return;
-
-  // 6. 最后的防线：如果 250ms 后连 canvas 都没有，说明彻底失败了，保留原画面
-  const hasCanvas = !!targetRoot.querySelector('canvas');
-  if (!mounted || !hasCanvas) {
-    try {
-      if (window.PixelDaylightSwitch && window.PixelDaylightSwitch.unmount) {
-        window.PixelDaylightSwitch.unmount(targetRoot);
-      }
-    } catch (e) {}
-    targetRoot.innerHTML = '';
-    $('status').textContent = '渲染未就绪，已保留原画面，请重试';
-    $('apply').removeAttribute('data-clean');
-    return;
-  }
-
-  // 7. 新画面已经完全就绪 → 交叉淡化，物理上绝不可能看到白屏
-  applied = c;
-  targetLayer.classList.remove('inactive');
-  targetLayer.classList.add('active');
-  sourceLayer.classList.remove('active');
-  sourceLayer.classList.add('inactive');
-
-  // 交换引用
-  [activeRoot, inactiveRoot] = [inactiveRoot, activeRoot];
-  [activeLayer, inactiveLayer] = [inactiveLayer, activeLayer];
-
-  // 同步网页背景
-  document.documentElement.dataset.night = c.startNight ? '1' : '0';
-
-  generateCode();
-  mark();
-}
-
-/* ========================================================= */
-
-fields.forEach(id => {
-  const el = $(id);
-  if (id === 'weather' || id === 'scene' || id === 'startNight') {
-    el.addEventListener('change', () => { handleInput(); handleChange(); });
-  } else {
-    el.addEventListener('input', handleInput);
-    el.addEventListener('change', handleChange);
-  }
-});
-
-document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', ()=>{ 
-  set(presets[b.dataset.p]); 
-  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
-  b.setAttribute('aria-pressed','true'); 
-  triggerApply(); // 改为防抖触发
-}));
-
-const tabs=[...document.querySelectorAll('.tabs button')];
-tabs.forEach((t,i)=>{
- t.addEventListener('click', ()=>tabs.forEach((x,j)=>{ x.setAttribute('aria-selected',j===i); $('p'+j).hidden=j!==i; }));
-});
-
-$('apply').addEventListener('click', triggerApply); // 改为防抖触发
-
-$('copy').addEventListener('click', async()=>{
- const b=$('copy');
- try { await navigator.clipboard.writeText($('snippet').textContent); b.textContent='已复制'; }
- catch { b.textContent='复制失败'; }
- setTimeout(()=>b.textContent='复制代码', 1500);
-});
-
-// 初始化
-set(defaults);
-// 首次加载不走防抖，直接渲染
-executeApply();
-})();
-</script>
-</body>
-</html>
