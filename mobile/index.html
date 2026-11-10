@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Pixel Daylight Switch</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="mobile.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./mobile.css">
 </head>
 <body class="mobile-app">
   <main class="mobile-stage">
@@ -21,6 +21,67 @@
       <span class="probe" aria-hidden="true"></span>
     </div>
   </main>
-  <script src="app.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var panel;
+      function showDiagnostic(title, detail) {
+        try {
+          if (!panel) {
+            panel = document.createElement('pre');
+            panel.id = 'pds-diagnostic';
+            panel.setAttribute('role', 'alert');
+            panel.setAttribute('aria-live', 'assertive');
+            document.body.appendChild(panel);
+          }
+          panel.textContent = title + (detail ? '\\n\\n' + String(detail) : '');
+          panel.style.display = 'block';
+        } catch (displayError) {
+          try { console.error('[PDS diagnostic display failed]', displayError); } catch (_) {}
+        }
+      }
+      window.__PDS_DIAG__ = {
+        show: showDiagnostic,
+        error: function (error) {
+          var message = error && (error.stack || error.message) || String(error || 'Unknown error');
+          showDiagnostic('JavaScript Error', message);
+        }
+      };
+      window.addEventListener('error', function (event) {
+        if (event.target && event.target !== window) {
+          var target = event.target;
+          var source = target.src || target.href || target.tagName || 'unknown resource';
+          showDiagnostic('Resource Load Failed', source + '\\n' + (event.message || 'The resource could not be loaded'));
+          return;
+        }
+        var where = event.filename ? '\\n' + event.filename + ':' + (event.lineno || 0) + ':' + (event.colno || 0) : '';
+        showDiagnostic('JavaScript Error', (event.message || 'Unknown window error') + where + (event.error && event.error.stack ? '\\n' + event.error.stack : ''));
+      }, true);
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = event.reason;
+        showDiagnostic('Unhandled Promise Rejection', reason && (reason.stack || reason.message) || String(reason || 'Unknown rejection'));
+      });
+      window.addEventListener('DOMContentLoaded', function () {
+        var scripts = Array.prototype.slice.call(document.scripts);
+        var appScript = scripts.find(function (script) { return /(?:^|\\/)app\\.js(?:$|[?#])/.test(script.src); });
+        if (!appScript) showDiagnostic('Resource Path Error', 'app.js script tag was not found in mobile/index.html');
+        else {
+          appScript.addEventListener('error', function () { showDiagnostic('Resource Load Failed', 'app.js\\n' + appScript.src); });
+          appScript.addEventListener('load', function () {
+            window.setTimeout(function () {
+              var root = document.querySelector('[data-ld-part="toggle-daylight"]');
+              var canvas = root && root.querySelector('canvas.scene');
+              if (!root) showDiagnostic('App Initialization Failed', 'The daylight switch root element was not found.');
+              else if (!canvas) showDiagnostic('App Initialization Failed', 'The renderer did not create a scene canvas.');
+              else if (!canvas.width || !canvas.height || !root.getBoundingClientRect().width || !root.getBoundingClientRect().height) {
+                showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + JSON.stringify(root.getBoundingClientRect().toJSON()));
+              }
+            }, 2500);
+          }, { once: true });
+        }
+      }, { once: true });
+    })();
+  </script>
+  <script src="./app.js"></script>
 </body>
 </html>
