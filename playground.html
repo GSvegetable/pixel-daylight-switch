@@ -419,12 +419,25 @@ executeApply();
  const copy=document.getElementById("copy"),apply=document.getElementById("apply");if(copy)copy.textContent=t.copy;if(apply)apply.textContent=t.apply;
  const chips=document.querySelectorAll(".chip");chips.forEach((el,i)=>{if(t.scenes[i])el.textContent=t.scenes[i];});
  const tabs=document.querySelectorAll(".tabs button");tabs.forEach((el,i)=>{if(t.groups[i])el.textContent=t.groups[i];});
+ const fieldLabels={
+ en:{speed:"Slider response speed",friction:"Release inertia",bounce:"Edge rebound",refraction:"Lens refraction",bezel:"Glass edge thickness",dispersion:"Edge color dispersion",shine:"Surface highlight",timeSpeed:"World time multiplier"},
+ "zh-CN":{speed:"滑动响应速度",friction:"松手后的惯性",bounce:"边缘回弹力度",refraction:"镜片折射率",bezel:"玻璃边缘厚度",dispersion:"边缘色散强度",shine:"表面反射高光",timeSpeed:"世界时间倍率"},
+ ja:{speed:"スライダーの応答速度",friction:"離した後の慣性",bounce:"端の跳ね返り",refraction:"レンズの屈折率",bezel:"ガラスの縁の厚さ",dispersion:"縁の色分散",shine:"表面のハイライト",timeSpeed:"ワールド時間倍率"}
+ };
+ Object.entries(fieldLabels[lang]).forEach(([id,label])=>{const el=document.querySelector('label[for="'+id+'"]');if(el)el.textContent=label;});
  const weather=document.querySelector('label[for="weather"]');if(weather)weather.textContent=t.weather;
  const scene=document.querySelector('label[for="scene"]');if(scene)scene.textContent=t.scene;
  const start=document.querySelector(".check");if(start&&start.querySelector("input")){const input=start.querySelector("input");start.textContent="";start.append(input,document.createTextNode(t.start));}
  const w=document.querySelector('#weather option[value="default"]'),s=document.querySelector('#weather option[value="snow"]');if(w)w.textContent=t.none;if(s)s.textContent=t.snow;
  select.value=lang;try{localStorage.setItem("pds-language",lang);}catch(e){}
  }
+ const statusNode=document.getElementById("status");
+ const statusTranslations={
+ en:{"参数有变动，尚未应用":"Settings changed — not applied yet","参数已是最新":"Settings are up to date","正在准备渲染...":"Preparing preview…","渲染未就绪，已保留原画面，请重试":"Preview not ready. The previous scene was kept; please try again."},
+ "zh-CN":{},
+ ja:{"参数有变动，尚未应用":"設定が変更されています（未適用）","参数已是最新":"設定は最新です","正在准备渲染...":"プレビューを準備中…","渲染未就绪，已保留原画面，请重试":"プレビューを表示できません。前のシーンを保持しました。再試行してください。"}
+ };
+ if(statusNode)new MutationObserver(()=>{const raw=statusNode.textContent.trim();if(raw){statusNode.dataset.rawStatus=raw;statusNode.textContent=statusTranslations[lang][raw]||raw;}}).observe(statusNode,{childList:true,characterData:true,subtree:true});
  select.addEventListener("change",()=>apply(select.value));apply(lang);
 })();
 </script>
