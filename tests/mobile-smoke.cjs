@@ -59,7 +59,7 @@ try {
   const versionRun = spawnSync(process.execPath, [path.join(root, 'scripts/set-android-version.cjs'), gradlePath], { cwd: root, encoding: 'utf8' });
   assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
   const gradle = fs.readFileSync(gradlePath, 'utf8');
-  assert.match(gradle, /versionCode 30100/);
+  assert.match(gradle, /versionCode 30001/);
   assert.match(gradle, /versionName "3\.0\.1"/);
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
