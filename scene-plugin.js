@@ -12,6 +12,8 @@
   const MAX_WIDTH = 192;
   const MAX_HEIGHT = 112;
   const MAX_PALETTES = 8;
+  const MAX_TIME_STOPS = 48;
+  const MAX_PALETTES = 8;
   const MAX_SYMBOLS = 64;
   const ID_RE = /^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$/;
   const COLOR_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
@@ -36,6 +38,7 @@
     if (!isPlainObject(input)) return { valid: false, errors: ['Scene manifest must be a plain object.'] };
 
     addUnknownKeyErrors(input, new Set(['schemaVersion', 'id', 'name', 'author', 'license', 'canvas', 'pixels', 'palettes', 'timeCycle']), 'manifest', errors);
+    Object.keys(input).forEach((key) => { if (!allowedKeys.includes(key)) errors.push('Unsupported manifest field: ' + key + '.'); });
     if (input.schemaVersion !== 1) errors.push('schemaVersion must be 1.');
     if (typeof input.id !== 'string' || !ID_RE.test(input.id)) errors.push('id must be 3-64 lowercase letters, numbers, dots, underscores or hyphens.');
     if (BUILT_INS.has(input.id)) errors.push('Built-in scene IDs are reserved.');
@@ -117,6 +120,12 @@
       });
     }
     return { valid: errors.length === 0, errors };
+  }
+
+  function deepFreeze(value) {
+    if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+    Object.keys(value).forEach((key) => deepFreeze(value[key]));
+    return Object.freeze(value);
   }
 
   function deepFreeze(value) {
