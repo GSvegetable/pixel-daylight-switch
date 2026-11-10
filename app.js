@@ -915,12 +915,51 @@ function mount(root) {
     }
   };
 
-  const scene = ['countryside', 'japanese-street', 'apartment', 'seaside', 'mountain-cabin'].includes(dataset.scene) ? dataset.scene : 'countryside';
+  const scenePlugins = typeof window !== 'undefined' ? window.PixelDaylightSwitchScenePlugins : null;
+  const pluginScene = scenePlugins && typeof scenePlugins.getScene === 'function' ? scenePlugins.getScene(dataset.scene) : null;
+  const builtInScene = ['countryside', 'japanese-street', 'apartment', 'seaside', 'mountain-cabin'].includes(dataset.scene);
+  const scene = builtInScene ? dataset.scene : (pluginScene ? dataset.scene : 'countryside');
   const LIVE = { seaside: liveSeaside, 'mountain-cabin': liveCabin, 'japanese-street': liveStreet, apartment: liveApartment };
   const drawSceneLive = (h, dt) => { const fn = LIVE[scene]; if (fn) fn(h, dt); };
+  const parsePluginColor = (value) => {
+    const hex = value.slice(1);
+    const full = hex.length === 3 ? hex.split('').map((v) => v + v).join('') : hex;
+    return [parseInt(full.slice(0, 2), 16), parseInt(full.slice(2, 4), 16), parseInt(full.slice(4, 6), 16)];
+  };
+  const packPluginColor = (rgb) => (255 << 24) | (rgb[2] << 16) | (rgb[1] << 8) | rgb[0];
+  const renderPluginWorld = (hour) => {
+    const stops = pluginScene.timeCycle;
+    let left = stops[0]; let right = stops[stops.length - 1]; let sampleHour = hour;
+    if (hour < stops[0].at) sampleHour += 24;
+    for (let i = 0; i < stops.length - 1; i++) {
+      const a = stops[i]; const b = stops[i + 1];
+      if (sampleHour >= a.at && sampleHour <= b.at) { left = a; right = b; break; }
+    }
+    if (sampleHour > stops[stops.length - 1].at) { left = stops[stops.length - 1]; right = stops[0]; right = { at: right.at + 24, palette: right.palette }; }
+    const span = Math.max(0.0001, right.at - left.at);
+    const t = clamp((sampleHour - left.at) / span);
+    const aPalette = pluginScene.palettes[left.palette];
+    const bPalette = pluginScene.palettes[right.palette];
+    const width = pluginScene.canvas.width; const height = pluginScene.canvas.height;
+    for (let py = 0; py < bh; py++) {
+      const sy = clamp(Math.floor((py / bh) * height), 0, height - 1);
+      const row = pluginScene.pixels[sy];
+      for (let px = 0; px < bw; px++) {
+        const sx = clamp(Math.floor((px / bw) * width), 0, width - 1);
+        const symbol = row[sx];
+        const ca = parsePluginColor(aPalette[symbol]); const cb = parsePluginColor(bPalette[symbol]);
+        pixels[py * bw + px] = packPluginColor([
+          Math.round(mix(ca[0], cb[0], t)),
+          Math.round(mix(ca[1], cb[1], t)),
+          Math.round(mix(ca[2], cb[2], t))
+        ]);
+      }
+    }
+  };
 
 
   const buildBase = () => {
+    if (pluginScene) { matBuf.fill(0); baseBuf.set(matBuf); skyKeys = []; return; }
     matBuf.fill(0); if (scene === 'countryside') { paintGround(); paintFence(); paintBush(22, 78, 16, 8, 61); paintBush(176, 80, 14, 7, 62); paintBush(-6, 81, 11, 6, 63); paintBush(204, 81, 10, 5, 64); paintTrunk(); paintHouse(); paintFlowers(96, 126, 85, 92, 26, 91); paintFlowers(14, 38, 86, 96, 16, 92); paintFlowers(150, 205, 90, 106, 24, 93); paintFlowers(-14, 14, 88, 104, 12, 95); paintFlowers(40, 62, 90, 104, 12, 94); buildCanopy(); } else { canopy = []; if (scene === 'japanese-street') paintJapaneseStreet(); else if (scene === 'apartment') paintApartment(); else if (scene === 'seaside') paintSeaside(); else paintMountainCabin(); } baseBuf.set(matBuf);
     const r = seeded(808); stars = [];
     for (let i = 0; i < 95; i++) { stars.push({ x: Math.floor(r() * (CORE_W + 40)) - 20, y: Math.floor(r() * 66), seed: r(), big: r() < 0.14 }); }
@@ -1034,7 +1073,9 @@ function mount(root) {
   let keyA = 0; let keyB = 1; let keyP = 0;
   const pickKeys = (h) => { for (let i = 0; i < KEYS.length - 1; i++) { if (h >= KEYS[i][0] && h < KEYS[i + 1][0]) { keyA = i; keyB = i + 1; keyP = clamp(((h - KEYS[i][0]) / (KEYS[i + 1][0] - KEYS[i][0]) - 0.32) / 0.36); return; } } keyA = 0; keyB = 1; keyP = 0; };
   const renderWorld = (clock, dt, hurry) => {
-    const h = hourOf(clock); if (!calm) anim += dt; matBuf.set(baseBuf); varBuf.fill(0); emitList.length = 0;
+    const h = hourOf(clock);
+    if (pluginScene) { renderPluginWorld(h); return; }
+    if (!calm) anim += dt; matBuf.set(baseBuf); varBuf.fill(0); emitList.length = 0;
     for (const c of sources) { c.w = 0; c.x = 0; c.y = 0; }
     lampFlick = calm ? 1 : 0.95 + 0.05 * Math.sin(anim * 13) * Math.sin(anim * 5.3);
     if (!calm) { birds.next -= dt; if (birds.t >= 0) { birds.t += dt; if (birds.t > 9) birds.t = -1; } else if (birds.next <= 0) { birds.t = 0; birds.next = 12 + Math.random() * 14; birds.y = 10 + Math.random() * 24; birds.dir = Math.random() < 0.5 ? 1 : -1; } shoot.next -= dt; if (shoot.t >= 0) { shoot.t += dt; if (shoot.t > 0.6) shoot.t = -1; } else if (shoot.next <= 0) { shoot.t = 0; shoot.next = 9 + Math.random() * 16; shoot.x = 10 + Math.random() * 130; shoot.y = 2 + Math.random() * 20; } }
