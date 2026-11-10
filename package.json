@@ -52,6 +52,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "node tests/package-smoke.cjs"
+    "test": "node tests/package-smoke.cjs",
+    "test:browser": "playwright test"
   }
 }
