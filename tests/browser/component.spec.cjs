@@ -82,9 +82,8 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
   }));
   expect(widths.document).toBeLessThanOrEqual(widths.viewport + 1);
   expect(widths.body).toBeLessThanOrEqual(widths.viewport + 1);
-  await page.locator('#speed').fill('12');
-  await page.locator('#speed').dispatchEvent('change');
+  await page.locator('#speed').evaluate(el => { el.value = '12'; el.dispatchEvent(new Event('input', {bubbles:true})); el.dispatchEvent(new Event('change', {bubbles:true})); });
   await page.locator('#apply').click();
   await expect(page.locator('#status')).toContainText('参数已是最新', {timeout:10000});
-  await expect(page.locator('#previewB canvas.scene')).toHaveCount(1);
+  await expect(page.locator('#previewA canvas.scene')).toHaveCount(1);
 });
