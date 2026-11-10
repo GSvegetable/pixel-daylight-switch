@@ -96,6 +96,41 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 
 npm 包提供 ESM 和 CommonJS 入口，可在 SSR 环境中安全导入；只有在浏览器中且目标元素已经存在时，才能调用 `mount()`。npm 发布文件清单以 [package.json](package.json) 为准。
 
+## 社区场景插件（v3.0.0）
+
+3.0.0 开始支持通过 JSON Manifest 注册自定义像素世界。普通创作者可以保留像素矩阵、只修改昼夜色板；进阶创作者可以自己设计像素矩阵和时间色板。插件只提供声明式数据，不会在渲染器中执行第三方 JavaScript。
+
+**浏览器使用：**
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+<script>
+  PixelDaylightSwitch.registerScene(sceneManifest);
+</script>
+```
+
+请在组件挂载前注册 Manifest。使用 npm 时：
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import myScene from './my-scene.json';
+
+const unregister = registerScene(myScene);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = myScene.id;
+PixelDaylightSwitch.mount(root);
+```
+
+Manifest v1 包含场景 ID、作者与许可证、像素画布、字符像素矩阵、多个昼夜色板和 24 小时时间节点。画布最大为 192 × 112；每个像素符号都必须在每套色板中定义颜色。渲染器会在相邻时间节点之间插值颜色。
+
+- [完整插件开发指南](SCENE_PLUGINS.md)
+- [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
+- [樱花黄昏示例](examples/scenes/sakura-evening.json)
+
+v1 暂不支持外部图片/Sprite、分层 Tile Map 和自定义动画轨道；这些能力会通过后续独立版本的 Schema 扩展，不会开放任意代码执行。五个内置场景仍保留原有绘制与动态逻辑。
+
 ## 配置参数
 
 所有参数均为可选项，写在挂载元素上。省略参数或参数值无效时使用默认值。
