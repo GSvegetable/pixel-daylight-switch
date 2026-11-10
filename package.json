@@ -53,6 +53,7 @@
     "LICENSE",
     "llms.txt",
     "INTEGRATIONS.md",
+    "SCENE_PLUGINS.md",
     "scene-plugin.js",
     "schemas",
     "examples",
