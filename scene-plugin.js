@@ -27,7 +27,7 @@
     unknownKeys(input, new Set(['schemaVersion','id','name','author','license','canvas','pixels','palettes','timeCycle','assets','layers']), 'manifest', errors);
     if (input.schemaVersion !== 1 && input.schemaVersion !== 2) errors.push('schemaVersion must be 1 or 2.');
     if (input.schemaVersion === 1 && (input.assets !== undefined || input.layers !== undefined)) errors.push('assets and layers require schemaVersion 2.');
-    if (input.schemaVersion !== 1) errors.push('schemaVersion must be 1.');
+    if (input.schemaVersion !== 1 && input.schemaVersion !== 2) errors.push('schemaVersion must be 1 or 2.');
     if (typeof input.id !== 'string' || !ID_RE.test(input.id)) errors.push('id must be 3-64 lowercase letters, numbers, dots, underscores or hyphens.');
     if (BUILT_INS.has(input.id)) errors.push('Built-in scene IDs are reserved.');
     if (typeof input.name !== 'string' || !input.name.trim() || input.name.length > 80) errors.push('name must be a non-empty string of at most 80 characters.');
