@@ -23,7 +23,7 @@ export function DaylightSwitch({ scene = 'countryside', weather = 'default' }) {
 
     mount(root);
     return () => unmount(root);
-  }, []);
+  }, [scene, weather]);
 
   return (
     <div style={{ width: 'min(100%, 800px)', marginInline: 'auto' }}>
@@ -38,18 +38,7 @@ export function DaylightSwitch({ scene = 'countryside', weather = 'default' }) {
 }
 ```
 
-When `scene` or `weather` props change after mount, update the root attributes and remount the component so the renderer reads the new configuration:
-
-```jsx
-useEffect(() => {
-  const root = rootRef.current;
-  if (!root) return;
-  unmount(root);
-  mount(root);
-}, [scene, weather]);
-```
-
-For a component with frequent prop changes, keep the configuration in one effect and avoid mounting twice in the same render cycle.
+The effect cleans up the previous instance before applying changed scene or weather attributes, so the renderer always reads the latest configuration.
 
 ## Vue 3
 
