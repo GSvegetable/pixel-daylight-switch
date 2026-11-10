@@ -2,6 +2,18 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [2.2.0] — Mobile scene controls
+
+### Mobile app experience
+- Add a dedicated mobile app shell with five selectable scenes: countryside, Japanese street, apartment, seaside and mountain cabin.
+- Add an optional snowfall control.
+- Add live day/night status, device-language UI (English, Simplified Chinese and Japanese), accessible pressed states and compact portrait/landscape layouts.
+- Reuse the shared renderer and preserve the glass shader, refraction, highlights, dispersion and drag interaction.
+
+### Documentation and verification
+- Update English, Simplified Chinese and Japanese README files with the mobile controls.
+- Extend mobile smoke checks for all five scene choices, weather control and renderer remount behavior.
+
 ## [2.1.0] — Android visual and versioning fix
 
 ### Android app
