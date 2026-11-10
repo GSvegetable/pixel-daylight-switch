@@ -103,6 +103,28 @@ For custom configuration, place a root element where you want it and load the ru
 
 The runtime injects component-scoped styles. Do not import `style.css` just to use the component; that file also contains styles for the repository's standalone demo page.
 
+## Community scene plugins
+
+Register a JSON scene manifest before mounting a root. The package entry point exports `registerScene`, `validateScene`, `getScene` and `listScenes` alongside `mount` and `unmount`.
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import scene from './my-scene.json';
+
+const unregister = registerScene(scene);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = scene.id;
+PixelDaylightSwitch.mount(root);
+
+// Before removing a dynamically registered scene:
+PixelDaylightSwitch.unmount(root);
+unregister();
+```
+
+For CDN usage, load `scene-plugin.js` before `app.js`, then call `PixelDaylightSwitchScenePlugins.registerScene(manifest)` before mounting. The embed loader loads both scripts in the correct order for built-in scenes; custom manifests still need to be registered by the host page.
+
+Manifest v1 is data-only: a bounded pixel matrix, named palettes and a 24-hour palette timeline. See [the schema](schemas/scene-manifest.v1.schema.json) and [the example](examples/scenes/sakura-evening.json). Do not place executable code, remote script URLs or untrusted HTML in a manifest.
+
 ## Lifecycle and events
 
 - Call `mount(root)` after the root is attached to the DOM.
