@@ -33,7 +33,7 @@ jobs:
 
   browser:
     name: Chromium interaction and mobile regression
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out source
         uses: actions/checkout@v4
