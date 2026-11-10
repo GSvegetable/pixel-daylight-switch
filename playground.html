@@ -172,6 +172,18 @@ function renderControls(){
   (i===3?`<div class="ctl"><div class="row"><label for="weather">${tr().weather}</label><select id="weather"><option value="default">${tr().none}</option><option value="snow">${tr().snow}</option></select></div><div class="ctl"><div class="row"><label for="scene">${tr().scene}</label><select id="scene"><option value="countryside">${tr().scenes[0]}</option><option value="japanese-street">${tr().scenes[1]}</option><option value="apartment">${tr().scenes[2]}</option><option value="seaside">${tr().scenes[3]}</option><option value="mountain-cabin">${tr().scenes[4]}</option></select></div></div></div><label class="check"><input id="startNight" type="checkbox">${tr().startNight}</label>`:'')+
   '</div>').join('');
  if(currentValues) set(currentValues);
+ fields.forEach(id=>{
+   const el=$(id); if(!el) return;
+   if(id==='weather'||id==='scene'||id==='startNight') el.addEventListener('change',()=>{handleInput();handleChange();});
+   else {el.addEventListener('input',handleInput);el.addEventListener('change',handleChange);}
+ });
+ document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+   set(presets[b.dataset.p]);document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+   b.setAttribute('aria-pressed','true');triggerApply();
+ }));
+ [...document.querySelectorAll('.tabs button')].forEach((t,i)=>t.addEventListener('click',()=>{
+   document.querySelectorAll('.tabs button').forEach((x,j)=>{x.setAttribute('aria-selected',j===i);$('p'+j).hidden=j!==i;});
+ }));
 }
 const names = {countryside:'',japanese:'',apartment:'',seaside:'',mountain:''};doctype html>
 <html lang="zh-CN" data-night="0">
