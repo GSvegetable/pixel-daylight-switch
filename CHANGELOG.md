@@ -2,6 +2,19 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [1.3.1]
+
+### 稳定性与生命周期
+- 修复组件卸载时主动销毁 WebGL context，导致同一 canvas/root 后续重新挂载可能异常的问题。
+- 保留 GPU 资源释放与事件监听器、观察器清理，同时允许 canvas 在卸载后重新挂载。
+
+### 自动化验证
+- 增加 CommonJS、ESM 与 SSR 导入检查。
+- 增加 Node.js 18、20、22 的 CI 兼容性检查。
+- 增加 Chromium 浏览器回归：自动挂载、重复挂载/卸载、多实例、指针交互、事件监听器清理。
+- 增加移动端触控、Playground 小屏布局与参数应用检查。
+- 将浏览器回归纳入 npm 发布前置检查。
+
 ## [1.3.0]
 
 <details>
