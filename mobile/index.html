@@ -25,6 +25,13 @@
     (function () {
       'use strict';
       var panel;
+      var browserLanguage = (navigator.language || 'en').toLowerCase();
+      var uiLanguage = browserLanguage.indexOf('ja') === 0 ? 'ja' : browserLanguage.indexOf('zh') === 0 ? 'zh-CN' : 'en';
+      document.documentElement.lang = uiLanguage;
+      var switchRoot = document.querySelector('[data-ld-part="toggle-daylight"]');
+      if (switchRoot) switchRoot.lang = uiLanguage;
+      var switchButton = document.querySelector('.hit');
+      if (switchButton) switchButton.setAttribute('aria-label', uiLanguage === 'ja' ? '昼夜スイッチ' : uiLanguage === 'zh-CN' ? '昼夜开关' : 'Day/night switch');
       function showDiagnostic(title, detail) {
         try {
           if (!panel) {
