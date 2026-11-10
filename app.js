@@ -931,6 +931,7 @@ function mount(root) {
     Object.keys(palette).forEach((symbol) => { colors[symbol.charCodeAt(0)] = parsePluginColor(palette[symbol]); });
     return [name, colors];
   })) : null;
+  let pluginAnimClock = 0;
   const renderPluginWorld = (hour) => {
     const stops = pluginScene.timeCycle;
     let left = stops[0]; let right = stops[stops.length - 1]; let sampleHour = hour;
@@ -945,14 +946,43 @@ function mount(root) {
     const aPalette = pluginPaletteRgb[left.palette];
     const bPalette = pluginPaletteRgb[right.palette];
     const width = pluginScene.canvas.width; const height = pluginScene.canvas.height;
+    let scenePixels = pluginScene.pixels;
+    if (pluginScene.schemaVersion === 2 && Array.isArray(pluginScene.layers)) {
+      const composed = pluginScene.pixels.map(row => row.split(''));
+      for (const layer of pluginScene.layers) {
+        const asset = pluginScene.assets[layer.asset];
+        const motion = layer.animation;
+        let dx = 0, dy = 0;
+        if (motion) {
+          const offset = Math.sin(pluginAnimClock * motion.speed + (motion.phase || 0)) * motion.distance;
+          if (motion.type === 'drift' && motion.axis === 'x') dx = Math.round(offset);
+          else if (motion.type === 'drift' && motion.axis === 'y') dy = Math.round(offset);
+          else if (motion.type === 'bob' && motion.axis === 'x') dx = Math.round(offset);
+          else if (motion.type === 'bob' && motion.axis === 'y') dy = Math.round(offset);
+        }
+        const originX = layer.x + dx, originY = layer.y + dy;
+        for (let sy = 0; sy < asset.height; sy++) {
+          const targetY = originY + sy;
+          if (targetY < 0 || targetY >= height) continue;
+          const row = asset.pixels[sy];
+          for (let sx = 0; sx < asset.width; sx++) {
+            const targetX = originX + sx;
+            if (targetX < 0 || targetX >= width) continue;
+            const symbol = row[sx];
+            if (symbol !== '.') composed[targetY][targetX] = symbol;
+          }
+        }
+      }
+      scenePixels = composed.map(row => row.join(''));
+    }
     const scale = Math.min(bw / width, bh / height);
     const drawW = Math.max(1, Math.round(width * scale)); const drawH = Math.max(1, Math.round(height * scale));
     const offsetX = Math.floor((bw - drawW) / 2); const offsetY = Math.floor((bh - drawH) / 2);
-    const background = pluginScene.pixels[0].charCodeAt(0);
+    const background = scenePixels[0].charCodeAt(0);
     for (let py = 0; py < bh; py++) {
       const insideY = py >= offsetY && py < offsetY + drawH;
       const sy = insideY ? clamp(Math.floor(((py - offsetY) / drawH) * height), 0, height - 1) : 0;
-      const row = pluginScene.pixels[sy];
+      const row = scenePixels[sy];
       for (let px = 0; px < bw; px++) {
         const inside = insideY && px >= offsetX && px < offsetX + drawW;
         const sx = inside ? clamp(Math.floor(((px - offsetX) / drawW) * width), 0, width - 1) : 0;
@@ -1083,7 +1113,7 @@ function mount(root) {
   const pickKeys = (h) => { for (let i = 0; i < KEYS.length - 1; i++) { if (h >= KEYS[i][0] && h < KEYS[i + 1][0]) { keyA = i; keyB = i + 1; keyP = clamp(((h - KEYS[i][0]) / (KEYS[i + 1][0] - KEYS[i][0]) - 0.32) / 0.36); return; } } keyA = 0; keyB = 1; keyP = 0; };
   const renderWorld = (clock, dt, hurry) => {
     const h = hourOf(clock);
-    if (pluginScene) { renderPluginWorld(h); return; }
+    if (pluginScene) { if (!calm) pluginAnimClock += dt; renderPluginWorld(h); return; }
     if (!calm) anim += dt; matBuf.set(baseBuf); varBuf.fill(0); emitList.length = 0;
     for (const c of sources) { c.w = 0; c.x = 0; c.y = 0; }
     lampFlick = calm ? 1 : 0.95 + 0.05 * Math.sin(anim * 13) * Math.sin(anim * 5.3);
