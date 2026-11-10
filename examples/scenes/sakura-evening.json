@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "community:sakura-evening",
+  "name": "Sakura Evening",
+  "author": "Community Artist",
+  "license": "CC-BY-4.0",
+  "canvas": { "width": 16, "height": 8 },
+  "pixels": [
+    "................",
+    "......ccc.......",
+    ".....ccccc......",
+    "...tt..s..tt....",
+    "..ttttsss.tttt..",
+    "......sss.......",
+    "gggggggggggggggg",
+    "gggggggggggggggg"
+  ],
+  "palettes": {
+    "day": {
+      ".": "#9bd8f5", "c": "#f4a7c8", "t": "#8a5a72", "s": "#f6d6df", "g": "#78ad72"
+    },
+    "dusk": {
+      ".": "#ef9b83", "c": "#dc83b4", "t": "#563e69", "s": "#f0c0cf", "g": "#526f62"
+    },
+    "night": {
+      ".": "#171d3b", "c": "#9879b5", "t": "#292744", "s": "#c3a4c8", "g": "#283f45"
+    }
+  },
+  "timeCycle": [
+    { "at": 0, "palette": "night" },
+    { "at": 5.5, "palette": "night" },
+    { "at": 7, "palette": "day" },
+    { "at": 16.5, "palette": "day" },
+    { "at": 19, "palette": "dusk" },
+    { "at": 21, "palette": "night" },
+    { "at": 24, "palette": "night" }
+  ]
+}
