@@ -34,6 +34,7 @@
   "browser": "./browser.mjs",
   "exports": {
     ".": {
+      "browser": "./browser.mjs",
       "import": "./index.mjs",
       "require": "./index.cjs"
     },
