@@ -109,3 +109,14 @@ Invalid values fall back to defaults; documented numeric ranges are clamped.
 - Scene registration is data-only; arbitrary plugin JavaScript is not executed.
 - Browser script order: scene-plugin.js, register the manifest, then app.js. The one-line embed loader loads the registry before the renderer.
 - Existing built-in scenes and their custom live animation code remain unchanged.
+
+
+## Scene Manifest v2 (v3.0.1)
+
+- Manifest v1 remains supported and its schema is unchanged.
+- Manifest v2 adds up to 24 reusable pixel-matrix assets and up to 16 ordered layers.
+- Layers reference named assets and integer x/y positions; '.' is transparent in overlay assets.
+- Optional deterministic motion tracks: drift or bob, on x or y, bounded speed/distance/phase.
+- Every symbol across the base matrix and assets must be defined in every palette.
+- Schema: schemas/scene-manifest.v2.schema.json. Example: examples/scenes/floating-island.v2.json.
+- No arbitrary remote image loading, eval, or executable plugin callbacks.
