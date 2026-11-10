@@ -56,6 +56,12 @@
 - **轻量接入**：原生脚本无需构建工具或运行时依赖。
 - **无障碍支持**：提供 switch 语义、键盘操作，并尊重减少动态效果偏好。
 
+### 五种场景一览
+
+<p align="center">
+  <img src="./assets/scene-gallery.png" alt="Pixel Daylight Switch — five pixel-art scenes: countryside, Japanese street, apartment, seaside, and mountain cabin" width="100%" />
+</p>
+
 ## 快速开始
 
 不使用 NPM，也不需要安装依赖。把容器和脚本放进 HTML：
