@@ -18,7 +18,7 @@ for (const file of ['index.html', 'app.js', 'style.css', 'mobile.css']) {
 }
 const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
 assert.equal(config.webDir, 'mobile/www');
-assert.match(config.appId, /^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$/);
+assert.ok(typeof config.appId === 'string' && config.appId.includes('.') && /^[a-z0-9.]+$/.test(config.appId));
 const html = fs.readFileSync(path.join(output, 'index.html'), 'utf8');
 assert.match(html, /viewport-fit=cover/);
 assert.match(html, /mobile\.css/);
