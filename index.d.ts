@@ -12,7 +12,7 @@ export interface SceneLayerAnimation {
   /** drift and bob are deterministic sinusoidal motion tracks. */
   type: 'drift' | 'bob';
   axis: 'x' | 'y';
-  /** Cycles per second, from 0 to 4. */
+  /** Angular speed in radians per second, from 0 to 4. */
   speed: number;
   /** Motion amplitude in scene pixels, from 1 to 64. */
   distance: number;
