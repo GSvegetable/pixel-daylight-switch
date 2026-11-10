@@ -8,7 +8,8 @@ const output = path.join(root, 'mobile', 'www');
 const required = ['app.js', 'style.css', 'mobile/index.html', 'mobile/mobile.css', 'capacitor.config.json'];
 const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
 if (config.webDir !== 'mobile/www') throw new Error('Capacitor webDir must target the generated mobile/www directory');
-if (typeof config.appId !== 'string' || !config.appId.includes('.') || !/^[a-z0-9.]+$/.test(config.appId)) throw new Error('Capacitor appId must be a reverse-domain identifier');
+const appIdParts = typeof config.appId === 'string' ? config.appId.split('.') : [];
+if (appIdParts.length < 2 || appIdParts.some(part => !/^[a-z][a-z0-9]*$/.test(part))) throw new Error('Capacitor appId must be a reverse-domain identifier');
 
 for (const file of required) {
   if (!fs.existsSync(path.join(root, file))) {
