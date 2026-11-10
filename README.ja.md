@@ -62,6 +62,12 @@ HTML にマウント要素を配置し、ランタイムを読み込みます。
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
+script タグにシーンや天候を直接指定することもできます。
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+```
+
 レスポンシブなインスタンスを 1 つ作成してランタイムを読み込みます。スタイルはコンポーネント内に限定され、ホストページの `body` や `main` などのグローバル要素を変更しません。script タグに `data-scene`、`data-weather`、`data-start-night` などを直接指定できます。複数インスタンスや配置の細かな制御には、上記のマウント方式を使用してください。
 
 ## npm からインストール
