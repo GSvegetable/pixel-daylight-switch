@@ -1,6 +1,6 @@
 # Scene Plugin Guide
 
-Pixel Daylight Switch 3.0.0 introduces a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
+Pixel Daylight Switch 3.0.0 introduced a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
 
 ## Two ways to create a scene
 
@@ -61,6 +61,22 @@ Required fields:
 Every symbol used in `pixels` must have a color in every palette. The renderer interpolates the RGB values between adjacent time stops, including across midnight. Keep the first and last palette compatible to avoid a visible midnight jump.
 
 The authoritative machine-readable contract is [schemas/scene-manifest.v1.schema.json](schemas/scene-manifest.v1.schema.json). A complete sample is [examples/scenes/sakura-evening.json](examples/scenes/sakura-evening.json).
+
+## Layered scenes and pixel assets (Manifest v2)
+
+Version 3.0.1 adds reusable pixel-art assets, compositing layers and deterministic motion tracks. Manifest v1 remains supported without changes; use `schemaVersion: 2` to opt in.
+
+A v2 manifest keeps the base `canvas`, `pixels`, `palettes` and `timeCycle`, and adds:
+
+- `assets`: up to 24 named pixel matrices (each up to 192 × 112).
+- `layers`: 1–16 ordered placements that reference an asset and specify integer `x` / `y` coordinates.
+- `animation`: optional `drift` or `bob` motion on either axis, with bounded speed, distance and phase.
+
+The dot character (`.`) is transparent when an asset is composited as a layer. All other characters are palette symbols, so every palette must define colors for symbols used by the base matrix and every asset. Layers are drawn in array order; later layers appear above earlier ones. Motion is deterministic and uses the scene's animation clock; it does not execute plugin code.
+
+Example: [Floating Island v2](examples/scenes/floating-island.v2.json). The v2 contract is [schemas/scene-manifest.v2.schema.json](schemas/scene-manifest.v2.schema.json); the original v1 contract remains at [schemas/scene-manifest.v1.schema.json](schemas/scene-manifest.v1.schema.json).
+
+The current asset format is deliberately pixel-matrix based. Arbitrary PNG/JPEG downloads and executable animation callbacks are not part of v3.0.1; this keeps rendering crisp, portable, CSP-friendly and safe for community contributions.
 
 ## API
 
