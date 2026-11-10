@@ -79,3 +79,55 @@ jobs:
             -configuration Debug \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO build
+
+  android-runtime:
+    name: Android emulator runtime smoke test
+    needs: android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download debug APK
+        uses: actions/download-artifact@v4
+        with:
+          name: pixel-daylight-switch-android-debug
+          path: artifacts
+      - name: Boot emulator and verify rendered app
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_tablet
+          script: |
+            adb install artifacts/app-debug.apk
+            adb logcat -c
+            adb shell monkey -p com.gsvegetable.pixeldayswitch 1
+            sleep 12
+            adb shell screencap -p /sdcard/pixel-daylight-switch.png
+            adb pull /sdcard/pixel-daylight-switch.png pixel-daylight-switch.png
+            adb logcat -d > android-logcat.txt
+            python3 - <<'PY'
+            from PIL import Image
+            image = Image.open("pixel-daylight-switch.png").convert("RGB")
+            width, height = image.size
+            # Ignore Android status/navigation bars and inspect the central app surface.
+            crop = image.crop((int(width * .08), int(height * .12), int(width * .92), int(height * .88)))
+            colors = crop.getcolors(maxcolors=crop.width * crop.height)
+            unique = len(colors) if colors else 1000000
+            if unique < 80:
+                raise SystemExit(f"Rendered app appears blank: only {unique} colors in central screen")
+            print(f"Android runtime screenshot: {width}x{height}, {unique} central colors")
+            PY
+            if grep -E "\\[pixel-daylight-switch\\]|Uncaught (Error|TypeError|ReferenceError)" android-logcat.txt; then
+              echo "JavaScript runtime error detected in Android WebView"
+              exit 1
+            fi
+      - name: Upload Android runtime diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-daylight-switch-android-runtime-diagnostics
+          path: |
+            pixel-daylight-switch.png
+            android-logcat.txt
+          if-no-files-found: ignore
+          retention-days: 14
