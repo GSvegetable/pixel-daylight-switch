@@ -23,6 +23,7 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 | 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
+| React / Vue 接入示例 | [框架集成指南](INTEGRATIONS.md) |
 | 阅读核心实现 | [运行时 app.js](app.js) · [样式 style.css](style.css) |
 | 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
