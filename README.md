@@ -2,56 +2,68 @@
 
 [![Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml/badge.svg)](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/pixel-daylight-switch-gsvegetable)](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
-[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
-[![Vanilla JavaScript](https://img.shields.io/badge/JavaScript-vanilla-f7df1e?logo=javascript&logoColor=222)](https://developer.mozilla.org/docs/Web/JavaScript)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE)
 
-**Language / 语言 / 言語:** [English](#english) · [简体中文](#简体中文) · [日本語](#日本語)
+**Languages:** [English](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-![Pixel Daylight Switch — five animated pixel-world scenes](assets/scene-gallery.png)
+![Five animated pixel-world scenes](assets/scene-gallery.png)
 
-A tiny animated world, held inside a refractive glass switch.
+*A tiny animated world, held inside a refractive glass switch.*
 
-Pixel Daylight Switch is a self-contained day/night UI component. Drag its glass control to move between day, dusk, and night while a small pixel-art environment changes inside the lens. It is built with vanilla JavaScript, WebGL2, and a Canvas 2D fallback — with no third-party runtime dependencies.
+Pixel Daylight Switch is a draggable day/night UI component. Move its glass control to travel between day, dusk and night while a miniature pixel-art world changes inside the lens. It uses vanilla JavaScript, WebGL2 and a Canvas 2D fallback, with no third-party runtime dependency.
 
-**[Try the live Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** · **[View the source](https://github.com/GSvegetable/pixel-daylight-switch)** · **[Read the changelog](CHANGELOG.md)**
+**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
----
+## Start here
 
-<a id="english"></a>
+| Goal | Direct link |
+| --- | --- |
+| Experience the switch | [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/) |
+| Customize scenes and visual behavior | [Interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
+| Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| Add it to a website with one script | [Embed loader source](embed.js) |
+| Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
+| Read implementation details | [Runtime](app.js) · [Styles](style.css) |
+| Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| Check tests | [CI workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| Review changes | [Changelog](CHANGELOG.md) |
+| Report a bug | [Issue tracker](https://github.com/GSvegetable/pixel-daylight-switch/issues) |
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+## Features
 
-### Highlights
+- Five scenes: countryside, Japanese street, modern apartment, seaside lighthouse and mountain cabin.
+- Refractive glass rendering with WebGL2 and a Canvas 2D fallback.
+- Continuous drag interaction, tap/click switching and keyboard operation.
+- Configurable motion, inertia, bounce, refraction, glass details, world speed, weather and scene.
+- Multiple independent instances on one page.
+- Switch semantics, live status announcements and `prefers-reduced-motion` support.
+- `mount()` and `unmount()` lifecycle methods for dynamic applications.
+- Rendering pauses when the document is hidden or the component is outside the viewport.
 
-- **A living pixel world:** five handcrafted environments — countryside, Japanese street, modern apartment, seaside lighthouse, and mountain cabin.
-- **Refractive glass:** WebGL2 rendering creates the lens effect; Canvas 2D provides a fallback when WebGL2 cannot be initialized.
-- **Continuous day/night motion:** drag, tap, click, or use the keyboard to move through the transition.
-- **Tunable behavior and appearance:** configure motion, inertia, bounce, refraction, glass details, world speed, weather, and scene through HTML data attributes.
-- **Multiple instances:** mount independent switches on the same page.
-- **Accessibility-aware interaction:** switch semantics, an announced status, keyboard controls, and support for `prefers-reduced-motion`.
-- **Lifecycle control:** explicit `mount()` and `unmount()` methods for dynamic applications.
-- **Lightweight integration:** the standalone browser script has no third-party runtime dependencies.
+## Quick start — browser, no build step
 
-### Try it
-
-Open the **[Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** to change the scene and parameters, preview the result, and copy the generated HTML.
-
-### Quick start — no build step
-
-Add an empty mount point and load the browser script:
+Place a mount point on your page and load the runtime:
 
 ```html
-<div data-ld-part="toggle-daylight"></div>
+<div data-ld-part="toggle-daylight" style="width: min(100%, 800px);">
+</div>
 
-<script
-  defer
-  src="https://gsvegetable.github.io/pixel-daylight-switch/app.js">
-</script>
+<script defer src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
 ```
 
-The script automatically finds elements with `data-ld-part="toggle-daylight"` and creates the component markup and rendering surface. Give the mount point a width in your layout; the component scales to its container.
+The browser runtime finds the mount point and creates the component UI. The host element needs a usable width.
 
-### Install from npm
+### Embed with one script
+
+For a self-inserting embed, add this script where you want the component to appear:
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+```
+
+The loader inserts its own container, stylesheet and runtime. It currently creates one default instance with a fixed maximum display size; use the mount-point approach above when you need precise layout or custom attributes.
+
+## Install from npm
 
 ```bash
 npm install pixel-daylight-switch-gsvegetable
@@ -63,10 +75,9 @@ npm install pixel-daylight-switch-gsvegetable
 import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
-
 PixelDaylightSwitch.mount(root);
 
-// Before removing the root from the DOM:
+// Call before removing the root from the DOM.
 PixelDaylightSwitch.unmount(root);
 ```
 
@@ -76,27 +87,27 @@ PixelDaylightSwitch.unmount(root);
 const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 ```
 
-The package exposes ESM and CommonJS entry points. It is safe to import in an SSR environment; call `mount()` only in the browser after the target element exists. Automatic mounting is provided when the browser runtime is loaded directly.
+The package exposes ESM and CommonJS entry points. Importing is safe in an SSR environment; call `mount()` only in a browser after the target element exists. The package's published file list is defined in [package.json](package.json).
 
-### Configuration
+## Configuration
 
-Every option is optional and is set on the component's root element. The defaults below are used when an attribute is omitted or contains an invalid value.
+Set optional attributes on the mount element. Defaults apply when an attribute is omitted or invalid.
 
 | Attribute | Default | Description |
 | --- | ---: | --- |
-| `data-speed` | `9.5` | Base response speed of the switch motion. Must be greater than zero. |
-| `data-refraction` | `1.24` | Refraction strength of the glass lens. Must be greater than zero. |
-| `data-bezel` | `0.046` | Relative thickness of the glass edge. Must be greater than zero. |
-| `data-start-night` | `false` | Set to the exact string `"true"` to start in the night state. |
-| `data-friction` | `0.6` | Inertia damping after release; clamped to `0.1–0.9`. |
+| `data-speed` | `9.5` | Base response speed; greater than zero. |
+| `data-refraction` | `1.24` | Glass lens refraction strength; greater than zero. |
+| `data-bezel` | `0.046` | Relative glass-edge thickness; greater than zero. |
+| `data-start-night` | `false` | Exact string `"true"` starts in night mode. |
+| `data-friction` | `0.6` | Release inertia damping; clamped to `0.1–0.9`. |
 | `data-bounce` | `3.2` | Edge rebound strength; clamped to `0–12`. |
-| `data-dispersion` | `0.05` | RGB dispersion around the glass edge; clamped to `0–0.25`. |
-| `data-shine` | `0.44` | Daytime glass highlight intensity; clamped to `0–1.5`. |
-| `data-time-speed` | `1` | Pixel-world simulation speed; clamped to `0–8`. Set to `0` to freeze world dynamics. |
+| `data-dispersion` | `0.05` | RGB dispersion at the glass edge; clamped to `0–0.25`. |
+| `data-shine` | `0.44` | Daylight glass highlight; clamped to `0–1.5`. |
+| `data-time-speed` | `1` | World simulation speed; clamped to `0–8`. Set to `0` to freeze world motion. |
 | `data-weather` | `default` | `default` or `snow`. Unknown values fall back to `default`. |
-| `data-scene` | `countryside` | `countryside`, `japanese-street`, `apartment`, `seaside`, or `mountain-cabin`. |
+| `data-scene` | `countryside` | `countryside`, `japanese-street`, `apartment`, `seaside` or `mountain-cabin`. |
 
-**Example — start at night with the seaside scene**
+Example:
 
 ```html
 <div
@@ -109,15 +120,11 @@ Every option is optional and is set on the component's root element. The default
 </div>
 ```
 
-### Events and state
+## Events and state
 
-The component exposes its transition progress as the CSS custom property `--night` on the root element:
+The root element exposes transition progress through the CSS custom property `--night`: `0` is day, `1` is night, and values between them represent the transition.
 
-- `0` — day
-- `1` — night
-- Values between `0` and `1` — transition in progress
-
-When the committed day/night state changes, the root dispatches a bubbling, composed `daylight:change` event. Its `event.detail.night` property is a boolean.
+When the committed day/night state changes, the root dispatches a bubbling, composed `daylight:change` event. `event.detail.night` is a boolean. It is not emitted on every animation frame.
 
 ```js
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
@@ -127,19 +134,17 @@ root.addEventListener('daylight:change', (event) => {
 });
 ```
 
-The event reports a change of the committed day/night state; it is not emitted for every animation frame.
+## Rendering, accessibility and performance
 
-### Rendering and performance
+- WebGL2 renders the refractive lens; Canvas 2D is used if WebGL2 is unavailable or fails to initialize.
+- The component scales its drawing surface to its container.
+- Rendering pauses while the document is hidden or the component is outside the viewport.
+- Keyboard and switch semantics are provided, with a live status announcement.
+- The runtime respects the operating system's `prefers-reduced-motion` preference.
 
-- WebGL2 is used for the refractive glass rendering.
-- Canvas 2D is used when WebGL2 is unavailable or initialization fails.
-- Rendering is paused when the document is hidden or the component is outside the viewport.
-- The component measures its container and scales its drawing surface to fit.
-- The component responds to the operating system's `prefers-reduced-motion` setting.
+Performance varies with browser, graphics hardware, device pixel ratio and the number of visible instances.
 
-The browser script does not require a framework. Actual rendering performance depends on the browser, graphics hardware, device pixel ratio, and the number of instances on screen.
-
-### Development and tests
+## Development and tests
 
 ```bash
 git clone https://github.com/GSvegetable/pixel-daylight-switch.git
@@ -147,9 +152,7 @@ cd pixel-daylight-switch
 npm test
 ```
 
-The package smoke tests cover the module entry points, SSR import behavior, and mobile preparation checks.
-
-To run the Chromium browser regression suite:
+Run the Chromium browser regression suite:
 
 ```bash
 npm install --no-save @playwright/test@1.56.1
@@ -157,39 +160,48 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-GitHub Actions runs package and SSR checks on Node.js 18, 20, and 22, plus the Chromium interaction and mobile regression suite. See the **[workflow runs](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml)** for the latest result.
+GitHub Actions runs package and SSR checks on Node.js 18, 20 and 22, plus Chromium interaction and mobile regression tests. See [current workflow runs](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml).
 
-### Mobile builds and validation
+## Android and iOS
 
-The repository includes Capacitor 8 build paths for Android and iOS. The mobile projects reuse the web renderer rather than maintaining a separate rendering implementation.
+The repository includes Capacitor 8 build workflows that reuse the web runtime. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator app archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml).
 
-Build setup and commands are documented in the repository scripts and mobile configuration. Build success should not be interpreted as proof of compatibility on every physical device. Android real-device validation is ongoing; iOS simulator build support is included, but this repository does not provide a signed App Store IPA.
+## Repository map
 
-### Project hub
+```text
+pixel-daylight-switch/
+├── .github/workflows/       # CI, native mobile builds, npm publishing
+├── assets/
+│   └── scene-gallery.png    # Five-scene overview image
+├── builds/
+│   └── README.md            # Mobile artifact notes; binaries are workflow outputs
+├── mobile/
+│   ├── index.html            # Capacitor app entry
+│   └── mobile.css            # Mobile-only layout
+├── scripts/
+│   └── prepare-mobile.cjs   # Prepare the shared web runtime for Capacitor
+├── tests/
+│   ├── browser/              # Playwright interaction and mobile regressions
+│   ├── fixture.html
+│   ├── mobile-smoke.cjs
+│   ├── package-smoke.cjs
+│   └── server.cjs
+├── app.js                    # Component runtime, scenes, input and rendering
+├── style.css                 # Component styles
+├── embed.js                  # One-script website embed loader
+├── index.html                # Live demo page
+├── preview.html              # Component preview
+├── playground.html            # Interactive parameter lab
+├── index.mjs / index.cjs     # ESM and CommonJS package entry points
+├── package.json               # Package metadata and scripts
+├── capacitor.config.json     # Capacitor configuration
+├── playwright.config.cjs     # Browser test configuration
+├── CHANGELOG.md
+├── llms.txt
+├── LICENSE
+└── README*.md                 # English, Simplified Chinese and Japanese docs
+```
 
-Start here based on what you want to do — no need to browse the repository manually.
+## License
 
-| I want to… | Open |
-| --- | --- |
-| **Try the switch** | [Live interactive demo](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| **Tune every visual parameter** | [Parameter Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
-| **See the component preview** | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
-| **Embed it on my own website** | [Embed instructions and loader](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/embed.js) |
-| **Install it in a JavaScript project** | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) · `npm install pixel-daylight-switch-gsvegetable` |
-| **Read the source code** | [Core renderer](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/app.js) · [Styles](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/style.css) |
-| **Download a mobile build** | [Mobile build notes and artifacts](builds/README.md) |
-| **See what changed** | [Changelog](CHANGELOG.md) |
-| **Check automated test results** | [Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
-| **Get Android / iOS build status** | [Native mobile builds](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
-| **Report a bug or request a feature** | [Open an issue](https://github.com/GSvegetable/pixel-daylight-switch/issues/new/choose) |
-| **Review license and reuse terms** | [Unlicense](LICENSE) |
-
-**Quick choices:** [Try it now](https://gsvegetable.github.io/pixel-daylight-switch/) · [Customize it](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) · [Install with npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
-
-### License
-
-Pixel Daylight Switch is released under **[The Unlicense](https://unlicense.org/)**. You may copy, modify, publish, distribute, and use it for personal or commercial purposes without attribution. The software is provided without warranty; see [LICENSE](LICENSE).
-
----
-
-<a id="简体中文"></a>
+Released under [The Unlicense](LICENSE). You may copy, modify, publish, distribute and use the software for personal or commercial purposes without attribution. It is provided without warranty.
