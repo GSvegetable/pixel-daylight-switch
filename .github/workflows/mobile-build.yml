@@ -85,7 +85,7 @@ jobs:
         run: |
           mkdir -p dist/ios
           ditto -c -k --sequesterRsrc --keepParent \
-            ios/App/build/ios-derived/Build/Products/Debug-iphonesimulator/App.app \
+            build/ios-derived/Build/Products/Debug-iphonesimulator/App.app \
             dist/ios/pixel-daylight-switch-ios-simulator.zip
       - uses: actions/upload-artifact@v4
         with:
