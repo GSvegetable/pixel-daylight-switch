@@ -26,7 +26,7 @@ async function main() {
   assert.equal(pkg.exports['.'].require, './index.cjs');
 
   const allowed = new Set(pkg.files);
-  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'README.md', 'LICENSE', 'llms.txt']) {
+  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'README.md', 'INTEGRATIONS.md', 'LICENSE', 'llms.txt']) {
     assert.ok(allowed.has(required), 'Missing package file: ' + required);
     assert.ok(fs.existsSync(path.join(__dirname, '..', required)), 'Missing source file: ' + required);
   }
