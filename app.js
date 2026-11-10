@@ -9,6 +9,13 @@
  */
 (function () {
 "use strict";
+const reportDiagnostic = (title, detail) => {
+  try {
+    if (typeof window !== 'undefined' && window.__PDS_DIAG__ && typeof window.__PDS_DIAG__.show === 'function') {
+      window.__PDS_DIAG__.show(title, detail);
+    }
+  } catch (_) {}
+};
 const CORE_W = 192;
 const CORE_H = 112;
 const HORIZON = 82;
@@ -1038,12 +1045,53 @@ function mount(root) {
   const GRID_W = 72; let GRID_H = 44; let glowRaw = new Float32Array(1); let glowNearBuf = new Float32Array(1); let glowFarBuf = new Float32Array(1); let glowTemp = new Float32Array(1);
   const boxBlur = (src, dst, w, h, r) => { const size = r * 2 + 1; for (let y = 0; y < h; y++) { const row = y * w * 4; for (let c = 0; c < 3; c++) { let sum = 0; for (let x = -r; x <= r; x++) sum += src[row + clamp(x, 0, w - 1) * 4 + c]; for (let x = 0; x < w; x++) { dst[row + x * 4 + c] = sum / size; sum += src[row + clamp(x + r + 1, 0, w - 1) * 4 + c] - src[row + clamp(x - r, 0, w - 1) * 4 + c]; } } } for (let x = 0; x < w; x++) { for (let c = 0; c < 3; c++) { let sum = 0; for (let y = -r; y <= r; y++) sum += dst[clamp(y, 0, h - 1) * w * 4 + x * 4 + c]; for (let y = 0; y < h; y++) { src[y * w * 4 + x * 4 + c] = sum / size; sum += dst[clamp(y + r + 1, 0, h - 1) * w * 4 + x * 4 + c] - dst[clamp(y - r, 0, h - 1) * w * 4 + x * 4 + c]; } } } };
   let gl = null;
-  try { gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' }); } catch { gl = null; }
+  let webglContextError = '';
+  try {
+    gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance' });
+    if (!gl) webglContextError = 'canvas.getContext("webgl2") returned null. WebGL2 may be unavailable, disabled, or blocked by the device WebView.';
+  } catch (error) {
+    webglContextError = error && (error.stack || error.message) || String(error);
+    gl = null;
+  }
   let program = null; const loc = {}; let vao = null; let quad = null; let texWorld = null; let texNear = null;
-  const compile = (type, source) => { const s = gl.createShader(type); gl.shaderSource(s, source); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) || 'shader'); return s; };
+  const compile = (type, source) => {
+    const label = type === gl.VERTEX_SHADER ? 'Vertex Shader' : 'Fragment Shader';
+    const shader = gl.createShader(type);
+    if (!shader) throw new Error(label + ': gl.createShader returned null');
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      const log = gl.getShaderInfoLog(shader) || 'No shader compiler log was provided.';
+      gl.deleteShader(shader);
+      throw new Error(label + ' compilation failed:\\n' + log);
+    }
+    return shader;
+  };
   const setupGl = () => {
-    if (!gl) return false;
-    try { program = gl.createProgram(); const v = compile(gl.VERTEX_SHADER, VERT); const f = compile(gl.FRAGMENT_SHADER, FRAG); gl.attachShader(program, v); gl.attachShader(program, f); gl.bindAttribLocation(program, 0, 'aPos'); gl.linkProgram(program); gl.deleteShader(v); gl.deleteShader(f); if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program) || 'link'); } catch (error) { console.warn('cannot create shader', error); return false; }
+    if (!gl) {
+      reportDiagnostic('WebGL2 Failed', webglContextError || 'WebGL2 context could not be created.');
+      return false;
+    }
+    try {
+      program = gl.createProgram();
+      if (!program) throw new Error('gl.createProgram returned null');
+      const v = compile(gl.VERTEX_SHADER, VERT);
+      const f = compile(gl.FRAGMENT_SHADER, FRAG);
+      gl.attachShader(program, v);
+      gl.attachShader(program, f);
+      gl.bindAttribLocation(program, 0, 'aPos');
+      gl.linkProgram(program);
+      gl.deleteShader(v);
+      gl.deleteShader(f);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error('Shader program link failed:\\n' + (gl.getProgramInfoLog(program) || 'No program link log was provided.'));
+      }
+    } catch (error) {
+      const detail = error && (error.stack || error.message) || String(error);
+      console.warn('cannot create shader', error);
+      reportDiagnostic('WebGL2 Failed', detail);
+      return false;
+    }
     gl.useProgram(program);
     for (const name of ['uWorld', 'uGlowNear', 'uRes', 'uPill', 'uOrigin', 'uWorldSize', 'uGlowSize', 'uLens', 'uBezel', 'uK', 'uNight', 'uLift', 'uSeam', 'uCalm', 'uRefraction', 'uDispersion', 'uShine', 'uShellDay', 'uShellNight', 'uInk', 'uLight', 'uHiNight', 'uLoNight', 'uSkyDay', 'uHomeCol', 'uSkyCol', 'uHomePos', 'uSkyPos']) { loc[name] = gl.getUniformLocation(program, name); }
     vao = gl.createVertexArray(); gl.bindVertexArray(vao); quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW); gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
@@ -1052,7 +1100,17 @@ function mount(root) {
     texWorld = makeTex(); texNear = makeTex(); gl.uniform1i(loc.uWorld, 0); gl.uniform1i(loc.uGlowNear, 1); gl.disable(gl.BLEND); return true;
   };
   let ready = setupGl(); let lost = !ready && !!gl && gl.isContextLost(); let ctx2d = null; let lowCanvas = null;
-  const useCanvas2d = () => { const fresh = canvas.cloneNode(false); canvas.replaceWith(fresh); canvas = fresh; ctx2d = canvas.getContext('2d'); };
+  const useCanvas2d = () => {
+    const fresh = canvas.cloneNode(false);
+    canvas.replaceWith(fresh);
+    canvas = fresh;
+    try { ctx2d = canvas.getContext('2d'); }
+    catch (error) {
+      reportDiagnostic('Canvas 2D Failed', error && (error.stack || error.message) || String(error));
+      return;
+    }
+    if (!ctx2d) reportDiagnostic('Canvas 2D Failed', 'canvas.getContext("2d") returned null after WebGL2 initialization failed.');
+  };
   if (!ready && !lost) useCanvas2d();
   const shape = { W: 1, H: 1, cssW: 1, cssH: 1, dpr: 1, pillW: 1, pillH: 1, bezel: 1, winW: 1, winH: 1, r0: 1, travel: 1, travelCss: 1, ox: 0, oy: 0 };
   let renderScale = 1; let fullK = 1; let thumbSeam = 1;
@@ -1256,6 +1314,7 @@ function mountOne(root) {
     return destroy;
   } catch (err) {
     console.error('[pixel-daylight-switch]', err);
+    reportDiagnostic('App Initialization Failed', err && (err.stack || err.message) || String(err));
     return null;
   }
 }
