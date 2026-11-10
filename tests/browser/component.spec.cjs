@@ -205,8 +205,16 @@ test('one-line embed preserves host page global layout styles', async ({ page })
     mainDisplay: getComputedStyle(document.querySelector('main')).display,
     bodyMargin: getComputedStyle(document.body).margin
   }));
-  await page.addScriptTag({ url: '/embed.js' });
+  await page.evaluate(() => {
+    const script = document.createElement('script');
+    script.src = '/embed.js';
+    script.dataset.scene = 'seaside';
+    script.dataset.weather = 'snow';
+    document.head.appendChild(script);
+  });
   await expect(page.locator('.pds-embed canvas.scene')).toHaveCount(1);
+  await expect(page.locator('.pds-embed [data-ld-part="toggle-daylight"]')).toHaveAttribute('data-scene', 'seaside');
+  await expect(page.locator('.pds-embed [data-ld-part="toggle-daylight"]')).toHaveAttribute('data-weather', 'snow');
   const after = await page.evaluate(() => ({
     bodyDisplay: getComputedStyle(document.body).display,
     mainDisplay: getComputedStyle(document.querySelector('main')).display,
