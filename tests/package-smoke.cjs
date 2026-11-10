@@ -23,6 +23,12 @@ async function main() {
   assert.equal(typeof esm.registerScene, 'function');
   assert.equal(esm.default, cjs);
 
+  // Browser ESM entry must also expose the registry but defer auto-mount so callers
+  // can register a scene before explicitly mounting a root.
+  const browser = await import('../browser.mjs');
+  assert.equal(typeof browser.mount, 'function');
+  assert.equal(typeof browser.registerScene, 'function');
+
   assert.equal(pkg.main, './index.cjs');
   assert.equal(pkg.module, './index.mjs');
   assert.equal(pkg.exports['.'].import, './index.mjs');
