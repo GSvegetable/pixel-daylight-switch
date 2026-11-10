@@ -31,7 +31,7 @@
   },
   "main": "./index.cjs",
   "module": "./index.mjs",
-  "browser": "./app.js",
+  "browser": "./browser.mjs",
   "exports": {
     ".": {
       "import": "./index.mjs",
@@ -54,7 +54,8 @@
     "INTEGRATIONS.md",
     "scene-plugin.js",
     "schemas",
-    "examples"
+    "examples",
+    "browser.mjs"
   ],
   "sideEffects": [
     "./app.js"
