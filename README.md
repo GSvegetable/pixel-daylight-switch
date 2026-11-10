@@ -36,6 +36,7 @@
 - [自定义主题](#自定义主题)
 - [动态挂载与卸载](#动态挂载与卸载)
 - [渲染与兼容性](#渲染与兼容性)
+- [项目目录结构](#项目目录结构)
 - [本地开发与测试](#本地开发与测试)
 - [版本记录](#版本记录)
 - [许可证](#许可证)
@@ -365,6 +366,46 @@ root.remove();
 - **运行时依赖**：原生脚本不需要第三方运行时依赖。
 
 组件需要现代浏览器提供 Canvas 2D；WebGL2 用于增强玻璃渲染体验。
+
+## 项目目录结构
+
+仓库采用轻量的原生 JavaScript 结构，无需前端打包工具。核心组件、演示页面、NPM 入口和自动化测试分别独立维护。
+
+```text
+pixel-daylight-switch/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml                 # Node.js 与 Chromium 持续集成
+│       └── npm-publish.yml        # 通过 v* 标签触发 NPM 发布
+├── tests/
+│   ├── browser/
+│   │   └── component.spec.cjs     # Playwright 浏览器回归测试
+│   ├── fixture.html               # 浏览器测试页面
+│   ├── package-smoke.cjs          # 包入口与 SSR 冒烟测试
+│   └── server.cjs                 # 本地测试静态服务器
+├── app.js                         # 核心组件：渲染、交互与生命周期
+├── embed.js                       # 独立嵌入入口
+├── index.cjs                      # CommonJS 包入口
+├── index.mjs                      # ESM 包入口
+├── index.html                     # 主演示页面
+├── preview.html                   # 预览页面
+├── playground.html                # 交互式参数实验室
+├── style.css                      # 演示页面样式
+├── package.json                   # NPM 元数据与脚本
+├── playwright.config.cjs          # Playwright 配置
+├── CHANGELOG.md                   # 版本变更记录
+├── LICENSE                        # Unlicense 许可证
+├── llms.txt                       # 面向 AI 工具的项目说明
+└── README.md                      # 项目文档
+```
+
+### 关键目录说明
+
+- **`app.js`**：组件主体，包含昼夜状态、Canvas/WebGL 渲染、输入交互和实例生命周期管理。
+- **`playground.html`**：可视化调整参数、切换场景并生成 HTML 配置。
+- **`embed.js`**：面向嵌入式使用场景的入口脚本。
+- **`tests/`**：包加载、SSR、挂载卸载、多实例、指针/触控和移动端回归测试。
+- **`.github/workflows/`**：自动执行持续集成，并在版本标签触发时执行发布流程。
 
 ## 本地开发与测试
 
