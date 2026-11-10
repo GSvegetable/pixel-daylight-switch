@@ -926,7 +926,11 @@ function mount(root) {
     const full = hex.length === 3 ? hex.split('').map((v) => v + v).join('') : hex;
     return [parseInt(full.slice(0, 2), 16), parseInt(full.slice(2, 4), 16), parseInt(full.slice(4, 6), 16)];
   };
-  const packPluginColor = (rgb) => (255 << 24) | (rgb[2] << 16) | (rgb[1] << 8) | rgb[0];
+  const pluginPaletteRgb = pluginScene ? Object.fromEntries(Object.entries(pluginScene.palettes).map(([name, palette]) => {
+    const colors = new Array(128);
+    Object.keys(palette).forEach((symbol) => { colors[symbol.charCodeAt(0)] = parsePluginColor(palette[symbol]); });
+    return [name, colors];
+  })) : null;
   const renderPluginWorld = (hour) => {
     const stops = pluginScene.timeCycle;
     let left = stops[0]; let right = stops[stops.length - 1]; let sampleHour = hour;
@@ -938,21 +942,20 @@ function mount(root) {
     if (sampleHour > stops[stops.length - 1].at) { left = stops[stops.length - 1]; right = stops[0]; right = { at: right.at + 24, palette: right.palette }; }
     const span = Math.max(0.0001, right.at - left.at);
     const t = clamp((sampleHour - left.at) / span);
-    const aPalette = pluginScene.palettes[left.palette];
-    const bPalette = pluginScene.palettes[right.palette];
+    const aPalette = pluginPaletteRgb[left.palette];
+    const bPalette = pluginPaletteRgb[right.palette];
     const width = pluginScene.canvas.width; const height = pluginScene.canvas.height;
     for (let py = 0; py < bh; py++) {
       const sy = clamp(Math.floor((py / bh) * height), 0, height - 1);
       const row = pluginScene.pixels[sy];
       for (let px = 0; px < bw; px++) {
         const sx = clamp(Math.floor((px / bw) * width), 0, width - 1);
-        const symbol = row[sx];
-        const ca = parsePluginColor(aPalette[symbol]); const cb = parsePluginColor(bPalette[symbol]);
-        pixels[py * bw + px] = packPluginColor([
-          Math.round(mix(ca[0], cb[0], t)),
-          Math.round(mix(ca[1], cb[1], t)),
-          Math.round(mix(ca[2], cb[2], t))
-        ]);
+        const symbol = row.charCodeAt(sx);
+        const ca = aPalette[symbol]; const cb = bPalette[symbol];
+        const r = Math.round(mix(ca[0], cb[0], t));
+        const g = Math.round(mix(ca[1], cb[1], t));
+        const b = Math.round(mix(ca[2], cb[2], t));
+        pixels[py * bw + px] = (255 << 24) | (b << 16) | (g << 8) | r;
       }
     }
   };
