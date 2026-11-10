@@ -945,12 +945,18 @@ function mount(root) {
     const aPalette = pluginPaletteRgb[left.palette];
     const bPalette = pluginPaletteRgb[right.palette];
     const width = pluginScene.canvas.width; const height = pluginScene.canvas.height;
+    const scale = Math.min(bw / width, bh / height);
+    const drawW = Math.max(1, Math.round(width * scale)); const drawH = Math.max(1, Math.round(height * scale));
+    const offsetX = Math.floor((bw - drawW) / 2); const offsetY = Math.floor((bh - drawH) / 2);
+    const background = pluginScene.pixels[0].charCodeAt(0);
     for (let py = 0; py < bh; py++) {
-      const sy = clamp(Math.floor((py / bh) * height), 0, height - 1);
+      const insideY = py >= offsetY && py < offsetY + drawH;
+      const sy = insideY ? clamp(Math.floor(((py - offsetY) / drawH) * height), 0, height - 1) : 0;
       const row = pluginScene.pixels[sy];
       for (let px = 0; px < bw; px++) {
-        const sx = clamp(Math.floor((px / bw) * width), 0, width - 1);
-        const symbol = row.charCodeAt(sx);
+        const inside = insideY && px >= offsetX && px < offsetX + drawW;
+        const sx = inside ? clamp(Math.floor(((px - offsetX) / drawW) * width), 0, width - 1) : 0;
+        const symbol = inside ? row.charCodeAt(sx) : background;
         const ca = aPalette[symbol]; const cb = bPalette[symbol];
         const r = Math.round(mix(ca[0], cb[0], t));
         const g = Math.round(mix(ca[1], cb[1], t));
