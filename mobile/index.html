@@ -20,7 +20,7 @@
         <p class="eyebrow" data-i18n="eyebrow">A LITTLE WORLD, IN YOUR HAND</p>
         <h1>Pixel Daylight</h1>
       </div>
-      <span class="version-mark">2.2</span>
+      <span class="version-mark">v2.2.0</span>
     </header>
 
     <section class="switch-card" aria-label="Day and night switch">
@@ -102,6 +102,7 @@
       var sceneIndex = {countryside:'01','japanese-street':'02',apartment:'03',seaside:'04','mountain-cabin':'05'};
       function selectScene(name) {
         if (root.dataset.scene === name) return;
+        root.dataset.startNight = String(root.querySelector('.hit').getAttribute('aria-checked') === 'true');
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
         root.dataset.scene = name;
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
@@ -118,6 +119,7 @@
       var weatherButton = document.getElementById('weather-toggle');
       weatherButton.addEventListener('click', function () {
         var enabled = weatherButton.getAttribute('aria-pressed') !== 'true';
+        root.dataset.startNight = String(root.querySelector('.hit').getAttribute('aria-checked') === 'true');
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
         root.dataset.weather = enabled ? 'snow' : 'default';
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
