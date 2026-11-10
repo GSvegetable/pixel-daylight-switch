@@ -954,11 +954,11 @@ function mount(root) {
         const motion = layer.animation;
         let dx = 0, dy = 0;
         if (motion) {
-          const offset = Math.sin(pluginAnimClock * motion.speed + (motion.phase || 0)) * motion.distance;
-          if (motion.type === 'drift' && motion.axis === 'x') dx = Math.round(offset);
-          else if (motion.type === 'drift' && motion.axis === 'y') dy = Math.round(offset);
-          else if (motion.type === 'bob' && motion.axis === 'x') dx = Math.round(offset);
-          else if (motion.type === 'bob' && motion.axis === 'y') dy = Math.round(offset);
+          const phase = pluginAnimClock * motion.speed + (motion.phase || 0);
+          const wave = motion.type === 'drift' ? (2 / Math.PI) * Math.asin(Math.sin(phase)) : Math.sin(phase);
+          const offset = wave * motion.distance;
+          if (motion.axis === 'x') dx = Math.round(offset);
+          else dy = Math.round(offset);
         }
         const originX = layer.x + dx, originY = layer.y + dy;
         for (let sy = 0; sy < asset.height; sy++) {
