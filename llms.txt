@@ -94,3 +94,14 @@ Invalid values fall back to defaults; documented numeric ranges are clamped.
 - [Integration recipes](INTEGRATIONS.md)
 - [English README](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 - [Changelog](CHANGELOG.md)
+
+
+## Scene plugins (v3.0.0)
+
+- Public API: registerScene(manifest), validateScene(manifest), getScene(id), listScenes().
+- Manifest schema: schemas/scene-manifest.v1.schema.json.
+- Example: examples/scenes/sakura-evening.json.
+- Manifest v1: printable-ASCII pixel matrix (up to 192x112), named palettes, 24-hour palette interpolation.
+- Scene registration is data-only; arbitrary plugin JavaScript is not executed.
+- Browser script order: scene-plugin.js, register the manifest, then app.js. The one-line embed loader loads the registry before the renderer.
+- Existing built-in scenes and their custom live animation code remain unchanged.
