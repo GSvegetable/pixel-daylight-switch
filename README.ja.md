@@ -129,7 +129,17 @@ Manifest v1 はシーン ID、作者・ライセンス、ピクセルキャン�
 - [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
 - [Sakura Evening サンプル](examples/scenes/sakura-evening.json)
 
-v1 は外部画像/Sprite、レイヤー式 Tile Map、独自アニメーショントラックにはまだ対応していません。これらは任意コードの実行を許可せず、将来の独立した Schema 拡張として追加します。5 つの組み込みシーンは従来の描画・アニメーション実装を維持します。
+### Manifest v2：レイヤー付きピクセルワールド（v3.0.1）
+
+3.0.1 では Manifest v1 を変更せずに v2 を追加しました。v2 は最大 24 個の再利用可能なピクセルアセットと、最大 16 個の順序付きレイヤーに対応します。レイヤーはシーン座標に配置でき、drift または bob の宣言型モーショントラックで横・縦方向に動かせます。重ねるアセット内の . は透明として扱い、それ以外の文字は昼夜パレットで着色されます。
+
+- [Manifest v2 JSON Schema](schemas/scene-manifest.v2.schema.json)
+- [Floating Island レイヤーサンプル](examples/scenes/floating-island.v2.json)
+- [シーンプラグイン開発ガイド](SCENE_PLUGINS.md)
+
+v2 のアセットは文字ベースのピクセルマップです。PNG/JPEG の外部ダウンロードには対応しません。これによりピクセル表現と昼夜の色変化を一貫させ、外部画像の CORS や任意コード実行を避けます。
+
+5 つの組み込みシーンは従来の描画・アニメーション実装を維持します。
 
 ## 設定属性
 
