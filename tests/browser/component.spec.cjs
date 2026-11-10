@@ -1,3 +1,43 @@
+
+test('renders a Manifest v2 scene with layered pixel assets and motion', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/tests/fixture.html');
+  const result = await page.evaluate(() => {
+    const manifest = {
+      schemaVersion: 2, id: 'layered-browser-scene', name: 'Layered Browser Scene',
+      author: 'Test', license: 'CC0-1.0',
+      canvas: {width: 12, height: 6},
+      pixels: Array(6).fill('............'),
+      assets: {
+        island: {width: 6, height: 2, pixels: ['.gggg.','gggggg']},
+        cloud: {width: 4, height: 2, pixels: ['.cc.','cccc']}
+      },
+      palettes: {
+        day: {'.':'#83c9ee','g':'#6eaa68','c':'#ffffff'},
+        night: {'.':'#171d3b','g':'#273f49','c':'#a48ac7'}
+      },
+      timeCycle: [{at:0,palette:'night'},{at:12,palette:'day'},{at:24,palette:'night'}],
+      layers: [
+        {id:'island',asset:'island',x:3,y:4},
+        {id:'cloud',asset:'cloud',x:2,y:1,animation:{type:'drift',axis:'x',speed:0.2,distance:2}}
+      ]
+    };
+    const validation = window.PixelDaylightSwitch.validateScene(manifest);
+    const unregister = window.PixelDaylightSwitch.registerScene(manifest);
+    const root = document.querySelector('#switch-a');
+    window.PixelDaylightSwitch.unmount(root);
+    root.dataset.scene = manifest.id;
+    window.PixelDaylightSwitch.mount(root);
+    return {valid:validation.valid,scene:window.PixelDaylightSwitch.getScene(manifest.id).id,canvas:!!root.querySelector('canvas.scene'),unregister:unregister()};
+  });
+  expect(result.valid).toBeTruthy();
+  expect(result.scene).toBe('layered-browser-scene');
+  expect(result.canvas).toBeTruthy();
+  expect(result.unregister).toBeTruthy();
+  expect(errors).toEqual([]);
+});
+
 'use strict';
 const { test, expect } = require('@playwright/test');
 
