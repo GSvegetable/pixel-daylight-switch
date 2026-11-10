@@ -128,7 +128,27 @@ registerScene(sakura);
 PixelDaylightSwitch.mount(document.querySelector('[data-ld-part="toggle-daylight"]'));
 ```
 
-### Manifest v1
+### Manifest v2 — layered pixel worlds (v3.0.1)
+
+Version 3.0.1 extends the community scene format without changing Manifest v1. V2 scenes can define up to 24 reusable pixel-matrix assets and up to 16 ordered layers. A layer places an asset at integer scene coordinates and can optionally animate with a deterministic drift or bob track along either axis. The dot (.) is transparent in overlay assets; all other symbols are color-mapped by the scene palettes.
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import island from './floating-island.v2.json';
+
+registerScene(island);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = island.id;
+PixelDaylightSwitch.mount(root);
+```
+
+- [Manifest v2 JSON Schema](schemas/scene-manifest.v2.schema.json)
+- [Floating Island layered example](examples/scenes/floating-island.v2.json)
+- [Full scene authoring guide](SCENE_PLUGINS.md)
+
+V2 assets are native pixel matrices, not downloaded PNG/JPEG files. This keeps the scene pipeline deterministic and avoids remote asset/CORS dependencies or executable plugin code.
+
+## Manifest v1
 
 A manifest contains a fixed-size character pixel map, named color palettes and a 24-hour palette timeline. The renderer interpolates colors between timeline stops while keeping the same scene geometry.
 
