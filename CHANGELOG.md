@@ -2,6 +2,17 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [2.1.0] — Android visual and versioning fix
+
+### Android app
+- Replace the warm yellow-beige native page background with a neutral cool gray.
+- Match the Capacitor native window background and mobile theme color to the page background.
+- Set Android versionName and versionCode from the package version so new APKs no longer appear as version 1.0.
+
+### Build reliability
+- Apply package-driven Android version metadata after each generated Capacitor project.
+- Keep the shared WebGL renderer and scene implementation unchanged.
+
 ## [2.0.0] — Released
 
 ### Android 与 iOS
