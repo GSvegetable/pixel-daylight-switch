@@ -166,6 +166,31 @@ GitHub Actions 会在 Node.js 18、20、22 环境中执行包与 SSR 检查，�
 
 Capacitor 移动端现已提供完整的场景控制界面：可在乡间小屋、日本街道、现代公寓、海边灯塔、山间木屋五个世界之间切换，并可单独开启飘雪效果。切换时复用同一套渲染器，不改动玻璃 Shader 和昼夜拖动交互。界面会根据设备语言显示简体中文、日文或英文。GitHub Actions 会生成 Android Debug APK 和未签名的 iOS 模拟器应用压缩包。它们属于开发测试产物，不是可直接上架的商店版本：Android APK 不是 Play Store 发布包，iOS 模拟器版本也不能安装到实体 iPhone/iPad。请查看[移动端构建说明](builds/README.md)和[移动端工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml)。
 
+
+
+### 快速嵌入到网页
+
+如果只需要在网页中放入一个昼夜开关，无需安装依赖，直接粘贴下面这一行即可。它会自动加载样式和组件：
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+```
+
+这是一键式基础嵌入，当前展示单个默认场景开关；如果需要自定义场景、天气或多个实例，请使用上面的 npm API（`data-scene`、`data-weather` 等参数）。
+
+### 集成到自己的 Android / iOS Capacitor 工程
+
+项目目前提供的是 **Capacitor 应用模板与构建脚本**，不是可直接 `npm install` 的原生 UI 插件。若你的工程已经使用 Capacitor 8，可将本仓库的 `mobile/`、`app.js`、`style.css` 和 `scripts/prepare-mobile.cjs` 集成到工程，再执行：
+
+```bash
+npm install
+npm run mobile:prepare
+npm run mobile:android:init  # 首次创建 Android 工程
+npm run mobile:android      # 后续同步更新
+```
+
+iOS 首次创建使用 `npm run mobile:ios:init`，后续使用 `npm run mobile:ios`；需要 macOS 与 Xcode。打开原生工程分别执行 `npm run mobile:open:android` 或 `npm run mobile:open:ios`。详细脚本以 [package.json](package.json) 为准。
+
 ## 项目 / 目录结构
 
 ```text
