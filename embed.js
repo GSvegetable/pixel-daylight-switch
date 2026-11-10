@@ -21,22 +21,40 @@
   const root = document.createElement('div');
   root.setAttribute('data-ld-part', 'toggle-daylight');
   root.style.cssText = 'width:100%;height:100%;';
+
+  // Optional data-* attributes on the embed script configure the generated instance.
+  const config = [
+    'data-label', 'data-speed', 'data-refraction', 'data-bezel',
+    'data-start-night', 'data-friction', 'data-bounce', 'data-dispersion',
+    'data-shine', 'data-time-speed', 'data-weather', 'data-scene'
+  ];
+  if (script) {
+    for (const name of config) {
+      if (script.hasAttribute(name)) root.setAttribute(name, script.getAttribute(name));
+    }
+  }
   wrapper.appendChild(root);
 
-  if (script && script.parentNode) {
-    script.parentNode.insertBefore(wrapper, script);
-  } else {
-    (document.body || document.documentElement).appendChild(wrapper);
-  }
+  const insertAndLoad = function () {
+    // A script placed in <head> must not insert visual markup into <head>.
+    if (script && script.parentNode && script.parentNode !== document.head) {
+      script.parentNode.insertBefore(wrapper, script);
+    } else {
+      (document.body || document.documentElement).appendChild(wrapper);
+    }
 
-  const runtime = document.createElement('script');
-  runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
-  runtime.async = true;
-  runtime.onerror = function () {
-    const message = document.createElement('p');
-    message.textContent = 'Pixel Daylight Switch could not load. Please check your network connection.';
-    message.style.cssText = 'padding:16px;color:#9b1c1c;font:14px/1.5 system-ui,sans-serif;';
-    wrapper.replaceChildren(message);
+    const runtime = document.createElement('script');
+    runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
+    runtime.async = true;
+    runtime.onerror = function () {
+      const message = document.createElement('p');
+      message.textContent = 'Pixel Daylight Switch could not load. Please check your network connection.';
+      message.style.cssText = 'padding:16px;color:#9b1c1c;font:14px/1.5 system-ui,sans-serif;';
+      wrapper.replaceChildren(message);
+    };
+    (document.body || document.documentElement).appendChild(runtime);
   };
-  (document.body || document.documentElement).appendChild(runtime);
+
+  if (document.body) insertAndLoad();
+  else document.addEventListener('DOMContentLoaded', insertAndLoad, { once: true });
 })();
