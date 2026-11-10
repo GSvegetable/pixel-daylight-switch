@@ -11,7 +11,6 @@
   const registry = new Map();
   const MAX_WIDTH = 192;
   const MAX_HEIGHT = 112;
-  const MAX_PIXELS = MAX_WIDTH * MAX_HEIGHT;
   const ID_RE = /^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$/;
   const COLOR_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
   const BUILT_INS = new Set(['countryside', 'japanese-street', 'apartment', 'seaside', 'mountain-cabin']);
@@ -36,6 +35,7 @@
     if (Array.isArray(input.pixels) && Number.isInteger(width)) {
       input.pixels.forEach((row, index) => {
         if (typeof row !== 'string' || row.length !== width) errors.push('pixels[' + index + '] must be a string exactly canvas.width characters long.');
+        else if (!/^[\\x20-\\x7E]+$/.test(row)) errors.push('pixels[' + index + '] may contain printable ASCII characters only.');
       });
     }
     if (!input.palettes || typeof input.palettes !== 'object' || Array.isArray(input.palettes)) errors.push('palettes must be an object of named color maps.');
@@ -59,6 +59,8 @@
         else previous = stop.at;
         if (!stop || typeof stop.palette !== 'string' || !input.palettes || !Object.prototype.hasOwnProperty.call(input.palettes, stop.palette)) errors.push('timeCycle[' + index + '] references an unknown palette.');
       });
+      if (input.timeCycle[0] && input.timeCycle[0].at !== 0) errors.push('timeCycle must start at hour 0.');
+      if (input.timeCycle[input.timeCycle.length - 1] && input.timeCycle[input.timeCycle.length - 1].at !== 24) errors.push('timeCycle must end at hour 24.');
     }
     if (Array.isArray(input.pixels) && input.palettes && typeof input.palettes === 'object') {
       const symbols = new Set();
