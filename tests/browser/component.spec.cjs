@@ -87,3 +87,40 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
   await expect(page.locator('#status')).toContainText('参数已是最新', {timeout:10000});
   await expect(page.locator('#previewA canvas.scene')).toHaveCount(1);
 });
+
+test('removes all component-owned event listeners on unmount', async ({ page }) => {
+  await page.addInitScript(() => {
+    const originalAdd = EventTarget.prototype.addEventListener;
+    const originalRemove = EventTarget.prototype.removeEventListener;
+    window.__eventCounts = {added:0,removed:0};
+    EventTarget.prototype.addEventListener = function(...args) {
+      window.__eventCounts.added++;
+      return originalAdd.apply(this,args);
+    };
+    EventTarget.prototype.removeEventListener = function(...args) {
+      window.__eventCounts.removed++;
+      return originalRemove.apply(this,args);
+    };
+  });
+  await page.goto('/tests/fixture.html');
+  const before = await page.evaluate(() => ({...window.__eventCounts}));
+  await page.evaluate(() => window.PixelDaylightSwitch.unmount(document.querySelector('#switch-a')));
+  const after = await page.evaluate(() => ({...window.__eventCounts}));
+  expect(after.added - before.added).toBeGreaterThan(0);
+  expect(after.removed - before.removed).toBe(after.added - before.added);
+});
+
+test('accepts touch input in a mobile browser context', async ({ browser }) => {
+  const context = await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('http://127.0.0.1:4173/tests/fixture.html');
+  const hit = page.locator('#switch-a button.hit');
+  await expect(hit).toBeVisible();
+  const box = await hit.boundingBox();
+  await page.touchscreen.tap(box.x + box.width * 0.7, box.y + box.height * 0.5);
+  await page.waitForTimeout(300);
+  expect(errors).toEqual([]);
+  await context.close();
+});
