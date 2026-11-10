@@ -10,7 +10,7 @@ Paste one line where the component should appear:
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader creates a responsive default instance and loads the runtime. Component styles are scoped; the loader does not inject the demo stylesheet or reset the host page's body, main, footer, typography or layout. The embed loader is intended for one default instance. Use the mount API for custom attributes or multiple instances.
+The loader creates a responsive instance and loads the runtime. Component styles are scoped; the loader does not inject the demo stylesheet or reset the host page's body, main, footer, typography or layout. Set supported `data-*` options (including `data-scene` and `data-weather`) on the script tag to configure this instance. Use the mount API for multiple instances or custom placement.
 
 ## Direct browser usage
 
