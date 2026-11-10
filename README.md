@@ -24,6 +24,7 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | Framework integration recipes | [React and Vue examples](INTEGRATIONS.md) |
+| Scene plugin authoring guide | [Scene plugin guide](SCENE_PLUGINS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
 | Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | Check tests | [CI workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
