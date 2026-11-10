@@ -4,6 +4,7 @@
  */
 html,
 body.mobile-app {
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
   height: 100%;
@@ -11,7 +12,7 @@ body.mobile-app {
   margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
-  background: #eef1f5;
+  background: #eef1f5 !important;
   -webkit-text-size-adjust: 100%;
   -webkit-user-select: none;
   user-select: none;
@@ -25,23 +26,35 @@ body.mobile-app {
 }
 
 .mobile-stage {
-  position: absolute;
-  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
-    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  padding: clamp(12px, 4vw, 28px);
+  padding:
+    max(12px, env(safe-area-inset-top, 0px))
+    max(12px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(12px, env(safe-area-inset-left, 0px));
+  background: #eef1f5;
 }
 
 .mobile-stage [data-ld-part="toggle-daylight"] {
-  width: min(100%, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px) * 1.6439));
+  box-sizing: border-box;
+  display: block;
+  flex: none;
+  width: min(calc(100vw - 24px), calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px) * 1.6439));
+  height: auto;
+  min-width: 0;
+  min-height: 0;
   max-width: 900px;
-  max-height: 100%;
+  max-height: none;
+  aspect-ratio: 1.6439;
 }
 
 .mobile-stage .hit {
@@ -55,7 +68,7 @@ body.mobile-app {
   }
 
   .mobile-stage [data-ld-part="toggle-daylight"] {
-    width: min(100%, calc((100dvh - 16px) * 1.6439));
+    width: min(calc(100vw - 40px), calc((100dvh - 32px) * 1.6439));
   }
 }
 
