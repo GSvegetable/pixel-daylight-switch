@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-night="0">
+<html lang="en" data-night="0">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -13,7 +13,7 @@ a{color:inherit;text-underline-offset:3px}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .top{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px}
 .top b{font-size:17px}.top span{color:var(--muted);margin-left:8px}
-.top nav{display:flex;gap:16px;font-size:14px}
+.top nav{display:flex;gap:16px;font-size:14px;align-items:center}.language-control select{font:inherit;padding:4px 8px}.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* ===== 双缓冲交叉淡化预览区 ===== */
 .stage-col{position:sticky;top:0;z-index:5;background:var(--bg);padding:24px 18px 12px;transition:background-color .3s}
@@ -86,7 +86,7 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 <body>
 <header class="top">
   <div><b>像素昼夜开关</b><span>实验室</span></div>
-  <nav><a href="./index.html">返回演示</a><a href="./README.md">文档</a></nav>
+  <nav><a id="nav-back" href="./index.html">Back to demo</a><a id="nav-docs" href="./README.md">Documentation</a><label class="language-control"><span class="vh" id="language-label">Language</span><select id="language" aria-labelledby="language-label"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="ja">日本語</option></select></label></nav>
 </header>
 
 <main>
@@ -395,6 +395,32 @@ $('copy').addEventListener('click', async()=>{
 set(defaults);
 // 首次加载不走防抖，直接渲染
 executeApply();
+})();
+</script>
+<script>
+(function(){
+ const dict={
+ en:{title:"Pixel Daylight Switch",sub:"Playground",back:"Back to demo",docs:"Documentation",hint:"Adjust the sliders, then apply your settings.",presets:"Presets",params:"Parameters",embed:"Embed code",copy:"Copy code",apply:"Apply settings",weather:"Weather effect",scene:"Scene",start:"Start at night",none:"None",snow:"Snow",groups:["Motion","Glass optics","World timing","Environment"],scenes:["Countryside cottage","Japanese street","Modern apartment","Seaside lighthouse","Mountain cabin"]},
+ "zh-CN":{title:"像素昼夜开关",sub:"参数实验室",back:"返回演示",docs:"项目文档",hint:"拖动滑块调整参数，然后点击应用。",presets:"预设场景",params:"详细参数",embed:"嵌入代码",copy:"复制代码",apply:"应用参数",weather:"天气特效",scene:"真实场景",start:"默认从夜晚开始",none:"无",snow:"飘雪",groups:["运动反馈","玻璃光学","世界节奏","场景环境"],scenes:["乡村小屋","日本街道","现代公寓","海边灯塔","山间木屋"]},
+ ja:{title:"昼夜スイッチ",sub:"プレイグラウンド",back:"デモに戻る",docs:"ドキュメント",hint:"スライダーを調整して、設定を適用してください。",presets:"プリセットシーン",params:"詳細設定",embed:"埋め込みコード",copy:"コードをコピー",apply:"設定を適用",weather:"天候効果",scene:"シーン",start:"夜の状態から開始",none:"なし",snow:"雪",groups:["動き","ガラス光学","ワールド時間","環境"],scenes:["田舎のコテージ","日本の街並み","モダンなアパート","海辺の灯台","山小屋"]}
+ };
+ const keys=["en","zh-CN","ja"],select=document.getElementById("language");
+ let lang="en";try{const saved=localStorage.getItem("pds-language");if(keys.includes(saved))lang=saved;else if(navigator.language==="ja")lang="ja";else if(navigator.language.toLowerCase().startsWith("zh"))lang="zh-CN";}catch(e){}
+ function apply(next){lang=keys.includes(next)?next:"en";const t=dict[lang];document.documentElement.lang=lang;document.title=t.title+" · "+t.sub;
+ document.querySelector(".top b").textContent=t.title;document.querySelector(".top span").textContent=t.sub;
+ document.getElementById("nav-back").textContent=t.back;document.getElementById("nav-docs").textContent=t.docs;
+ document.querySelector(".hint").textContent=t.hint;
+ const hs=document.querySelectorAll(".panel h2");if(hs[0])hs[0].textContent=t.presets;if(hs[1])hs[1].textContent=t.params;if(hs[2])hs[2].textContent=t.embed;
+ const copy=document.getElementById("copy"),apply=document.getElementById("apply");if(copy)copy.textContent=t.copy;if(apply)apply.textContent=t.apply;
+ const chips=document.querySelectorAll(".chip");chips.forEach((el,i)=>{if(t.scenes[i])el.textContent=t.scenes[i];});
+ const tabs=document.querySelectorAll(".tabs button");tabs.forEach((el,i)=>{if(t.groups[i])el.textContent=t.groups[i];});
+ const weather=document.querySelector('label[for="weather"]');if(weather)weather.textContent=t.weather;
+ const scene=document.querySelector('label[for="scene"]');if(scene)scene.textContent=t.scene;
+ const start=document.querySelector(".check");if(start&&start.querySelector("input")){const input=start.querySelector("input");start.textContent="";start.append(input,document.createTextNode(t.start));}
+ const w=document.querySelector('#weather option[value="default"]'),s=document.querySelector('#weather option[value="snow"]');if(w)w.textContent=t.none;if(s)s.textContent=t.snow;
+ select.value=lang;try{localStorage.setItem("pds-language",lang);}catch(e){}
+ }
+ select.addEventListener("change",()=>apply(select.value));apply(lang);
 })();
 </script>
 </body>
