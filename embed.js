@@ -1,42 +1,60 @@
-(function() {
-  // 1. 自动注入所需样式
-  if (!document.getElementById('ld-switch-styles')) {
-    const link = document.createElement('link');
-    link.id = 'ld-switch-styles';
-    link.rel = 'stylesheet';
-    link.href = 'https://gsvegetable.github.io/pixel-daylight-switch/style.css';
-    document.head.appendChild(link);
-  }
+(function () {
+  'use strict';
 
-  // 2. 自动创建一个自带尺寸的容器
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'width: 100%; max-width: 800px; height: 450px; margin: 20px auto; position: relative; background: #f5ecd9; border-radius: 16px; overflow: hidden;';
-  
-  // 3. 塞入组件需要的 DOM 结构
-  const inner = document.createElement('div');
-  inner.setAttribute('data-ld-part', 'toggle-daylight');
-  inner.style.cssText = 'width: 100%; height: 100%;';
-  inner.innerHTML = `
-    <canvas class="scene" aria-hidden="true"></canvas>
-    <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
-    <span class="vh" role="status" aria-live="polite" data-status></span>
-    <span class="probe" aria-hidden="true"></span>
-  `;
-  wrapper.appendChild(inner);
-
-  // 4. 把容器插入到当前 script 标签的前面
+  // The renderer injects component-scoped CSS. Loading the repository's full-page demo
+  // stylesheet here would leak body/main/footer rules into the host website.
   const script = document.currentScript;
-  if (script && script.parentNode) {
-    script.parentNode.insertBefore(wrapper, script);
-  } else {
-    document.body.appendChild(wrapper);
-  }
+  const wrapper = document.createElement('div');
+  wrapper.className = 'pds-embed';
+  wrapper.style.cssText = [
+    'display:block',
+    'position:relative',
+    'box-sizing:border-box',
+    'width:min(100%, 800px)',
+    'aspect-ratio:1.6439',
+    'margin:20px auto',
+    'overflow:hidden',
+    'border-radius:16px',
+    'background:#f5ecd9'
+  ].join(';');
 
-  // 5. 最后加载核心逻辑，并加时间戳强制刷新缓存
-  const appScript = document.createElement('script');
-  appScript.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js?v=' + Date.now();
-  appScript.onerror = () => {
-    wrapper.innerHTML = '<div style="color:red; padding:20px;">组件加载失败，请检查网络或跨域设置。</div>';
+  const root = document.createElement('div');
+  root.setAttribute('data-ld-part', 'toggle-daylight');
+  root.style.cssText = 'width:100%;height:100%;';
+
+  // Optional data-* attributes on the embed script configure the generated instance.
+  const config = [
+    'data-label', 'data-speed', 'data-refraction', 'data-bezel',
+    'data-start-night', 'data-friction', 'data-bounce', 'data-dispersion',
+    'data-shine', 'data-time-speed', 'data-weather', 'data-scene'
+  ];
+  if (script) {
+    for (const name of config) {
+      if (script.hasAttribute(name)) root.setAttribute(name, script.getAttribute(name));
+    }
+  }
+  wrapper.appendChild(root);
+
+  const insertAndLoad = function () {
+    // A script placed in <head> must not insert visual markup into <head>.
+    if (script && script.parentNode && script.parentNode !== document.head) {
+      script.parentNode.insertBefore(wrapper, script);
+    } else {
+      (document.body || document.documentElement).appendChild(wrapper);
+    }
+
+    const runtime = document.createElement('script');
+    runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
+    runtime.async = true;
+    runtime.onerror = function () {
+      const message = document.createElement('p');
+      message.textContent = 'Pixel Daylight Switch could not load. Please check your network connection.';
+      message.style.cssText = 'padding:16px;color:#9b1c1c;font:14px/1.5 system-ui,sans-serif;';
+      wrapper.replaceChildren(message);
+    };
+    (document.body || document.documentElement).appendChild(runtime);
   };
-  document.body.appendChild(appScript);
+
+  if (document.body) insertAndLoad();
+  else document.addEventListener('DOMContentLoaded', insertAndLoad, { once: true });
 })();

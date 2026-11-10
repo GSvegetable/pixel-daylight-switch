@@ -2,6 +2,14 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [Unreleased] — Developer integration
+
+- Make the one-line embed responsive and prevent demo-page global CSS from leaking into host websites.
+- Generate responsive, copy-ready integration snippets from the Playground.
+- Add React and Vue 3 lifecycle integration recipes.
+- Refresh `llms.txt` and add smoke/browser regression coverage for embed isolation.
+
+
 ## [2.2.0] — Mobile scene controls
 
 ### Mobile app experience

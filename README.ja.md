@@ -23,6 +23,7 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 | コンポーネントを見る | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | Web サイトに埋め込む | [embed.js](embed.js) |
 | JavaScript プロジェクトで使う | [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
+| React / Vue の導入例 | [フレームワーク統合ガイド](INTEGRATIONS.md) |
 | 実装を読む | [app.js](app.js) · [style.css](style.css) |
 | モバイルビルド | [ビルド情報](builds/README.md) · [GitHub Actions](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | テスト結果 | [CI ワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -61,7 +62,13 @@ HTML にマウント要素を配置し、ランタイムを読み込みます。
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-ローダーがコンテナ、スタイル、ランタイムを自動挿入します。現在は既定設定のインスタンスを 1 つ生成し、最大表示サイズを固定します。レイアウトや属性を細かく制御する場合は、上記のマウント要素方式を使用してください。
+script タグにシーンや天候を直接指定することもできます。
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+```
+
+レスポンシブなインスタンスを 1 つ作成してランタイムを読み込みます。スタイルはコンポーネント内に限定され、ホストページの `body` や `main` などのグローバル要素を変更しません。script タグに `data-scene`、`data-weather`、`data-start-night` などを直接指定できます。複数インスタンスや配置の細かな制御には、上記のマウント方式を使用してください。
 
 ## npm からインストール
 
@@ -176,7 +183,7 @@ Capacitor 8 アプリには、田園の家、日本の街並み、モダンな�
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-スタイルとデフォルトシーンのスイッチを自動挿入します。シーンや天気のカスタマイズ、複数インスタンス、配置の制御には、上記の npm API と `data-scene` / `data-weather` 属性を使用してください。
+レスポンシブなデフォルトシーンのスイッチを自動作成してランタイムを読み込みます。デモページ用スタイルは挿入せず、サイトのグローバルスタイルも変更しません。シーンや天気のカスタマイズ、複数インスタンス、配置の制御には、上記の npm API と `data-scene` / `data-weather` 属性を使用してください。
 
 ### 独自の Android / iOS Capacitor アプリへの統合
 

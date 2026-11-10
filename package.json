@@ -42,7 +42,8 @@
     "index.mjs",
     "README.md",
     "LICENSE",
-    "llms.txt"
+    "llms.txt",
+    "INTEGRATIONS.md"
   ],
   "sideEffects": [
     "./app.js"
@@ -54,7 +55,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "node tests/package-smoke.cjs && node tests/mobile-smoke.cjs",
+    "test": "node tests/package-smoke.cjs && node tests/mobile-smoke.cjs && node tests/embed-smoke.cjs",
     "test:browser": "playwright test",
     "mobile:prepare": "node scripts/prepare-mobile.cjs",
     "mobile:android": "npm run mobile:prepare && cap sync android && node scripts/set-android-version.cjs android/app/build.gradle",

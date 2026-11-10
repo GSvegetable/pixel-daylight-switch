@@ -23,6 +23,7 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 | Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
+| Framework integration recipes | [React and Vue examples](INTEGRATIONS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
 | Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | Check tests | [CI workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -61,7 +62,13 @@ For a self-inserting embed, add this script where you want the component to appe
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader inserts its own container, stylesheet and runtime. It currently creates one default instance with a fixed maximum display size; use the mount-point approach above when you need precise layout or custom attributes.
+Configure the generated instance directly on the script tag:
+
+```html
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+```
+
+The loader inserts one responsive instance and loads only the component runtime. Its styles are isolated to the component and do not reset or modify your page's `body`, `main`, or other global elements. You can set `data-scene`, `data-weather`, `data-start-night` and the other documented `data-*` options directly on the script tag. For multiple instances or exact placement, use the mount-point approach above.
 
 ## Install from npm
 
@@ -176,7 +183,7 @@ For one basic day/night switch, no package installation is required. Paste this 
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-The loader injects its styles and one default-scene switch. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
+The loader creates a responsive default-scene switch and loads the runtime. It does not inject the demo page stylesheet or alter your site's global styles. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
 
 ### Integrate with your own Android / iOS Capacitor app
 

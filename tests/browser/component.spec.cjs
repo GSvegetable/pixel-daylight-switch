@@ -193,3 +193,39 @@ test('playground remains vertically scrollable on a narrow mobile viewport', asy
   const stagePosition = await page.locator('.stage-col').evaluate(el => getComputedStyle(el).position);
   expect(stagePosition).toBe('relative');
 });
+
+
+test('one-line embed preserves host page global layout styles', async ({ page }) => {
+  await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
+    status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
+  }));
+  await page.goto('/tests/fixture.html');
+  const before = await page.evaluate(() => ({
+    bodyDisplay: getComputedStyle(document.body).display,
+    mainDisplay: getComputedStyle(document.querySelector('main')).display,
+    bodyMargin: getComputedStyle(document.body).margin
+  }));
+  await page.evaluate(() => {
+    const script = document.createElement('script');
+    script.src = '/embed.js';
+    script.dataset.scene = 'seaside';
+    script.dataset.weather = 'snow';
+    document.head.appendChild(script);
+  });
+  await expect(page.locator('.pds-embed canvas.scene')).toHaveCount(1);
+  await expect(page.locator('.pds-embed [data-ld-part="toggle-daylight"]')).toHaveAttribute('data-scene', 'seaside');
+  await expect(page.locator('.pds-embed [data-ld-part="toggle-daylight"]')).toHaveAttribute('data-weather', 'snow');
+  const after = await page.evaluate(() => ({
+    bodyDisplay: getComputedStyle(document.body).display,
+    mainDisplay: getComputedStyle(document.querySelector('main')).display,
+    bodyMargin: getComputedStyle(document.body).margin,
+    embedWidth: document.querySelector('.pds-embed').getBoundingClientRect().width,
+    embedHeight: document.querySelector('.pds-embed').getBoundingClientRect().height
+  }));
+  expect(after.bodyDisplay).toBe(before.bodyDisplay);
+  expect(after.mainDisplay).toBe(before.mainDisplay);
+  expect(after.bodyMargin).toBe(before.bodyMargin);
+  expect(after.embedWidth).toBeGreaterThan(0);
+  expect(after.embedHeight).toBeGreaterThan(0);
+  expect(after.embedWidth / after.embedHeight).toBeCloseTo(1.6439, 1);
+});

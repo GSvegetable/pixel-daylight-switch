@@ -1,118 +1,96 @@
 # Pixel Daylight Switch
 
-> A dependency-free, draggable pixel-art day/night switch. A tiny animated world lives inside a refractive glass lens.
+> A dependency-free, draggable pixel-art day/night UI component. Five living pixel-art environments sit inside a refractive glass lens, with continuous day-to-night color, lighting and animation transitions.
 
-## Quick Start
+## Zero-setup browser embed
 
-### CDN
+Paste one line where the component should appear:
 
 ```html
-<div data-ld-part="toggle-daylight"></div>
-<script src="https://cdn.jsdelivr.net/npm/pixel-daylight-switch-gsvegetable@1.3.0/app.js"></script>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
 ```
 
-### NPM
+The loader creates a responsive instance and loads the runtime. Component styles are scoped; the loader does not inject the demo stylesheet or reset the host page's body, main, footer, typography or layout. Set supported `data-*` options (including `data-scene` and `data-weather`) on the script tag to configure this instance. Use the mount API for multiple instances or custom placement.
 
-- Install: `npm install pixel-daylight-switch-gsvegetable`
-- ESM: `import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable'`
-- Named imports: `import { mount, unmount } from 'pixel-daylight-switch-gsvegetable'`
-- CommonJS: `const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable')`
-- The runtime auto-mounts matching elements present when the script is evaluated.
-- Call `mount(element)` for elements created later. Call `unmount(element)` before removing a mounted element.
-- SSR-safe to import: DOM work only runs when `document` exists.
+## Direct browser usage
 
-## Markup
+```html
+<div style="width:min(100%, 800px);margin-inline:auto">
+  <div data-ld-part="toggle-daylight" data-scene="japanese-street"></div>
+</div>
+<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+```
 
-- Mount selector: `[data-ld-part="toggle-daylight"]`
-- The component creates its canvas, interaction button, and live status element if they are missing.
-- Multiple independent instances are supported.
-- The root element should have a measurable width. Its aspect ratio is 1.6439.
+No stylesheet import is required. The runtime injects component-scoped CSS and automatically mounts matching elements. The host/container must have a measurable width. The component preserves its 1.6439 aspect ratio and scales to its available width.
 
-## Data Attributes
+## npm
 
-All attributes are optional unless stated. Numeric values that are invalid use the default. Numeric values with documented ranges are clamped to those ranges.
-
-| Attribute | Default | Accepted values / range | Effect |
-| --- | --- | --- | --- |
-| `data-ld-part` | required | `toggle-daylight` | Identifies a component root for automatic mounting. |
-| `data-label` | localized label | Any text | Accessible label for the switch button. |
-| `data-speed` | `9.5` | Positive number | Base motion response speed. |
-| `data-refraction` | `1.24` | Positive number | Refraction strength of the glass lens. |
-| `data-bezel` | `0.046` | Positive number | Glass bezel thickness ratio. |
-| `data-start-night` | `false` | `true` / `false` | Start in night mode when exactly `true`. |
-| `data-friction` | `0.6` | `0.1–0.9` | Release inertia damping. Lower values retain more glide. |
-| `data-bounce` | `3.2` | `0–12` | Edge rebound impulse. |
-| `data-dispersion` | `0.05` | `0–0.25` | RGB chromatic dispersion at the lens edge. |
-| `data-shine` | `0.44` | `0–1.5` | Daylight lens highlight intensity. |
-| `data-time-speed` | `1.0` | `0–8` | Pixel-world simulation speed; zero freezes world time. |
-| `data-weather` | `default` | `default`, `snow` | Selects the weather effect. Unknown values use `default`. |
-| `data-scene` | `countryside` | `countryside`, `japanese-street`, `apartment`, `seaside`, `mountain-cabin` | Selects the pixel environment. Unknown values use `countryside`. |
-
-## CSS Custom Properties
-
-Set these on the component root. Values shown are the runtime fallbacks.
-
-| Variable | Default | Effect |
-| --- | --- | --- |
-| `--ld-bg` | `#f5ecd9` | Component background palette input. |
-| `--ld-surface` | `#8c9a62` | Surface and environment palette input. |
-| `--ld-fg` | `#1b2146` | Foreground palette input. |
-| `--ld-muted` | `#7f97b3` | Muted palette input. |
-| `--ld-accent` | `#efa02c` | Focus and accent color. |
-| `--ld-radius` | `9999px` | Interaction button corner radius. |
-| `--ld-font` | `system-ui, sans-serif` | Component font family. |
-| `--ld-space` | `8px` | Focus outline offset scale. |
-| `--ld-shadow` | `0 8px 24px rgb(27 33 70 / .2)` | Reserved theme token; current renderer does not consume it. |
-| `--ld-motion` | `200ms` | Focus outline transition duration. |
-| `--night` | Runtime: `0–1` | Read-only live night intensity; 0 is day, 1 is night. |
-
-## JavaScript API
-
-### `PixelDaylightSwitch.mount(element)`
-
-- Mounts one component root element.
-- Returns a cleanup function when mounting succeeds; returns `null` if mounting fails.
-- Idempotent: mounting the same element twice does not create duplicate instances.
-- Example: `const destroy = PixelDaylightSwitch.mount(element)`.
-
-### `PixelDaylightSwitch.unmount(element)`
-
-- Stops rendering, removes observers and event listeners, and releases the WebGL context for that element.
-- Call before removing the element from the document.
-- Does not remove the root element itself.
-
-### ESM and CommonJS
+```bash
+npm install pixel-daylight-switch-gsvegetable
+```
 
 ```js
 import PixelDaylightSwitch, { mount, unmount } from 'pixel-daylight-switch-gsvegetable';
 
-// Or CommonJS:
-// const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
-
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
 mount(root);
-// Later:
+// Before removing the root:
 unmount(root);
 ```
 
-## Event
+CommonJS: `const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable')`.
 
-### `daylight:change`
+The package is safe to import during SSR; mount only after the target DOM element exists. `mount(element)` is idempotent and returns a cleanup function on success (or null on failure). `unmount(element)` stops rendering and removes observers/listeners; it does not remove the DOM root or forcibly invalidate the canvas context.
 
-- Dispatched on the component root when the switch reaches a changed day/night state.
-- Bubbles and is composed.
-- `event.detail.night` is a boolean.
+Framework lifecycle examples are in [INTEGRATIONS.md](INTEGRATIONS.md).
 
-```js
-document.addEventListener('daylight:change', (event) => {
-  const isNight = event.detail.night;
-  document.documentElement.classList.toggle('dark', isNight);
-});
-```
+## Scenes and weather
 
-## Rendering and Compatibility
+| Attribute | Default | Accepted values |
+| --- | --- | --- |
+| `data-scene` | `countryside` | `countryside`, `japanese-street`, `apartment`, `seaside`, `mountain-cabin` |
+| `data-weather` | `default` | `default`, `snow` |
+| `data-start-night` | `false` | `true`, `false` |
 
-- WebGL2 renders the refractive glass; Canvas 2D is used as a fallback.
+All five scenes are authored environments, not static background images. They use time-of-day palette keys and scene-specific lighting/animation: for example, the seaside lighthouse sweeps a beam across the bay, the apartment changes window and room lighting and animates its cat/resident, and the mountain cabin includes snow/pines and aurora behavior. Scene details continue to evolve as the clock moves between dawn, day, dusk and night.
+
+## Visual and motion parameters
+
+| Attribute | Default | Accepted values / range |
+| --- | --- | --- |
+| `data-speed` | `9.5` | Positive number |
+| `data-refraction` | `1.24` | Positive number |
+| `data-bezel` | `0.046` | Positive number |
+| `data-friction` | `0.6` | `0.1–0.9` |
+| `data-bounce` | `3.2` | `0–12` |
+| `data-dispersion` | `0.05` | `0–0.25` |
+| `data-shine` | `0.44` | `0–1.5` |
+| `data-time-speed` | `1` | `0–8`; zero freezes world time |
+
+Invalid values fall back to defaults; documented numeric ranges are clamped.
+
+## JavaScript API and events
+
+- `mount(element)`: mount one root; idempotent.
+- `unmount(element)`: stop rendering and clean up observers and event listeners.
+- The runtime auto-mounts existing `[data-ld-part="toggle-daylight"]` elements.
+- Use `mount(element)` for elements created later.
+- Listen for `daylight:change` on the root. `event.detail.night` is a boolean and the event fires when the committed day/night state changes, not every animation frame.
+- The root exposes transition progress through CSS custom property `--night` (0 day, 1 night).
+
+## Rendering, accessibility and performance
+
+- WebGL2 renders the refractive glass; Canvas 2D is the fallback.
+- Keyboard interaction, switch semantics, accessible labels and live status are provided.
 - Respects `prefers-reduced-motion`.
-- Pauses unnecessary rendering when the page is hidden or the component is offscreen.
-- No runtime dependencies.
+- Rendering pauses while the page is hidden or the component is outside the viewport.
+- Multiple independent instances are supported.
+
+## Links
+
+- [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/)
+- [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)
+- [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html)
+- [Integration recipes](INTEGRATIONS.md)
+- [English README](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
+- [Changelog](CHANGELOG.md)
