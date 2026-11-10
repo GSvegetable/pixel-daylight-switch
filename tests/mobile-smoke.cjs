@@ -16,6 +16,9 @@ const output = path.join(root, 'mobile/www');
 for (const file of ['index.html', 'app.js', 'style.css', 'mobile.css']) {
   assert.ok(fs.existsSync(path.join(output, file)), `Missing generated mobile asset: ${file}`);
 }
+const config = JSON.parse(fs.readFileSync(path.join(root, 'capacitor.config.json'), 'utf8'));
+assert.equal(config.webDir, 'mobile/www');
+assert.match(config.appId, /^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$/);
 const html = fs.readFileSync(path.join(output, 'index.html'), 'utf8');
 assert.match(html, /viewport-fit=cover/);
 assert.match(html, /mobile\.css/);
