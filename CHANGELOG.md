@@ -2,7 +2,7 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
-## [2.0.0]
+## [2.0.0] — Released
 
 ### Android 与 iOS
 - 引入 Capacitor 8 原生应用构建路径，支持 Android 与 iOS 共用现有 Web 渲染器。
