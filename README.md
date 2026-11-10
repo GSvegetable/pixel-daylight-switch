@@ -509,37 +509,13 @@ npm run test:browser
 
 CI 会在 Node.js 18、20、22 下执行包与 SSR 检查，并在 Chromium 中运行交互、重复挂载/卸载、多实例、事件监听器清理和移动端回归测试。
 
-## 版本记录
+## 版本与更新日志
 
-### v1.3.1
+当前版本：**v2.0.0**。
 
-- 修复组件卸载时主动销毁 WebGL context，导致同一 canvas/root 后续重新挂载可能异常的问题。
-- 保留组件资源、事件监听器与观察器的清理，同时允许 canvas 在卸载后重新挂载。
-- 增加 CommonJS、ESM、SSR、Node.js 18/20/22 和 Chromium 浏览器自动化检查。
-- 增加重复挂载、多实例、指针交互、触控、移动端布局与监听器清理测试。
-- 将浏览器回归纳入 NPM 发布前置检查。
+版本历史不在 README 中逐条累积。README 只说明当前版本和项目使用方式；每次发布的完整功能、修复和兼容性变化统一记录在 [CHANGELOG.md](./CHANGELOG.md)。
 
-### v1.3.0
-
-- 新增日本街道、现代公寓、海边灯塔和山间木屋四种像素环境。
-- 保留乡村小屋作为默认场景。
-- Playground 支持切换场景并组合调整天气、昼夜和玻璃参数。
-
-### v1.2.0
-
-- 新增惯性阻尼、边缘回弹、玻璃色散和表面高光参数。
-- 新增世界时间倍率与飘雪天气。
-- 新增独立 Playground，支持参数分组、场景预设和 HTML 代码复制。
-
-### v1.1.0
-
-- 新增运动速度、镜片折射、外框厚度和初始夜晚状态配置。
-
-### v1.0.0
-
-- 首个公开版本。
-
-详细记录见 [CHANGELOG.md](./CHANGELOG.md)。
+Android 与 iOS 的 Capacitor 构建路径已加入项目。Android 当前仍在真机运行验证阶段；iOS 已完成模拟器编译验证，尚未提供签名 IPA。构建成功不代表所有设备已完成验收。
 
 ## 许可证
 
@@ -728,15 +704,13 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-### Version history
+### Version and changelog
 
-- **v1.3.1** — lifecycle/remount stability fix and expanded automated regression coverage.
-- **v1.3.0** — four additional pixel environments and scene selection in Playground.
-- **v1.2.0** — motion, optics, world-speed, weather settings, and the standalone Playground.
-- **v1.1.0** — initial HTML configuration options.
-- **v1.0.0** — first public release.
+Current release: **v2.0.0**.
 
-See [CHANGELOG.md](./CHANGELOG.md) for details.
+The README stays focused on setup, usage, and current platform status. Detailed changes for every release are maintained separately in [CHANGELOG.md](./CHANGELOG.md), so this document does not grow with the full release history.
+
+The Capacitor Android and iOS build paths are included. Android real-device runtime validation is still in progress; iOS has passed a simulator build but no signed IPA is provided. A successful build does not mean every device has been validated.
 
 ### License
 
