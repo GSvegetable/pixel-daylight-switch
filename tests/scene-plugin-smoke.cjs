@@ -7,6 +7,9 @@ assert.equal(plugins.schemaVersion, 1);
 assert.equal(plugins.validateScene(example).valid, true);
 const unregister = plugins.registerScene(example);
 assert.equal(plugins.getScene(example.id).name, 'Sakura Evening');
+assert.equal(Object.isFrozen(plugins.getScene(example.id)), true);
+assert.equal(Object.isFrozen(plugins.getScene(example.id).palettes.day), true);
+assert.equal(Object.isFrozen(plugins.getScene(example.id).pixels), true);
 assert.equal(plugins.listScenes().length, 1);
 assert.equal(Object.isFrozen(plugins.getScene(example.id)), true);
 assert.equal(Object.isFrozen(plugins.getScene(example.id).palettes.day), true);
@@ -19,6 +22,8 @@ bad.pixels[0] = 'too-short';
 assert.equal(plugins.validateScene(bad).valid, false);
 assert.throws(() => plugins.registerScene(bad), /Invalid Pixel Daylight Switch scene/);
 assert.throws(() => plugins.registerScene({ ...example, id: 'seaside' }), /reserved/);
+assert.equal(plugins.validateScene({ ...example, arbitraryCode: 'alert(1)' }).valid, false);
+assert.equal(plugins.validateScene({ ...example, timeCycle: [{at:1,palette:'night'},{at:24,palette:'night'}] }).valid, false);
 
 const badTimeline = JSON.parse(JSON.stringify(example));
 badTimeline.timeCycle[0].at = 1;
