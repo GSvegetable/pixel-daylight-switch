@@ -1147,12 +1147,14 @@ function mount(root) {
   const clockOf = () => { if (branch === 'am') return mix(36, amStart, x); if (x >= 1) return nightClock; return CLOCK_DAY + (CLOCK_NIGHT - CLOCK_DAY) * x; };
   const beginTravel = () => { if (x <= 0.0005) branch = 'pm'; else if (x >= 0.9995) { branch = 'am'; amStart = nightClock; } };
   const setStatus = (text) => { if (statusEl.textContent !== text) statusEl.textContent = text; };
-  const phaseName = (h) => (h < 5 || h >= 20 ? '夜' : h < 7 ? '夜明け' : h < 10 ? '朝' : h < 16.5 ? '昼' : '夕方');
+  const locale = (() => { const el = root.closest('[lang]') || root.ownerDocument.documentElement; const value = (el.getAttribute('lang') || 'en').toLowerCase(); return value.startsWith('ja') ? 'ja' : value.startsWith('zh') ? 'zh-CN' : 'en'; })();
+  const phaseNames = locale === 'ja' ? ['夜','夜明け','朝','昼','夕方'] : locale === 'zh-CN' ? ['夜晚','黎明','早晨','白天','傍晚'] : ['Night','Dawn','Morning','Day','Evening'];
+  const phaseName = (h) => h < 5 || h >= 20 ? phaseNames[0] : h < 7 ? phaseNames[1] : h < 10 ? phaseNames[2] : h < 16.5 ? phaseNames[3] : phaseNames[4];
   const commit = (value) => {
     const night = value >= 1; x = night ? 1 : 0; velocity = 0; moving = false;
     if (night) { nightClock = branch === 'am' ? amStart : CLOCK_NIGHT; branch = 'pm'; } else { branch = 'pm'; }
     if (checked !== night) { checked = night; button.setAttribute('aria-checked', String(night)); root.dispatchEvent(new CustomEvent('daylight:change', { bubbles: true, composed: true, detail: { night } })); }
-    setStatus(night ? '夜' : '昼');
+    setStatus(night ? (locale === 'ja' ? '夜' : locale === 'zh-CN' ? '夜晚' : 'Night') : (locale === 'ja' ? '昼' : locale === 'zh-CN' ? '白天' : 'Day'));
   };
   const drawGl = (night) => {
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.useProgram(program); gl.bindVertexArray(vao);
@@ -1294,7 +1296,7 @@ function ensureMarkup(root) {
   if (!root.querySelector('.scene')) root.appendChild(make('canvas', 'scene', { 'aria-hidden': 'true' }));
   if (!root.querySelector('.hit')) {
     const lang = ((root.closest('[lang]') || doc.documentElement).getAttribute('lang') || '').toLowerCase();
-    const label = root.getAttribute('data-label') || (lang.indexOf('zh') === 0 ? '昼夜开关' : 'Day/night switch');
+    const label = root.getAttribute('data-label') || (lang.indexOf('ja') === 0 ? '昼夜スイッチ' : lang.indexOf('zh') === 0 ? '昼夜开关' : 'Day/night switch');
     root.appendChild(make('button', 'hit', { type: 'button', role: 'switch', 'aria-checked': 'false', 'aria-label': label }));
   }
   if (!root.querySelector('[data-status]')) {
