@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -33,6 +33,15 @@ jobs:
 
       - name: Run package smoke tests
         run: npm test
+
+      - name: Install browser test runner
+        run: npm install --no-save @playwright/test@1.56.1
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser stress tests
+        run: npm run test:browser
 
       - name: Inspect publish contents
         run: npm pack --dry-run
