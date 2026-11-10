@@ -1,4 +1,11 @@
 'use strict';
 
-// The browser runtime is inert during SSR and exposes mount/unmount when a DOM exists.
-module.exports = require('./app.js');
+// Load the declarative scene registry before the browser runtime so registered
+// community scenes are available when mount() initializes a root.
+const scenes = require('./scene-plugin.js');
+const api = require('./app.js');
+api.registerScene = scenes.registerScene;
+api.validateScene = scenes.validateScene;
+api.getScene = scenes.getScene;
+api.listScenes = scenes.listScenes;
+module.exports = api;
