@@ -1,0 +1,6 @@
+node_modules/
+mobile/www/
+android/
+ios/
+.DS_Store
+*.log

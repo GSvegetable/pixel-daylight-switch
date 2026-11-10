@@ -28,6 +28,7 @@
 
 - [项目简介](#项目简介)
 - [快速开始](#快速开始)
+- [Android 与 iOS 应用](#android-与-ios-应用)
 - [NPM 安装](#npm-安装)
 - [框架集成](#框架集成)
 - [参数实验室 Playground](#参数实验室-playground)
@@ -78,6 +79,63 @@
 脚本会自动为每个匹配的容器创建 Canvas、交互按钮和状态播报元素。容器宽度会自适应父级，组件保持约 **1.6439:1** 的宽高比。
 
 如果需要自行托管，可以下载仓库中的 `app.js`，将脚本地址替换为自己的静态资源地址。
+
+## Android 与 iOS 应用
+
+从 **v2.0.0** 开始，项目提供 Capacitor 原生应用构建路径。Web 版本继续独立运行；Android 与 iOS 使用同一份核心渲染器，不复制或重写场景、WebGL shader 和交互物理逻辑。
+
+### 技术结构
+
+- **共享核心**：根目录的 `app.js` 与 `style.css` 是唯一渲染实现。
+- **原生容器**：Capacitor 8 将同一套 Web 资源装入 Android WebView 和 iOS WKWebView。
+- **移动外壳**：`mobile/` 只负责全屏布局、安全区域和移动端 viewport，不包含第二套场景引擎。
+- **构建产物**：`mobile/www/` 由脚本生成并被 Git 忽略，避免提交重复的渲染资源。
+
+### 环境要求
+
+- Node.js 22+
+- Android：Android Studio、Android SDK、JDK 21
+- iOS：macOS、Xcode 26+；需要在 Mac 上构建和签名发布包
+
+Capacitor 8 的平台最低版本为 Android 7.0（API 24）和 iOS 15。具体要求以 [Capacitor 环境文档](https://capacitorjs.com/docs/getting-started/environment-setup) 为准。
+
+### 初始化原生工程
+
+先安装依赖并生成 Web 资源：
+
+```bash
+npm install
+npm run mobile:prepare
+```
+
+首次创建 Android / iOS 工程（每个平台只需初始化一次）：
+
+```bash
+npm run mobile:android:init
+npm run mobile:ios:init
+```
+
+同步后续 Web 资源变更：
+
+```bash
+npm run mobile:android
+npm run mobile:ios
+```
+
+在 Android Studio 或 Xcode 中打开工程：
+
+```bash
+npm run mobile:open:android
+npm run mobile:open:ios
+```
+
+原生工程目录 `android/` 与 `ios/` 是本地生成目录，不纳入 Git。这样可以避免提交大量 IDE 生成文件；CI 会从锁定的 Capacitor 主版本配置重新生成工程并验证构建。
+
+### 自动构建
+
+`.github/workflows/mobile-build.yml` 提供 Android Debug APK 与 iOS Simulator 构建。可在 GitHub Actions 手动运行；推送 `v2.*` 标签也会触发构建。Android APK 会作为 Actions artifact 保存。iOS Simulator 构建用于验证编译，不等同于已签名、可提交 App Store 的 IPA。
+
+**发布边界：** App Store / Google Play 上架仍需要开发者账号、应用图标与商店素材、签名证书及隐私合规信息。此仓库的 CI 不会伪造签名或自动代表开发者提交商店。
 
 ## NPM 安装
 
@@ -381,10 +439,17 @@ root.remove();
 pixel-daylight-switch/
 ├── assets/
 │   └── scene-gallery.png          # 五种像素场景总览图
+├── mobile/
+│   ├── index.html                 # Capacitor 原生应用入口
+│   └── mobile.css                 # 移动端安全区域与全屏布局
+├── scripts/
+│   └── prepare-mobile.cjs         # 生成 Capacitor Web 资源
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml                 # Node.js 与 Chromium 持续集成
+│       └── mobile-build.yml       # Android / iOS 构建验证
 │       └── npm-publish.yml        # 通过 v* 标签触发 NPM 发布
+├── capacitor.config.json         # Capacitor 原生应用配置
 ├── tests/
 │   ├── browser/
 │   │   └── component.spec.cjs     # Playwright 浏览器回归测试

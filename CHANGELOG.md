@@ -2,6 +2,19 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [2.0.0]
+
+### Android 与 iOS
+- 引入 Capacitor 8 原生应用构建路径，支持 Android 与 iOS 共用现有 Web 渲染器。
+- 新增独立移动端入口与全屏布局，处理 viewport、安全区域、横竖屏和触控拖动。
+- 新增移动资源准备脚本与 smoke test，确保原生包使用与 Web 完全相同的 `app.js`。
+- 新增 Android Debug APK 与 iOS Simulator 自动构建工作流。
+
+### 架构与兼容性
+- Web 继续保持独立运行；不重写、不复制 WebGL shader、场景数据或交互物理逻辑。
+- 原生 Android / iOS 工程按需由 Capacitor 生成，不把 IDE 派生文件提交到仓库。
+- 本版本不包含已签名商店包；正式发布仍需开发者签名与商店配置。
+
 ## [1.3.1]
 
 ### 稳定性与生命周期

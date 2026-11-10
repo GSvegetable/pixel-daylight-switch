@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#f5ecd9">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="A tiny pixel world inside a draggable glass day/night switch.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Pixel Daylight Switch</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile.css">
+</head>
+<body class="mobile-app">
+  <main class="mobile-stage">
+    <div data-ld-part="toggle-daylight" lang="zh-CN">
+      <canvas class="scene" aria-hidden="true"></canvas>
+      <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
+      <span class="vh" role="status" aria-live="polite" data-status></span>
+      <span class="probe" aria-hidden="true"></span>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

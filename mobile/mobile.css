@@ -1,0 +1,68 @@
+/*
+ * Native app shell only. The renderer, shader, scene data and interaction
+ * implementation remain in the shared root app.js and style.css.
+ */
+html,
+body.mobile-app {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #f5ecd9;
+  -webkit-text-size-adjust: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body.mobile-app {
+  position: fixed;
+  inset: 0;
+  display: block;
+  padding: 0;
+}
+
+.mobile-stage {
+  position: absolute;
+  inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  display: grid;
+  place-items: center;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: clamp(12px, 4vw, 28px);
+}
+
+.mobile-stage [data-ld-part="toggle-daylight"] {
+  width: min(100%, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 32px) * 1.6439));
+  max-width: 900px;
+  max-height: 100%;
+}
+
+.mobile-stage .hit {
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .mobile-stage {
+    padding: 8px 20px;
+  }
+
+  .mobile-stage [data-ld-part="toggle-daylight"] {
+    width: min(100%, calc((100dvh - 16px) * 1.6439));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-stage *,
+  .mobile-stage *::before,
+  .mobile-stage *::after {
+    scroll-behavior: auto !important;
+  }
+}
