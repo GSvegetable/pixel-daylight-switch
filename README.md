@@ -1,5 +1,11 @@
 # Pixel Daylight Switch
 
+**Language / 语言 / 言語:** [English](#english) · [简体中文](#简体中文) · [日本語](#日本語)
+
+![Pixel Daylight Switch — five animated pixel-world scenes](assets/scene-gallery.png)
+
+<a id="english"></a>
+
 **Pixel Daylight Switch** is a draggable day/night UI component with a tiny animated pixel world inside a refractive glass lens. Drag the control to move through daylight, dusk, and night.
 
 ## Features
@@ -112,6 +118,7 @@ Capacitor Android and iOS build paths are included. Android real-device runtime 
 
 ---
 
+<a id="简体中文"></a>
 # 简体中文
 
 **像素昼夜开关** 是一个可拖动的昼夜切换组件。折射玻璃镜片内部有一个持续活动的像素世界，拖动开关即可体验白天、黄昏与夜晚的变化。
@@ -227,6 +234,7 @@ npm run test:browser
 
 ---
 
+<a id="日本語"></a>
 # 日本語
 
 **Pixel Daylight Switch** は、ドラッグ操作で昼と夜を切り替えられる UI コンポーネントです。屈折するガラスレンズの中には、小さなピクセルワールドが広がっています。
