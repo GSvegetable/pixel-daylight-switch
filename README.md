@@ -379,6 +379,8 @@ root.remove();
 
 ```text
 pixel-daylight-switch/
+├── assets/
+│   └── scene-gallery.png          # 五种像素场景总览图
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml                 # Node.js 与 Chromium 持续集成
