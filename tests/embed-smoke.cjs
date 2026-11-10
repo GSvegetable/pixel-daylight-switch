@@ -13,7 +13,7 @@ assert.match(embed, /data-ld-part/);
 assert.match(embed, /aspect-ratio:1\.6439/);
 assert.match(embed, /width:min\(100%, 800px\)/);
 assert.match(embed, /pixel-daylight-switch\/app\.js/);
-assert.doesNotMatch(embed, /style\.css/, 'The embed loader must not import demo/global stylesheet rules.');
+assert.doesNotMatch(embed, /createElement\(['"]link['"]\)|\.href\s*=|rel\s*=\s*['"]stylesheet['"]/, 'The embed loader must not inject a global stylesheet.');
 assert.doesNotMatch(embed, /document\.body\.style|document\.documentElement\.style/, 'The embed loader must not mutate host page global styles.');
 assert.match(playground, /width:min\(100%, 800px\)/, 'Playground snippets must include a responsive sizing wrapper.');
 assert.match(playground, /data-ld-part="toggle-daylight"/);
