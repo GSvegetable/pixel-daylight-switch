@@ -51,7 +51,8 @@ output{font:13px ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;
 input[type=range]{
   -webkit-appearance:none; appearance:none; display:block; width:100%; height:30px; margin:0;
   background:transparent; cursor:pointer; --p:50%;
-  touch-action: pan-x; /* 核心修复：只允许水平拖动，不触发页面滚动 */
+  /* Keep vertical page scrolling available while the browser handles horizontal slider drags. */
+  touch-action: pan-y;
 }
 input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
 input[type=range]::-moz-range-track{height:6px;background:linear-gradient(90deg,var(--ink) var(--p),var(--line) var(--p));}
@@ -437,7 +438,17 @@ executeApply();
  "zh-CN":{},
  ja:{"参数有变动，尚未应用":"設定が変更されています（未適用）","参数已是最新":"設定は最新です","正在准备渲染...":"プレビューを準備中…","渲染未就绪，已保留原画面，请重试":"プレビューを表示できません。前のシーンを保持しました。再試行してください。"}
  };
- if(statusNode)new MutationObserver(()=>{const raw=statusNode.textContent.trim();if(raw){statusNode.dataset.rawStatus=raw;statusNode.textContent=statusTranslations[lang][raw]||raw;}}).observe(statusNode,{childList:true,characterData:true,subtree:true});
+ if(statusNode)new MutationObserver(()=>{
+  const previous=statusNode.dataset.rawStatus;
+  const previousTranslation=previous ? (statusTranslations[lang][previous]||previous) : null;
+  // If the visible text is already our translation, retain its original source string.
+  const raw=previous && statusNode.textContent===previousTranslation ? previous : statusNode.textContent.trim();
+  if(!raw)return;
+  const translated=statusTranslations[lang][raw]||raw;
+  statusNode.dataset.rawStatus=raw;
+  // Writing the same text creates another childList mutation. Never write unless it differs.
+  if(statusNode.textContent!==translated)statusNode.textContent=translated;
+ }).observe(statusNode,{childList:true,characterData:true,subtree:true});
  select.addEventListener("change",()=>apply(select.value));apply(lang);
 })();
 </script>
