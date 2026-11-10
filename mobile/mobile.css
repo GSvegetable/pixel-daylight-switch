@@ -27,7 +27,7 @@ body.mobile-app { overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: c
 .live-indicator i { width:7px; height:7px; border-radius:50%; background:#3aaf81; box-shadow:0 0 0 4px rgba(58,175,129,.12); }
 .switch-stage { display:grid; place-items:center; width:100%; min-height:0; margin:10px 0 4px; }
 .switch-stage [data-ld-part="toggle-daylight"] {
-  box-sizing:border-box; display:block; width:min(100%, calc((100dvh - 300px) * 1.6439));
+  box-sizing:border-box; display:block; width:min(100%, 620px);
   height:auto; min-width:0; min-height:0; max-width:620px; max-height:none; aspect-ratio:1.6439; flex:none;
 }
 .switch-stage .hit { touch-action:none; -webkit-tap-highlight-color:transparent; }
@@ -70,10 +70,34 @@ body.mobile-app { overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: c
   .scene-choice { min-height:69px; font-size:9px; }
   .scene-choice .scene-icon { font-size:19px; }
 }
-@media (max-height:700px) and (orientation:landscape) {
-  .mobile-shell { width:min(100%,920px); gap:10px; padding-top:8px; padding-bottom:8px; }
-  .switch-card { padding:10px 14px; }
-  .switch-stage [data-ld-part="toggle-daylight"] { width:min(55vw,calc((100dvh - 265px)*1.6439)); }
-  .scene-choice { min-height:60px; }
+/* Landscape: use the full available width and place controls beside the switch. */
+@media (orientation:landscape) and (min-width:600px) {
+  .mobile-shell {
+    width:100%; max-width:1180px; min-height:100dvh;
+    display:grid; grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);
+    grid-template-rows:auto 1fr auto auto; align-content:center;
+    gap:clamp(10px,2vh,20px); padding: max(8px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));
+  }
+  .app-header { grid-column:1 / -1; }
+  .switch-card { grid-column:1; grid-row:2 / 4; align-self:center; padding:clamp(10px,2vh,18px); }
+  .switch-stage [data-ld-part="toggle-daylight"] { width:min(100%, min(620px, calc((100dvh - 190px) * 1.6439))); }
+  .scene-panel { grid-column:2; grid-row:2; align-self:end; }
+  .scene-picker { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .world-tools { grid-column:2; grid-row:3; align-self:start; }
+  .app-footer { grid-column:1 / -1; }
+}
+@media (orientation:landscape) and (max-width:599px) {
+  .mobile-shell { width:100%; min-height:100dvh; gap:8px; padding:8px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left)); }
+  .app-header { padding:0; }
+  .brand-mark { width:32px; height:32px; border-radius:10px; font-size:19px; }
+  .brand-copy h1 { font-size:16px; }
+  .switch-card { padding:8px 10px; }
+  .switch-stage [data-ld-part="toggle-daylight"] { width:min(100%, calc((100dvh - 220px) * 1.6439)); }
+  .scene-choice { min-height:54px; }
+  .app-footer { margin-top:0; }
+}
+@media (orientation:portrait) {
+  .mobile-shell { width:100%; max-width:720px; margin-inline:auto; }
+  .switch-stage [data-ld-part="toggle-daylight"] { width:min(100%,620px); }
 }
 @media (prefers-reduced-motion:reduce) { .mobile-shell * { scroll-behavior:auto !important; } }
