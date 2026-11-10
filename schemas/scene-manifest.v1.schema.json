@@ -4,20 +4,60 @@
   "title": "Pixel Daylight Switch Scene Manifest v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "name", "author", "license", "canvas", "pixels", "palettes", "timeCycle"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "author",
+    "license",
+    "canvas",
+    "pixels",
+    "palettes",
+    "timeCycle"
+  ],
   "properties": {
-    "schemaVersion": { "const": 1 },
-    "id": { "type": "string", "minLength": 3, "maxLength": 64, "pattern": "^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$" },
-    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "author": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "license": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
     "canvas": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["width", "height"],
+      "required": [
+        "width",
+        "height"
+      ],
       "properties": {
-        "width": { "type": "integer", "minimum": 1, "maximum": 192 },
-        "height": { "type": "integer", "minimum": 1, "maximum": 112 }
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 192
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 112
+        }
       }
     },
     "pixels": {
@@ -28,7 +68,7 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 192,
-        "pattern": "^[\\u0020-\\u007E]+$"
+        "pattern": "^[\\x20-\\x7E]+$"
       }
     },
     "palettes": {
@@ -38,8 +78,16 @@
       "additionalProperties": {
         "type": "object",
         "maxProperties": 64,
-        "propertyNames": { "type": "string", "minLength": 1, "maxLength": 1, "pattern": "^[\\u0020-\\u007E]$" },
-        "additionalProperties": { "type": "string", "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$" }
+        "propertyNames": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1,
+          "pattern": "^[\\u0020-\\u007E]$"
+        },
+        "additionalProperties": {
+          "type": "string",
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        }
       }
     },
     "timeCycle": {
@@ -48,12 +96,22 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["at", "palette"],
+        "required": [
+          "at",
+          "palette"
+        ],
         "properties": {
-          "at": { "type": "number", "minimum": 0, "maximum": 24 },
-          "palette": { "type": "string" }
+          "at": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 24
+          },
+          "palette": {
+            "type": "string"
+          }
         }
-      }
+      },
+      "maxItems": 48
     }
   }
 }
