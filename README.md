@@ -1,66 +1,121 @@
 # Pixel Daylight Switch
 
-一个可以拖动的像素昼夜开关组件。拖动玻璃滑块，场景会从白天流动到夜晚；像素小人生活在开关内部，随着时间变化活动。
-
 <p align="center">
-  <a href="https://gsvegetable.github.io/pixel-daylight-switch/">在线演示</a> ·
-  <a href="https://gsvegetable.github.io/pixel-daylight-switch/playground.html">参数实验室 Playground</a> ·
-  <a href="https://github.com/GSvegetable/pixel-daylight-switch/releases">版本发布</a>
+  <strong>A tiny pixel world inside a draggable glass day/night switch.</strong>
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" alt="白天模式" />
-  <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" alt="夜晚模式" />
+  <a href="https://gsvegetable.github.io/pixel-daylight-switch/">Live Demo</a> ·
+  <a href="https://gsvegetable.github.io/pixel-daylight-switch/playground.html">Interactive Playground</a> ·
+  <a href="https://github.com/GSvegetable/pixel-daylight-switch/releases">Releases</a> ·
+  <a href="https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable">NPM</a>
 </p>
 
-**中文文档在前，English documentation is below.** [跳转到 English](#english)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f7f248a5-c39c-432c-92f6-73237abdfe6b" width="49%" alt="Pixel Daylight Switch in daytime" />
+  <img src="https://github.com/user-attachments/assets/b2e24e65-a378-4ac6-be7b-efd3070e4da8" width="49%" alt="Pixel Daylight Switch at night" />
+</p>
+
+<p align="center">
+  <em>Drag the glass control. Watch a small world move from day to dusk to night.</em>
+</p>
+
+**中文文档在前。** [English documentation](#english)
+
+---
 
 ## 目录
 
+- [项目简介](#项目简介)
 - [快速开始](#快速开始)
-- [参数实验室](#参数实验室-playground)
-- [HTML 参数配置](#html-参数配置)
-- [交互与页面主题](#交互与页面主题)
-- [自定义外观](#自定义外观)
-- [动态挂载](#动态挂载)
-- [兼容性与本地开发](#兼容性与本地开发)
-- [更新记录](#更新记录)
+- [NPM 安装](#npm-安装)
+- [框架集成](#框架集成)
+- [参数实验室 Playground](#参数实验室-playground)
+- [配置参数](#配置参数)
+- [交互与事件](#交互与事件)
+- [自定义主题](#自定义主题)
+- [动态挂载与卸载](#动态挂载与卸载)
+- [渲染与兼容性](#渲染与兼容性)
+- [本地开发与测试](#本地开发与测试)
+- [版本记录](#版本记录)
 - [许可证](#许可证)
+
+## 项目简介
+
+**Pixel Daylight Switch** 是一个可拖动的昼夜切换组件。它把一个持续变化的像素世界放进玻璃开关中：拖动滑块，场景会经过白天、黄昏并进入夜晚；点击或使用键盘也可以切换昼夜。
+
+### 特性
+
+- **像素世界**：场景中有持续活动的像素角色与环境细节。
+- **玻璃质感**：使用 WebGL2 绘制折射玻璃效果。
+- **五种场景**：乡村小屋、日本街道、现代公寓、海边灯塔、山间木屋。
+- **昼夜过渡**：不是简单的二态换色，而是连续的昼夜变化。
+- **可配置**：通过 HTML `data-*` 属性配置运动、玻璃、天气和场景。
+- **多实例**：同一页面可以放置多个独立开关。
+- **轻量接入**：原生脚本无需构建工具或运行时依赖。
+- **无障碍支持**：提供 switch 语义、键盘操作，并尊重减少动态效果偏好。
 
 ## 快速开始
 
-无需 npm、依赖安装或构建步骤。把下面两行放进 HTML：
+不使用 NPM，也不需要安装依赖。把容器和脚本放进 HTML：
 
 ```html
 <div data-ld-part="toggle-daylight"></div>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+
+<script
+  defer
+  src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"
+></script>
 ```
 
-脚本会自动创建组件内部的 Canvas、交互区域和辅助无障碍元素。组件宽度跟随父容器，高度保持固定比例。一个页面可以放置多个独立实例。
+脚本会自动为每个匹配的容器创建 Canvas、交互按钮和状态播报元素。容器宽度会自适应父级，组件保持约 **1.6439:1** 的宽高比。
 
-如果你需要离线部署，也可以直接下载仓库中的 `app.js` 并自行托管。
+如果需要自行托管，可以下载仓库中的 `app.js`，将脚本地址替换为自己的静态资源地址。
 
-### 使用 NPM
-
-适合 Vite、Webpack、Rspack 等构建项目：
+## NPM 安装
 
 ```bash
 npm install pixel-daylight-switch-gsvegetable
 ```
 
-**原生 JavaScript / ESM**
+### 原生 JavaScript / ESM
 
 ```js
 import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
-const root = document.querySelector('[data-ld-part="toggle-daylight"]');
-PixelDaylightSwitch.mount(root);
+const root = document.querySelector(
+  '[data-ld-part="toggle-daylight"]'
+);
 
-// 页面卸载或组件移除前
+// 页面加载后动态创建的元素需要手动挂载
+const destroy = PixelDaylightSwitch.mount(root);
+
+// 不再使用时，在移除元素前卸载
 PixelDaylightSwitch.unmount(root);
 ```
 
-**React**
+也可以使用命名导入：
+
+```js
+import { mount, unmount } from 'pixel-daylight-switch-gsvegetable';
+
+mount(root);
+unmount(root);
+```
+
+### CommonJS
+
+```js
+const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
+
+PixelDaylightSwitch.mount(root);
+```
+
+包同时提供 ESM 和 CommonJS 入口。模块可以在 SSR 环境中导入；DOM 挂载只会在浏览器中执行。对于服务端渲染项目，请在客户端生命周期中调用 `mount()`。
+
+## 框架集成
+
+### React
 
 ```jsx
 import { useEffect, useRef } from 'react';
@@ -71,6 +126,8 @@ export function DaylightSwitch() {
 
   useEffect(() => {
     const root = rootRef.current;
+    if (!root) return;
+
     PixelDaylightSwitch.mount(root);
     return () => PixelDaylightSwitch.unmount(root);
   }, []);
@@ -79,7 +136,7 @@ export function DaylightSwitch() {
 }
 ```
 
-**Vue 3**
+### Vue 3
 
 ```vue
 <script setup>
@@ -87,8 +144,14 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = ref(null);
-onMounted(() => PixelDaylightSwitch.mount(root.value));
-onBeforeUnmount(() => PixelDaylightSwitch.unmount(root.value));
+
+onMounted(() => {
+  PixelDaylightSwitch.mount(root.value);
+});
+
+onBeforeUnmount(() => {
+  PixelDaylightSwitch.unmount(root.value);
+});
 </script>
 
 <template>
@@ -96,45 +159,75 @@ onBeforeUnmount(() => PixelDaylightSwitch.unmount(root.value));
 </template>
 ```
 
-NPM 入口同时提供 CommonJS 与 ESM。导入在服务端渲染环境中不会访问 DOM；实际挂载应在浏览器端执行。
+### Svelte
+
+```svelte
+<script>
+  import { onMount } from 'svelte';
+  import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
+
+  let root;
+
+  onMount(() => {
+    PixelDaylightSwitch.mount(root);
+    return () => PixelDaylightSwitch.unmount(root);
+  });
+</script>
+
+<div bind:this={root} data-ld-part="toggle-daylight"></div>
+```
+
+> **生命周期原则：** 对于框架或路由动态创建的容器，在元素进入 DOM 后调用 `mount(element)`；在元素被移除前调用 `unmount(element)`。不要在同一个容器上重复创建自己的实例。
 
 ## 参数实验室 Playground
 
-**不想手动试参数？打开 [Pixel Daylight Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)。**
+打开 [Pixel Daylight Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)，可以在浏览器中试验组件配置。
 
-- 左侧实时预览组件，直接拖动开关测试手感。
-- 右侧按「运动反馈、玻璃光学、世界节奏、场景环境」四组调整参数。
-- 使用场景预设快速切换乡村小屋、日本街道、现代公寓、海边灯塔和山间木屋。
-- 调整参数时只更新数值；点击「应用参数」后才刷新独立预览，避免拖动滑块时反复重建 WebGL。
-- 预览运行在独立页面中，与控制面板隔离，减少渲染状态互相干扰。
+- 拖动预览区中的开关，直接体验交互。
+- 按运动反馈、玻璃光学、世界节奏和场景环境调整参数。
+- 在五种像素场景之间切换。
+- 选择天气、初始昼夜状态与世界时间倍率。
+- 先调整参数，再点击「应用参数」更新预览。
+- 复制生成的 HTML 配置，放入自己的项目。
 
-Playground 是独立页面，不会改变组件本身的零依赖接入方式。
+Playground 是独立页面。它用于探索配置，不是组件运行时的依赖。
 
-## HTML 参数配置
+## 配置参数
 
-所有参数都写在组件容器的 `data-*` 属性上。每个实例可以使用不同配置。参数可省略；缺失、空值或无效数值会回退到默认值。
+所有配置都写在组件根元素的 HTML `data-*` 属性上。每个实例可以使用不同参数；未填写的参数使用默认值。
 
-### 全部参数
+### 完整参数表
 
-| HTML 属性 | 默认值 | 作用 |
+| HTML 属性 | 默认值 | 说明 |
 | --- | ---: | --- |
-| `data-speed` | `9.5` | 开关运动的基础速度 |
-| `data-refraction` | `1.24` | 玻璃镜片的折射强度 |
-| `data-bezel` | `0.046` | 外框厚度系数，相对于开关高度 |
-| `data-start-night` | `false` | 设置为 `true` 时，初始化为夜晚状态 |
-| `data-friction` | `0.6` | 松手后的惯性阻尼，范围 `0.1–0.9`；越小越容易继续滑动 |
-| `data-bounce` | `3.2` | 滑块到达边缘时的回弹力度；越大弹性反馈越明显 |
-| `data-dispersion` | `0.05` | 玻璃边缘 RGB 色散强度，范围 `0–0.25`；设为 `0` 可关闭彩虹边 |
-| `data-shine` | `0.44` | 白天玻璃表面高光强度，范围 `0–1.5` |
-| `data-time-speed` | `1.0` | 像素世界时间倍率，范围 `0–8`；`0` 冻结世界动态，`2` 为两倍速度 |
-| `data-weather` | `default` | 天气预设：`default` 或 `snow`；雪天会出现飘落的像素雪花 |
-| `data-scene` | `countryside` | 世界场景：`countryside`、`japanese-street`、`apartment`、`seaside` 或 `mountain-cabin` |
+| `data-speed` | `9.5` | 开关运动的基础响应速度，必须为正数。 |
+| `data-refraction` | `1.24` | 玻璃镜片折射强度，必须为正数。 |
+| `data-bezel` | `0.046` | 玻璃边缘厚度系数，必须为正数。 |
+| `data-start-night` | `false` | 精确设置为 `true` 时，从夜晚状态开始。 |
+| `data-friction` | `0.6` | 松手后的惯性阻尼，范围 `0.1–0.9`；值越低，滑动越持久。 |
+| `data-bounce` | `3.2` | 边缘回弹力度，范围 `0–12`。 |
+| `data-dispersion` | `0.05` | 玻璃边缘 RGB 色散强度，范围 `0–0.25`；`0` 关闭色散。 |
+| `data-shine` | `0.44` | 白天玻璃表面高光强度，范围 `0–1.5`。 |
+| `data-time-speed` | `1` | 像素世界时间倍率，范围 `0–8`；`0` 冻结世界动态，`2` 为两倍速度。 |
+| `data-weather` | `default` | 天气预设：`default` 或 `snow`。 |
+| `data-scene` | `countryside` | 场景：`countryside`、`japanese-street`、`apartment`、`seaside`、`mountain-cabin`。 |
+
+### 场景选项
+
+| 值 | 场景 |
+| --- | --- |
+| `countryside` | 乡村小屋（默认） |
+| `japanese-street` | 日本街道 |
+| `apartment` | 现代公寓 |
+| `seaside` | 海边灯塔 |
+| `mountain-cabin` | 山间木屋 |
 
 ### 完整配置示例
 
 ```html
 <div
   data-ld-part="toggle-daylight"
+  data-label="昼夜环境切换"
   data-speed="12"
   data-refraction="1.5"
   data-bezel="0.05"
@@ -148,58 +241,39 @@ Playground 是独立页面，不会改变组件本身的零依赖接入方式。
   data-scene="mountain-cabin"
 ></div>
 
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script
+  defer
+  src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"
+></script>
 ```
 
-### 参数分组与调校建议
+### 参数校验规则
 
-**运动反馈 / Motion**
+- 数值参数为空、不是有限数字或不符合正数要求时，会回退到默认值。
+- `friction`、`bounce`、`dispersion`、`shine` 和 `time-speed` 会限制在表格所示范围内。
+- 未知的 `weather` 值回退为 `default`。
+- 未知的 `scene` 值回退为 `countryside`。
+- `data-start-night` 只有值为字符串 `true` 时才启用。
 
-- `data-speed` 控制开关运动的基础速度。
-- `data-friction` 控制松手后的惯性衰减。较小的值更滑，较大的值更黏。
-- `data-bounce` 控制滑块触及边缘时的回弹力度。
+## 交互与事件
 
-**玻璃光学 / Glass Optics**
+### 用户交互
 
-- `data-refraction` 控制镜片折射强度。
-- `data-bezel` 控制镜片外框厚度。
-- `data-dispersion` 控制边缘色散。数值越大，彩虹色边缘越明显。
-- `data-shine` 控制白天镜片高光。
+- **拖动**：连续控制昼夜进度。
+- **点击**：在白天和夜晚之间切换。
+- **键盘**：聚焦开关后可使用方向键操作。
+- **无障碍**：交互按钮使用 `role="switch"` 与 `aria-checked`；状态变化通过 live region 播报。
+- **减少动态效果**：尊重系统的 `prefers-reduced-motion` 设置。
 
-**世界节奏 / World Rhythm**
+### 读取昼夜进度
 
-- `data-time-speed="0"` 可以冻结世界时间和动态。
-- `data-time-speed="2"` 会让世界模拟以两倍速度运行。
-- `data-weather="snow"` 开启飘雪；省略或填写其他值时使用默认天气。
-- `data-scene` 选择完整的像素环境：乡村、日本街道、公寓室内、海边或山间木屋。
-- `data-start-night="true"` 让组件从夜晚开始。
+组件会在根元素上更新 CSS 自定义属性 `--night`：
 
-### 默认值与兼容性
+- `0`：白天。
+- `1`：夜晚。
+- `0` 到 `1` 之间：昼夜过渡。
 
-场景、天气和初始昼夜状态归入「场景环境」；它们不是连续数值，因此使用选择器与开关，而不是滑动条。
-
-如果只写：
-
-```html
-<div data-ld-part="toggle-daylight"></div>
-```
-
-组件会使用默认参数。v1.2.0 的新增参数默认值与 v1.1.0 的原有参数保持一致，未配置新属性时不会主动改变原有视觉设定。数值参数会进行数字转换、有效性检查和范围限制；未知天气值回退到 `default`。
-
-## 交互与页面主题
-
-- **拖动**：拖动滑块，让世界从白天经过黄昏进入夜晚。
-- **点击**：点击开关，在白天和夜晚之间切换。
-- **键盘**：聚焦开关后使用方向键调整。
-- **无障碍**：使用 switch 语义，并尊重系统的减少动态效果偏好。
-
-组件会把当前夜晚程度写入根元素的 CSS 自定义属性 `--night`：
-
-- `0` 表示白天；
-- `1` 表示夜晚；
-- 中间值表示昼夜过渡。
-
-例如，让页面背景跟随开关变化：
+可以用它联动页面其他部分：
 
 ```css
 body {
@@ -211,17 +285,30 @@ body {
 }
 ```
 
-如果只需要在昼夜状态变化时执行逻辑，可以监听事件：
+### 监听状态事件
+
+组件在昼夜状态发生变化时，会在组件根元素上派发可冒泡的 `daylight:change` 事件。事件的 `detail.night` 是布尔值。
 
 ```js
 document.addEventListener('daylight:change', (event) => {
-  document.documentElement.classList.toggle('dark', event.detail.night);
+  document.documentElement.classList.toggle(
+    'dark',
+    event.detail.night
+  );
 });
 ```
 
-## 自定义外观
+如果页面有多个实例，建议在单个根元素上监听，以区分具体是哪一个开关触发了事件：
 
-在组件容器上覆盖 CSS 自定义属性：
+```js
+root.addEventListener('daylight:change', (event) => {
+  console.log('当前是否为夜晚：', event.detail.night);
+});
+```
+
+## 自定义主题
+
+在组件根元素上覆盖以下 CSS 自定义属性：
 
 ```css
 [data-ld-part="toggle-daylight"] {
@@ -230,142 +317,212 @@ document.addEventListener('daylight:change', (event) => {
   --ld-fg: #1b2146;
   --ld-muted: #7f97b3;
   --ld-accent: #efa02c;
+  --ld-radius: 9999px;
+  --ld-font: system-ui, sans-serif;
 }
 ```
 
 | CSS 变量 | 默认值 | 用途 |
 | --- | --- | --- |
-| `--ld-bg` | `#f5ecd9` | 背景色 |
-| `--ld-surface` | `#8c9a62` | 表面与场景色 |
-| `--ld-fg` | `#1b2146` | 前景色 |
+| `--ld-bg` | `#f5ecd9` | 背景调色输入 |
+| `--ld-surface` | `#8c9a62` | 表面与场景调色输入 |
+| `--ld-fg` | `#1b2146` | 前景颜色 |
 | `--ld-muted` | `#7f97b3` | 次要颜色 |
-| `--ld-accent` | `#efa02c` | 强调色 |
+| `--ld-accent` | `#efa02c` | 强调色与焦点颜色 |
+| `--ld-radius` | `9999px` | 交互区域圆角 |
+| `--ld-font` | `system-ui, sans-serif` | 组件字体 |
+| `--ld-space` | `8px` | 焦点轮廓偏移相关尺寸 |
+| `--ld-shadow` | `0 8px 24px rgb(27 33 70 / .2)` | 主题预留变量 |
+| `--ld-motion` | `200ms` | 焦点轮廓过渡时长 |
 
-## 动态挂载
+## 动态挂载与卸载
 
-如果组件容器是在页面加载后动态创建的，可以手动挂载：
+页面加载时，脚本会自动查找已有的 `[data-ld-part="toggle-daylight"]` 元素并挂载。对于之后动态创建的元素，调用公开 API：
 
 ```js
-const destroy = PixelDaylightSwitch.mount(element);
+const root = document.createElement('div');
+root.dataset.ldPart = 'toggle-daylight';
+document.querySelector('#app').appendChild(root);
 
-// 不再需要时：
-PixelDaylightSwitch.unmount(element);
+const destroy = PixelDaylightSwitch.mount(root);
+
+// 需要移除时：
+PixelDaylightSwitch.unmount(root);
+root.remove();
 ```
 
-## 兼容性与本地开发
+`mount(element)` 对同一元素是幂等的：重复调用不会创建重复实例。成功挂载时会返回清理函数；如果挂载失败则返回 `null`。通常使用 `unmount(element)` 即可完成清理。
 
-- 优先使用 WebGL2 渲染玻璃效果；不可用时回退到 Canvas 2D。
-- 支持减少动态效果偏好。
-- 页面不可见或组件离开视口时会暂停不必要的绘制。
-- 不需要构建工具。
+卸载会停止绘制并释放组件持有的事件监听器和观察器。它不会移除根元素本身。
 
-本地运行：
+## 渲染与兼容性
+
+- **WebGL2**：用于绘制玻璃折射效果。
+- **Canvas 2D**：WebGL2 不可用时作为渲染回退。
+- **响应式布局**：组件保持固定宽高比，并随容器宽度缩放。
+- **页面可见性**：页面隐藏或组件离开视口时，会暂停不必要的绘制。
+- **减少动态效果**：支持系统减少动态效果偏好。
+- **运行时依赖**：原生脚本不需要第三方运行时依赖。
+
+组件需要现代浏览器提供 Canvas 2D；WebGL2 用于增强玻璃渲染体验。
+
+## 本地开发与测试
+
+克隆项目：
 
 ```bash
 git clone https://github.com/GSvegetable/pixel-daylight-switch.git
 cd pixel-daylight-switch
 ```
 
-使用浏览器打开 `index.html` 即可。主要文件：
+直接用浏览器打开 `index.html` 即可查看基础演示。项目无需打包构建。
 
-- `app.js`：组件实现。
-- `index.html`：基础演示页面。
-- `playground.html`：参数实验室与场景切换。
+### 自动化测试
 
-## 更新记录
+运行包入口、CommonJS / ESM 和 SSR 安全检查：
+
+```bash
+npm test
+```
+
+浏览器回归测试使用 Playwright。安装测试运行器和 Chromium 后执行：
+
+```bash
+npm install --no-save @playwright/test@1.56.1
+npx playwright install chromium
+npm run test:browser
+```
+
+CI 会在 Node.js 18、20、22 下执行包与 SSR 检查，并在 Chromium 中运行交互、重复挂载/卸载、多实例、事件监听器清理和移动端回归测试。
+
+## 版本记录
+
+### v1.3.1
+
+- 修复组件卸载时主动销毁 WebGL context，导致同一 canvas/root 后续重新挂载可能异常的问题。
+- 保留组件资源、事件监听器与观察器的清理，同时允许 canvas 在卸载后重新挂载。
+- 增加 CommonJS、ESM、SSR、Node.js 18/20/22 和 Chromium 浏览器自动化检查。
+- 增加重复挂载、多实例、指针交互、触控、移动端布局与监听器清理测试。
+- 将浏览器回归纳入 NPM 发布前置检查。
 
 ### v1.3.0
 
-- 新增四个独立像素环境：日本街道、现代公寓、海边灯塔和山间木屋。
-- Playground 新增真实场景选择，可与玻璃参数、昼夜和天气效果组合。
+- 新增日本街道、现代公寓、海边灯塔和山间木屋四种像素环境。
+- 保留乡村小屋作为默认场景。
+- Playground 支持切换场景并组合调整天气、昼夜和玻璃参数。
 
 ### v1.2.0
 
-本次版本包含两轮未发布的更新：
-
-- 新增物理参数：惯性阻尼与边缘回弹。
-- 新增液态玻璃参数：色散与表面高光。
-- 新增世界时间倍率和像素飘雪天气。
-- 新增独立 Playground，可实时调节参数、套用预设并复制 HTML。
-- 重组 README，将中文说明置于文档顶部，并提供中英文跳转。
+- 新增惯性阻尼、边缘回弹、玻璃色散和表面高光参数。
+- 新增世界时间倍率与飘雪天气。
+- 新增独立 Playground，支持参数分组、场景预设和 HTML 代码复制。
 
 ### v1.1.0
 
-- 新增动画速度、镜片折射、外框厚度和初始夜晚状态的 HTML 参数配置。
+- 新增运动速度、镜片折射、外框厚度和初始夜晚状态配置。
 
 ### v1.0.0
 
 - 首个公开版本。
 
+详细记录见 [CHANGELOG.md](./CHANGELOG.md)。
+
 ## 许可证
 
-[Unlicense](https://unlicense.org/) — 公有领域协议。允许自由使用，包括商业用途，无需署名。
+本项目使用 [Unlicense](https://unlicense.org/) 公有领域协议。允许个人和商业用途，无需署名。
 
 ---
 
+<a id="english"></a>
+
 ## English
 
-A draggable day/night switch with a tiny pixel world living inside the glass. Move the switch to transition between daylight, dusk, and night.
+**Pixel Daylight Switch** is a draggable day/night UI component with a tiny animated pixel world inside a refractive glass lens. Drag the control to move through daylight, dusk, and night.
 
-**Quick links:** [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/) · [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) · [Releases](https://github.com/GSvegetable/pixel-daylight-switch/releases)
+### Features
+
+- An animated pixel environment inside a glass switch.
+- WebGL2 refraction rendering with a Canvas 2D fallback.
+- Five scenes: countryside, Japanese street, modern apartment, seaside lighthouse, and mountain cabin.
+- Continuous day/night transitions, pointer dragging, click, and keyboard interaction.
+- Per-instance HTML data attributes for motion, optics, weather, and scene settings.
+- Multiple independent instances on the same page.
+- No runtime dependencies for the standalone script.
+- Accessible switch semantics and reduced-motion support.
 
 ### Quick start
 
-No npm, dependencies, or build step required:
+No package manager or build step is required:
 
 ```html
 <div data-ld-part="toggle-daylight"></div>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+
+<script
+  defer
+  src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"
+></script>
 ```
 
-The script creates the internal canvas, interaction target, and accessibility elements. The component is responsive and supports multiple independent instances on one page.
+The script automatically mounts matching elements. It creates the internal canvas, interaction button, and live status region. The component scales with its container and keeps an aspect ratio of approximately **1.6439:1**.
 
-### NPM installation
+### NPM
 
 ```bash
 npm install pixel-daylight-switch-gsvegetable
 ```
 
-ESM / native build tools:
+ESM:
 
 ```js
 import PixelDaylightSwitch from 'pixel-daylight-switch-gsvegetable';
 
 const root = document.querySelector('[data-ld-part="toggle-daylight"]');
 PixelDaylightSwitch.mount(root);
-// Before removing the root:
+
+// Before removing the element:
 PixelDaylightSwitch.unmount(root);
 ```
 
-React and Vue 3 integrations should call `mount(element)` after the element is created and `unmount(element)` before it is removed. The package exposes both ESM and CommonJS entry points and is safe to import during SSR; mount only in the browser.
+CommonJS:
 
-### Interactive Playground
+```js
+const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
+```
 
-Open the [Pixel Daylight Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) to tune all component settings visually, try presets, preview changes, and copy generated HTML.
+The package provides ESM and CommonJS entry points and is safe to import in SSR environments. Call `mount()` only after the element exists in the browser.
 
-### HTML configuration
+### Framework integration
 
-All settings are optional and configured per instance using `data-*` attributes.
+For React, Vue 3, and Svelte, mount the component in the client-side lifecycle and call `unmount(element)` during cleanup. See the complete examples in the [Chinese documentation above](#框架集成).
+
+### Playground
+
+Use the [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) to adjust motion, glass optics, world speed, weather, and scenes. Apply settings to the preview and copy the generated HTML.
+
+### Configuration
+
+All settings are optional and belong on the component root.
 
 | Attribute | Default | Description |
 | --- | ---: | --- |
-| `data-speed` | `9.5` | Base switch motion speed. |
-| `data-refraction` | `1.24` | Glass lens refraction strength. |
-| `data-bezel` | `0.046` | Bezel thickness relative to component height. |
-| `data-start-night` | `false` | Initialize in night mode when set to `true`. |
-| `data-friction` | `0.6` | Release inertia damping; lower values feel more slippery. |
-| `data-bounce` | `3.2` | Rebound impulse at the switch edges. |
-| `data-dispersion` | `0.05` | RGB chromatic dispersion at the glass edge; `0` disables it. |
-| `data-shine` | `0.44` | Daytime glass highlight intensity. |
-| `data-time-speed` | `1.0` | World simulation speed; `0` freezes world dynamics and `2` doubles the speed. |
-| `data-weather` | `default` | Weather preset: `default` or `snow`. |
-| `data-scene` | `countryside` | Pixel environment: `countryside`, `japanese-street`, `apartment`, `seaside`, or `mountain-cabin`. |
+| `data-speed` | `9.5` | Base motion response speed; positive number. |
+| `data-refraction` | `1.24` | Glass lens refraction strength; positive number. |
+| `data-bezel` | `0.046` | Glass edge thickness ratio; positive number. |
+| `data-start-night` | `false` | Start at night when exactly `true`. |
+| `data-friction` | `0.6` | Release inertia damping, clamped to `0.1–0.9`. |
+| `data-bounce` | `3.2` | Edge rebound, clamped to `0–12`. |
+| `data-dispersion` | `0.05` | RGB edge dispersion, clamped to `0–0.25`. |
+| `data-shine` | `0.44` | Daytime highlight intensity, clamped to `0–1.5`. |
+| `data-time-speed` | `1` | World simulation speed, clamped to `0–8`; zero freezes world dynamics. |
+| `data-weather` | `default` | `default` or `snow`. Unknown values use `default`. |
+| `data-scene` | `countryside` | `countryside`, `japanese-street`, `apartment`, `seaside`, or `mountain-cabin`. |
 
 Example:
 
 ```html
 <div
   data-ld-part="toggle-daylight"
+  data-label="Day and night switch"
   data-speed="12"
   data-refraction="1.5"
   data-bezel="0.05"
@@ -380,54 +537,93 @@ Example:
 ></div>
 ```
 
-Missing or invalid numeric values fall back to defaults. Unknown weather values fall back to `default`; unknown scene values fall back to `countryside`. With no new v1.2.0 or v1.3.0 attributes, the component retains the intended default appearance.
+Invalid numeric values fall back to defaults. Range-limited values are clamped. Unknown weather and scene values fall back to `default` and `countryside`, respectively.
 
-### Page theme integration
+### Events and page theme
 
-The component exposes the current night level as the `--night` CSS custom property on the root element: `0` is day, `1` is night, and intermediate values represent the transition.
+The component updates `--night` on its root element: `0` means day, `1` means night, and values in between represent the transition.
 
-```css
-body {
-  background: color-mix(in srgb, #f5ecd9, #1b2146 calc(var(--night, 0) * 100%));
-}
-```
-
-Listen for state changes with:
+It also dispatches a bubbling, composed `daylight:change` event from the component root when the day/night state changes. `event.detail.night` is a boolean:
 
 ```js
-document.addEventListener('daylight:change', (event) => {
+root.addEventListener('daylight:change', (event) => {
   document.documentElement.classList.toggle('dark', event.detail.night);
 });
 ```
 
-### Theme colors
+### Theme customization
 
-Override `--ld-bg`, `--ld-surface`, `--ld-fg`, `--ld-muted`, and `--ld-accent` on the component element to customize its palette.
+Override these CSS variables on the component root:
 
-### Dynamic mounting
-
-```js
-PixelDaylightSwitch.mount(element);
-PixelDaylightSwitch.unmount(element);
+```css
+[data-ld-part="toggle-daylight"] {
+  --ld-bg: #f5ecd9;
+  --ld-surface: #8c9a62;
+  --ld-fg: #1b2146;
+  --ld-muted: #7f97b3;
+  --ld-accent: #efa02c;
+  --ld-radius: 9999px;
+  --ld-font: system-ui, sans-serif;
+}
 ```
 
-### Browser support
+Supported variables: `--ld-bg`, `--ld-surface`, `--ld-fg`, `--ld-muted`, `--ld-accent`, `--ld-radius`, `--ld-font`, `--ld-space`, `--ld-shadow`, and `--ld-motion`.
 
-WebGL2 is used for the glass effect when available, with Canvas 2D as a fallback. The component respects reduced-motion preferences and pauses unnecessary rendering when hidden or offscreen.
+### Mounting and cleanup
 
-### Development
+Elements present when the script loads are mounted automatically. For elements created later:
+
+```js
+const destroy = PixelDaylightSwitch.mount(element);
+
+// Before removing the root:
+PixelDaylightSwitch.unmount(element);
+element.remove();
+```
+
+Mounting the same element more than once is safe and does not create duplicate instances. A successful `mount()` returns a cleanup function; a failed mount returns `null`. `unmount()` stops rendering and removes the component's listeners and observers without removing the root element.
+
+### Rendering and browser behavior
+
+- WebGL2 is used for the refractive glass effect.
+- Canvas 2D is the rendering fallback when WebGL2 is unavailable.
+- The component respects `prefers-reduced-motion`.
+- Unnecessary drawing pauses when the page is hidden or the component is offscreen.
+- The standalone runtime has no third-party dependencies.
+
+### Development and tests
 
 ```bash
 git clone https://github.com/GSvegetable/pixel-daylight-switch.git
 cd pixel-daylight-switch
 ```
 
-Open `index.html` in a modern browser. No build step is needed.
+Open `index.html` in a modern browser. No build step is required.
 
-### Version status
+Run package and SSR checks:
 
-v1.3.0 adds four new pixel environments and a reorganized Playground. See [CHANGELOG.md](./CHANGELOG.md) for the detailed history.
+```bash
+npm test
+```
+
+Run browser regression tests after installing Playwright and Chromium:
+
+```bash
+npm install --no-save @playwright/test@1.56.1
+npx playwright install chromium
+npm run test:browser
+```
+
+### Version history
+
+- **v1.3.1** — lifecycle/remount stability fix and expanded automated regression coverage.
+- **v1.3.0** — four additional pixel environments and scene selection in Playground.
+- **v1.2.0** — motion, optics, world-speed, weather settings, and the standalone Playground.
+- **v1.1.0** — initial HTML configuration options.
+- **v1.0.0** — first public release.
+
+See [CHANGELOG.md](./CHANGELOG.md) for details.
 
 ### License
 
-[Unlicense](https://unlicense.org/) — public domain. Free for personal and commercial use without attribution.
+[Unlicense](https://unlicense.org/) — public-domain dedication. Free for personal and commercial use without attribution.
