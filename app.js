@@ -824,7 +824,7 @@ function mount(root) {
   on(canvas, 'webglcontextrestored', () => { if (ctx2d) return; clearTimeout(restoreTimer); lost = false; ready = setupGl(); if (!ready) useCanvas2d(); redrawAll(); });
   readPalette(); measure(); if (lost) waitForRestore(); res.x = 131; res.inside = false;
   renderWorld(clockOf(), 0, 0); if (ready) uploadWorld(); if (startNight) { commit(1); dirty = true; } wake();
-  return () => { stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); for (const off of cleanups) off(); if (gl && ready) { gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); gl.deleteTexture(texWorld); gl.deleteTexture(texNear); const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext(); } };
+  return () => { stopDrawing(); clearTimeout(restoreTimer); visible = false; io.disconnect(); ro.disconnect(); for (const off of cleanups) off(); if (gl && ready) { gl.deleteProgram(program); gl.deleteBuffer(quad); gl.deleteVertexArray(vao); gl.deleteTexture(texWorld); gl.deleteTexture(texNear); } };
 }
 const SELECTOR = '[data-ld-part="toggle-daylight"]';
 const STYLE_ID = 'ld-toggle-daylight-style';
