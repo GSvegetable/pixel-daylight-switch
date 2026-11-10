@@ -2,6 +2,10 @@
  * Native app shell only. The renderer, shader, scene data and interaction
  * implementation remain in the shared root app.js and style.css.
  */
+html {
+  background: #eef1f5 !important;
+}
+
 html,
 body.mobile-app {
   box-sizing: border-box;
