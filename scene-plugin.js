@@ -1,5 +1,5 @@
 (function (root, factory) {
-  const api = factory();
+  const api = root && root.PixelDaylightSwitchScenePlugins ? root.PixelDaylightSwitchScenePlugins : factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) {
     root.PixelDaylightSwitchScenePlugins = api;
