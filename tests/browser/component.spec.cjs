@@ -74,7 +74,7 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
     status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
   }));
   await page.goto('/playground.html');
-  await expect(page.locator('#previewA canvas.scene')).toHaveCount(1);
+  await expect(page.locator('#previewB canvas.scene')).toHaveCount(1);
   const widths = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     document: document.documentElement.scrollWidth,
