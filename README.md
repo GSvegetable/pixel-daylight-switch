@@ -164,14 +164,26 @@ The repository includes Capacitor 8 build paths for Android and iOS. The mobile 
 
 Build setup and commands are documented in the repository scripts and mobile configuration. Build success should not be interpreted as proof of compatibility on every physical device. Android real-device validation is ongoing; iOS simulator build support is included, but this repository does not provide a signed App Store IPA.
 
-### Project links
+### Project hub
 
-- [Live Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)
-- [GitHub repository](https://github.com/GSvegetable/pixel-daylight-switch)
-- [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
-- [Changelog](CHANGELOG.md)
-- [License](LICENSE)
-- [Issue tracker](https://github.com/GSvegetable/pixel-daylight-switch/issues)
+Start here based on what you want to do — no need to browse the repository manually.
+
+| I want to… | Open |
+| --- | --- |
+| **Try the switch** | [Live interactive demo](https://gsvegetable.github.io/pixel-daylight-switch/) |
+| **Tune every visual parameter** | [Parameter Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
+| **See the component preview** | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| **Embed it on my own website** | [Embed instructions and loader](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/embed.js) |
+| **Install it in a JavaScript project** | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) · `npm install pixel-daylight-switch-gsvegetable` |
+| **Read the source code** | [Core renderer](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/app.js) · [Styles](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/style.css) |
+| **Download a mobile build** | [Mobile build notes and artifacts](builds/README.md) |
+| **See what changed** | [Changelog](CHANGELOG.md) |
+| **Check automated test results** | [Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| **Get Android / iOS build status** | [Native mobile builds](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| **Report a bug or request a feature** | [Open an issue](https://github.com/GSvegetable/pixel-daylight-switch/issues/new/choose) |
+| **Review license and reuse terms** | [Unlicense](LICENSE) |
+
+**Quick choices:** [Try it now](https://gsvegetable.github.io/pixel-daylight-switch/) · [Customize it](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) · [Install with npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
 
 ### License
 
@@ -332,14 +344,85 @@ GitHub Actions 会在 Node.js 18、20、22 环境中运行包与 SSR 检查，�
 
 构建成功不等于所有实体设备均已通过兼容性验证。Android 真机验证仍在进行；项目包含 iOS 模拟器构建支持，但不提供已签名的 App Store IPA。
 
-### 项目链接
+### 项目入口｜按用途直达
 
-- [在线参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)
-- [GitHub 仓库](https://github.com/GSvegetable/pixel-daylight-switch)
-- [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
-- [更新日志](CHANGELOG.md)
-- [许可证](LICENSE)
-- [问题反馈](https://github.com/GSvegetable/pixel-daylight-switch/issues)
+把常用入口放在这里，不需要进入仓库后再一层层寻找。
+
+| 你想做什么 | 直接打开 |
+| --- | --- |
+| **直接体验昼夜开关** | [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/) |
+| **调整场景、玻璃和运动参数** | [参数实验室 Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
+| **查看组件预览页** | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| **嵌入到自己的网站** | [嵌入脚本 embed.js](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/embed.js) |
+| **在项目中安装使用** | [npm 包页面](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) · `npm install pixel-daylight-switch-gsvegetable` |
+| **阅读核心实现** | [核心渲染器 app.js](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/app.js) · [样式 style.css](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/style.css) |
+| **获取 Android / iOS 构建产物** | [移动端构建说明与产物](builds/README.md) |
+| **查看版本更新记录** | [CHANGELOG](CHANGELOG.md) |
+| **查看自动化测试是否通过** | [Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| **查看 Android / iOS 构建状态** | [Native mobile builds](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| **反馈 Bug 或提出新功能** | [创建 Issue](https://github.com/GSvegetable/pixel-daylight-switch/issues/new/choose) |
+| **了解授权和使用范围** | [Unlicense 许可证](LICENSE) |
+
+**最常用的三个入口：** [立即体验](https://gsvegetable.github.io/pixel-daylight-switch/) · [开始调参](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) · [npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
+
+### 项目结构｜Repository map
+
+下面是仓库当前的主要目录与文件。按功能分组，方便开发者直接定位，不把依赖、构建缓存等非源码内容混进来。
+
+```text
+pixel-daylight-switch/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml                 # Node / SSR / Chromium 自动化测试
+│       ├── mobile-build.yml       # Android 与 iOS 构建流程
+│       └── npm-publish.yml        # 发布到 npm 的工作流
+│
+├── assets/
+│   └── scene-gallery.png          # 五种像素场景展示图
+│
+├── builds/
+│   └── README.md                  # 移动端构建产物说明
+│
+├── mobile/
+│   ├── index.html                 # Capacitor 移动端入口
+│   └── mobile.css                 # 移动端专用样式
+│
+├── scripts/
+│   └── prepare-mobile.cjs         # 移动端资源准备脚本
+│
+├── tests/
+│   ├── browser/
+│   │   └── component.spec.cjs     # 浏览器交互与移动端回归测试
+│   ├── fixture.html               # 浏览器测试页面
+│   ├── mobile-smoke.cjs           # 移动端准备检查
+│   ├── package-smoke.cjs          # npm / SSR 入口检查
+│   └── server.cjs                 # 本地测试服务器
+│
+├── app.js                         # 核心组件、像素世界与渲染逻辑
+├── style.css                      # 组件基础样式
+├── embed.js                       # 独立网站嵌入加载器
+├── index.mjs                      # ESM 包入口
+├── index.cjs                      # CommonJS 包入口
+├── index.html                     # 项目主页 / 在线入口
+├── preview.html                   # 组件预览页面
+├── playground.html                # 可交互参数实验室
+├── playwright.config.cjs          # Playwright 浏览器测试配置
+├── capacitor.config.json          # Capacitor 配置
+├── package.json                   # npm 元数据、导出与脚本
+├── CHANGELOG.md                   # 版本变更记录
+├── llms.txt                       # 面向 AI 工具的项目说明
+├── LICENSE                        # Unlicense
+└── README.md                      # 项目文档
+```
+
+**从哪里开始阅读代码？**
+
+- 想理解组件如何工作：从 `app.js` 开始。
+- 想调整视觉外观：查看 `style.css` 和 `playground.html`。
+- 想研究 npm 接入：查看 `index.mjs`、`index.cjs` 和 `package.json`。
+- 想把组件嵌入普通网页：查看 `embed.js`。
+- 想修改移动端：查看 `mobile/`、`scripts/` 和 `capacitor.config.json`。
+- 想验证改动有没有破坏功能：查看 `tests/` 和 `.github/workflows/ci.yml`。
 
 ### 许可证
 
@@ -500,14 +583,26 @@ GitHub Actions は Node.js 18、20、22 でパッケージと SSR のチェッ�
 
 ビルド成功は、すべての実機での互換性確認を意味しません。Android 実機での検証は継続中です。iOS シミュレーター向けビルドには対応していますが、署名済み App Store IPA は提供していません。
 
-### リンク
+### プロジェクトへの入口
 
-- [オンライン Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)
-- [GitHub リポジトリ](https://github.com/GSvegetable/pixel-daylight-switch)
-- [npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
-- [変更履歴](CHANGELOG.md)
-- [ライセンス](LICENSE)
-- [Issue / 不具合報告](https://github.com/GSvegetable/pixel-daylight-switch/issues)
+目的に合わせて、必要なページへ直接アクセスできます。
+
+| 目的 | リンク |
+| --- | --- |
+| **スイッチを体験する** | [オンラインデモ](https://gsvegetable.github.io/pixel-daylight-switch/) |
+| **パラメーターを調整する** | [Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
+| **コンポーネントのプレビューを見る** | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| **自分のサイトに埋め込む** | [embed.js](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/embed.js) |
+| **npm からインストールする** | [npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) · `npm install pixel-daylight-switch-gsvegetable` |
+| **コア実装を読む** | [app.js](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/app.js) · [style.css](https://github.com/GSvegetable/pixel-daylight-switch/blob/main/style.css) |
+| **モバイルビルドを確認する** | [ビルド情報](builds/README.md) |
+| **変更履歴を見る** | [CHANGELOG](CHANGELOG.md) |
+| **自動テストの結果を見る** | [Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| **Android / iOS のビルド状況を見る** | [Native mobile builds](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| **不具合報告・機能提案をする** | [Issue を作成](https://github.com/GSvegetable/pixel-daylight-switch/issues/new/choose) |
+| **ライセンスを確認する** | [Unlicense](LICENSE) |
+
+**よく使う入口：** [デモ](https://gsvegetable.github.io/pixel-daylight-switch/) · [パラメーター調整](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) · [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
 
 ### ライセンス
 
