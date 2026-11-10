@@ -58,7 +58,7 @@ try {
   assert.equal(versionRun.status, 0, versionRun.stderr || versionRun.stdout);
   const gradle = fs.readFileSync(gradlePath, 'utf8');
   assert.match(gradle, /versionCode 20200/);
-  assert.match(gradle, /versionName "2\.1\.0"/);
+  assert.match(gradle, /versionName "2\.2\.0"/);
 } finally {
   fs.rmSync(tempDir, { recursive: true, force: true });
 }
