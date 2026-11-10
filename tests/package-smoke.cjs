@@ -7,17 +7,20 @@ const path = require('node:path');
 async function main() {
   const pkg = require('../package.json');
   assert.equal(pkg.name, 'pixel-daylight-switch-gsvegetable');
-  assert.equal(pkg.version, '2.2.0');
+  assert.equal(pkg.version, '3.0.0');
 
   // CommonJS import must be safe in Node/SSR without window or document.
   const cjs = require('../index.cjs');
   assert.equal(typeof cjs.mount, 'function');
   assert.equal(typeof cjs.unmount, 'function');
+  assert.equal(typeof cjs.registerScene, 'function');
+  assert.equal(typeof cjs.validateScene, 'function');
 
   // ESM import must expose the same API and remain SSR-safe.
   const esm = await import('../index.mjs');
   assert.equal(typeof esm.mount, 'function');
   assert.equal(typeof esm.unmount, 'function');
+  assert.equal(typeof esm.registerScene, 'function');
   assert.equal(esm.default, cjs);
 
   assert.equal(pkg.main, './index.cjs');
@@ -26,7 +29,7 @@ async function main() {
   assert.equal(pkg.exports['.'].require, './index.cjs');
 
   const allowed = new Set(pkg.files);
-  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'README.md', 'INTEGRATIONS.md', 'LICENSE', 'llms.txt']) {
+  for (const required of ['app.js', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'README.md', 'INTEGRATIONS.md', 'LICENSE', 'llms.txt']) {
     assert.ok(allowed.has(required), 'Missing package file: ' + required);
     assert.ok(fs.existsSync(path.join(__dirname, '..', required)), 'Missing source file: ' + required);
   }
