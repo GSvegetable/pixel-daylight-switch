@@ -154,3 +154,29 @@ test('accepts touch input in a mobile browser context', async ({ browser }) => {
   expect(errors).toEqual([]);
   await context.close();
 });
+
+
+test('playground status localization does not create a MutationObserver feedback loop', async ({ page }) => {
+  await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
+    status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
+  }));
+  await page.goto('/playground.html');
+  const mutations = await page.evaluate(async () => {
+    const node = document.querySelector('#status');
+    let count = 0;
+    const observer = new MutationObserver(records => { count += records.length; });
+    observer.observe(node, {childList:true, characterData:true, subtree:true});
+    node.textContent = '参数有变动，尚未应用';
+    await new Promise(resolve => setTimeout(resolve, 100));
+    observer.disconnect();
+    return {count, text:node.textContent};
+  });
+  expect(mutations.text).toBe('Settings changed — not applied yet');
+  expect(mutations.count).toBeLessThanOrEqual(3);
+});
+
+test('range sliders preserve vertical page scrolling on touch devices', async ({ page }) => {
+  await page.goto('/playground.html');
+  const touchAction = await page.locator('#speed').evaluate(el => getComputedStyle(el).touchAction);
+  expect(touchAction).toBe('pan-y');
+});
