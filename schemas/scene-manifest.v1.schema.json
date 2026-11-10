@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gsvegetable.github.io/pixel-daylight-switch/schemas/scene-manifest.v1.schema.json",
-  "title": "Pixel Daylight Switch Scene Manifest v1",
+  "title": "Pixel Daylight Switch Scene Manifest v1 and v2",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": 1
+      "enum": [
+        1,
+        2
+      ]
     },
     "id": {
       "type": "string",
@@ -112,6 +115,152 @@
         }
       },
       "maxItems": 48
+    },
+    "assets": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 24,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "width",
+          "height",
+          "pixels"
+        ],
+        "properties": {
+          "width": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 192
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 112
+          },
+          "pixels": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 112,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 192,
+              "pattern": "^[\\x20-\\x7E]+$"
+            }
+          }
+        }
+      }
+    },
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "asset",
+          "x",
+          "y"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,47}$"
+          },
+          "asset": {
+            "type": "string"
+          },
+          "x": {
+            "type": "integer",
+            "minimum": -192,
+            "maximum": 192
+          },
+          "y": {
+            "type": "integer",
+            "minimum": -112,
+            "maximum": 112
+          },
+          "animation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "axis",
+              "speed",
+              "distance"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "drift",
+                  "bob"
+                ]
+              },
+              "axis": {
+                "enum": [
+                  "x",
+                  "y"
+                ]
+              },
+              "speed": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 4
+              },
+              "distance": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 64
+              },
+              "phase": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 6.2832
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": 2
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ]
+      },
+      "then": {
+        "required": [
+          "assets",
+          "layers"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "assets"
+              ]
+            },
+            {
+              "required": [
+                "layers"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
 }
