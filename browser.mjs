@@ -1,11 +1,17 @@
 import './scene-plugin.js';
-import './app.js';
+
+// Browser ESM consumers need to register their scene before mounting.
+// Suppress the classic script's automatic DOM scan until the caller invokes mount().
+globalThis.__PDS_DEFER_AUTO_MOUNT__ = true;
+await import('./app.js');
+delete globalThis.__PDS_DEFER_AUTO_MOUNT__;
 
 const api = globalThis.PixelDaylightSwitch;
+const scenes = globalThis.PixelDaylightSwitchScenePlugins;
 export const mount = api.mount;
 export const unmount = api.unmount;
-export const registerScene = globalThis.PixelDaylightSwitchScenePlugins.registerScene;
-export const validateScene = globalThis.PixelDaylightSwitchScenePlugins.validateScene;
-export const getScene = globalThis.PixelDaylightSwitchScenePlugins.getScene;
-export const listScenes = globalThis.PixelDaylightSwitchScenePlugins.listScenes;
+export const registerScene = scenes.registerScene;
+export const validateScene = scenes.validateScene;
+export const getScene = scenes.getScene;
+export const listScenes = scenes.listScenes;
 export default api;
