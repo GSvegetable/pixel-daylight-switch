@@ -1367,6 +1367,13 @@ function unmountOne(root) {
 }
 function mountAll() { document.querySelectorAll(SELECTOR).forEach(mountOne); }
 const api = { mount: mountOne, unmount: unmountOne };
+if (typeof window !== 'undefined' && window.PixelDaylightSwitchScenePlugins) {
+  const sceneApi = window.PixelDaylightSwitchScenePlugins;
+  api.registerScene = sceneApi.registerScene;
+  api.validateScene = sceneApi.validateScene;
+  api.getScene = sceneApi.getScene;
+  api.listScenes = sceneApi.listScenes;
+}
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountAll, { once: true });
   else mountAll();
