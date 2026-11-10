@@ -1,6 +1,42 @@
 'use strict';
 const { test, expect } = require('@playwright/test');
 
+
+test('registers and renders a community pixel scene through the shared switch renderer', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/tests/fixture.html');
+  const result = await page.evaluate(() => {
+    const manifest = {
+      schemaVersion: 1, id: 'browser-sample', name: 'Browser Sample',
+      author: 'Test', license: 'CC0-1.0',
+      canvas: {width: 8, height: 4},
+      pixels: ['........','..cc....','..cc....','gggggggg'],
+      palettes: {
+        day: {'.':'#83c9ee','c':'#e98db5','g':'#6eaa68'},
+        night: {'.':'#171d3b','c':'#a48ac7','g':'#273f49'}
+      },
+      timeCycle: [{at:0,palette:'night'},{at:12,palette:'day'},{at:24,palette:'night'}]
+    };
+    const unregister = window.PixelDaylightSwitch.registerScene(manifest);
+    const root = document.querySelector('#switch-a');
+    window.PixelDaylightSwitch.unmount(root);
+    root.dataset.scene = manifest.id;
+    window.PixelDaylightSwitch.mount(root);
+    return {
+      registered: window.PixelDaylightSwitch.getScene(manifest.id).name,
+      listed: window.PixelDaylightSwitch.listScenes().some(scene => scene.id === manifest.id),
+      canvas: !!root.querySelector('canvas.scene'),
+      unregister: unregister()
+    };
+  });
+  expect(result.registered).toBe('Browser Sample');
+  expect(result.listed).toBeTruthy();
+  expect(result.canvas).toBeTruthy();
+  expect(result.unregister).toBeTruthy();
+  expect(errors).toEqual([]);
+});
+
 test('auto-mounts, exposes an accessible switch, and avoids duplicate markup', async ({ page }) => {
   await page.goto('/tests/fixture.html');
   const root = page.locator('#switch-a');
