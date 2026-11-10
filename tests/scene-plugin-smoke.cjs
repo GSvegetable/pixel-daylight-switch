@@ -2,8 +2,14 @@
 const assert = require('node:assert/strict');
 const plugins = require('../scene-plugin.js');
 const example = require('../examples/scenes/sakura-evening.json');
+const layered = require('../examples/scenes/floating-island.v2.json');
 
 assert.equal(plugins.schemaVersion, 1);
+assert.equal(plugins.validateScene(layered).valid, true, plugins.validateScene(layered).errors.join(' '));
+const unregisterLayered = plugins.registerScene(layered);
+assert.equal(plugins.getScene(layered.id).schemaVersion, 2);
+assert.equal(Object.isFrozen(plugins.getScene(layered.id).assets.tree.pixels), true);
+assert.equal(unregisterLayered(), true);
 assert.equal(plugins.validateScene(example).valid, true);
 const unregister = plugins.registerScene(example);
 assert.equal(plugins.getScene(example.id).name, 'Sakura Evening');
@@ -45,4 +51,10 @@ assert.match(plugins.validateScene(tooManyPalettes).errors.join(' '), /more than
 const unregisterAgain = plugins.registerScene(example);
 assert.throws(() => plugins.registerScene(example), /already registered/);
 assert.equal(unregisterAgain(), true);
-console.log('Scene plugin manifest validation and registry tests passed.');
+const badLayer = JSON.parse(JSON.stringify(layered));
+badLayer.layers[0].animation = { type: 'execute', axis: 'x', speed: 1, distance: 4 };
+assert.equal(plugins.validateScene(badLayer).valid, false);
+const missingSymbol = JSON.parse(JSON.stringify(layered));
+missingSymbol.assets.tree.pixels[0] = 'zzzzz';
+assert.equal(plugins.validateScene(missingSymbol).valid, false);
+console.log('Scene plugin v1/v2 validation, registry and motion-track tests passed.');
