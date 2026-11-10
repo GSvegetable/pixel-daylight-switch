@@ -232,6 +232,9 @@ test('playground remains vertically scrollable on a narrow mobile viewport', asy
 
 
 test('one-line embed preserves host page global layout styles', async ({ page }) => {
+  await page.route('https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js', route => route.fulfill({
+    status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../scene-plugin.js'),'utf8')
+  }));
   await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
     status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
   }));
