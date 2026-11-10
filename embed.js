@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  // The renderer injects component-scoped CSS. Loading the repository demo stylesheet
-  // here would leak body/main/footer rules into the host website.
+  // The renderer injects component-scoped CSS. Loading the repository's full-page demo
+  // stylesheet here would leak body/main/footer rules into the host website.
   const script = document.currentScript;
   const wrapper = document.createElement('div');
   wrapper.className = 'pds-embed';
