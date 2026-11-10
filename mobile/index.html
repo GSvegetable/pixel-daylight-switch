@@ -20,7 +20,7 @@
         <p class="eyebrow" data-i18n="eyebrow">A LITTLE WORLD, IN YOUR HAND</p>
         <h1>Pixel Daylight</h1>
       </div>
-      <span class="version-mark">v2.2.0</span>
+      <span class="version-mark">v3.0.0</span>
     </header>
 
     <section class="switch-card" aria-label="Day and night switch">
@@ -160,22 +160,31 @@
         var reason = event.reason;
         showDiagnostic('Unhandled Promise Rejection', reason && (reason.stack || reason.message) || String(reason || 'Unknown rejection'));
       });
-      var appScript = document.createElement('script');
-      appScript.src = './app.js';
-      appScript.onload = function () {
-        window.setTimeout(function () {
-          var canvas = root.querySelector('canvas.scene');
-          var rect = root.getBoundingClientRect();
-          if (!canvas) showDiagnostic('App Initialization Failed', 'The renderer did not create a scene canvas.');
-          else if (!canvas.width || !canvas.height || !rect.width || !rect.height) {
-            showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + rect.width + 'x' + rect.height);
-          }
-        }, 2500);
+      var loadApp = function () {
+        var appScript = document.createElement('script');
+        appScript.src = './app.js';
+        appScript.onload = function () {
+          window.setTimeout(function () {
+            var canvas = root.querySelector('canvas.scene');
+            var rect = root.getBoundingClientRect();
+            if (!canvas) showDiagnostic('App Initialization Failed', 'The renderer did not create a scene canvas.');
+            else if (!canvas.width || !canvas.height || !rect.width || !rect.height) {
+              showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + rect.width + 'x' + rect.height);
+            }
+          }, 2500);
+        };
+        appScript.onerror = function () {
+          showDiagnostic('Resource Load Failed', 'app.js could not be loaded from: ' + appScript.src);
+        };
+        document.body.appendChild(appScript);
       };
-      appScript.onerror = function () {
-        showDiagnostic('Resource Load Failed', 'app.js could not be loaded from: ' + appScript.src);
+      var pluginScript = document.createElement('script');
+      pluginScript.src = './scene-plugin.js';
+      pluginScript.onload = loadApp;
+      pluginScript.onerror = function () {
+        showDiagnostic('Resource Load Failed', 'scene-plugin.js could not be loaded from: ' + pluginScript.src);
       };
-      document.body.appendChild(appScript);
+      document.body.appendChild(pluginScript);
     })();
   </script>
 </body>
