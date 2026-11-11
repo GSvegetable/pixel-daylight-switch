@@ -72,7 +72,7 @@ export interface GlassEngineOptions {
   left?: number | string; top?: number | string;
   radius?: number | string; refraction?: number; dispersion?: number;
   bezel?: number; shine?: number; opacity?: number; edgeDark?: number;
-  ink?: [number, number, number]; light?: [number, number, number];
+  ink?: [number, number, number]; light?: [number, number, number];\n  shellDay?: [number, number, number]; shellNight?: [number, number, number];\n  hiNight?: [number, number, number]; loNight?: [number, number, number]; night?: number;
   dpr?: number; continuous?: boolean;
 }
 export interface GlassEngineInstance {
