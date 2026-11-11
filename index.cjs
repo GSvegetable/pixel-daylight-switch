@@ -8,4 +8,4 @@ api.registerScene = scenes.registerScene;
 api.validateScene = scenes.validateScene;
 api.getScene = scenes.getScene;
 api.listScenes = scenes.listScenes;
-module.exports = api;
+api.createGlass = require('./glass-engine.js').createGlass;\nmodule.exports = api;
