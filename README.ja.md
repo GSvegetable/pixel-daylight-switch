@@ -12,15 +12,15 @@
 
 Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り替えられる UI コンポーネントです。ガラスレンズの中のピクセルアートの世界が、スイッチの動きに合わせて変化します。Vanilla JavaScript、WebGL2、Canvas 2D フォールバックで構成され、実行時にサードパーティ製ライブラリを必要としません。
 
-**[ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** · **[npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## 目的別リンク
 
 | 目的 | リンク |
 | --- | --- |
 | スイッチを体験する | [ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| シーンや表示を調整する | [パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
-| コンポーネントを見る | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| シーンや表示を調整する | [パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) |
+| コンポーネントを見る | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | Web サイトに埋め込む | [embed.js](embed.js) |
 | JavaScript プロジェクトで使う | [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | React / Vue の導入例 | [フレームワーク統合ガイド](docs/INTEGRATIONS.md) |
