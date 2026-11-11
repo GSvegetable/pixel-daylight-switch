@@ -101,3 +101,41 @@ body.mobile-app { overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: c
   .switch-stage [data-ld-part="toggle-daylight"] { width:min(100%,620px); }
 }
 @media (prefers-reduced-motion:reduce) { .mobile-shell * { scroll-behavior:auto !important; } }
+
+
+/* Expanded mobile showcase: quick time presets, scene context and live tuning. */
+.scene-subtitle { margin:5px 0 0; color:#8793a3; font-size:11px; line-height:1.4; }
+.quick-time { display:flex; justify-content:center; gap:8px; margin:12px auto 0; }
+.time-preset { display:flex; align-items:center; gap:7px; min-width:92px; justify-content:center; padding:8px 14px; border:1px solid #dce3eb; border-radius:999px; background:#f7f9fb; color:#627187; font:700 11px system-ui,sans-serif; }
+.time-preset span:first-child { font-size:15px; }
+.time-preset.is-active { border-color:#8da4bd; background:#eaf0f7; color:#294767; box-shadow:inset 0 0 0 1px rgba(82,111,145,.12); }
+.control-panel { padding:17px 17px 15px; border:1px solid #dce2ea; border-radius:22px; background:rgba(255,255,255,.82); box-shadow:0 8px 28px rgba(35,53,76,.045); }
+.control-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.control-heading h2 { margin:0; color:#1d2b3d; font-size:17px; line-height:1.2; letter-spacing:-.025em; }
+.control-heading output, .range-row output { color:#49698d; font-size:12px; font-weight:800; font-variant-numeric:tabular-nums; }
+.control-description { margin:9px 0 12px; color:#7a8798; font-size:11px; line-height:1.5; }
+.range-control { display:block; width:100%; height:22px; margin:7px 0 0; accent-color:#54789f; cursor:pointer; }
+.range-labels { display:flex; justify-content:space-between; margin-top:1px; color:#9aa5b3; font-size:9px; }
+.range-row { display:block; margin-top:13px; }
+.range-row > span { display:flex; justify-content:space-between; align-items:center; gap:12px; color:#43546a; font-size:11px; }
+.range-row .range-control { margin-top:5px; }
+.reset-button { padding:7px 11px; border:1px solid #d8e0e9; border-radius:999px; background:#f7f9fb; color:#607188; font:700 10px system-ui,sans-serif; }
+.about-panel { display:flex; align-items:flex-start; gap:12px; padding:15px 16px; border:1px solid #dce2ea; border-radius:20px; background:linear-gradient(125deg,#f9fbfd,#edf2f7); }
+.about-icon { display:grid; place-items:center; flex:none; width:34px; height:34px; border-radius:12px; background:#e2eaf3; color:#52769c; font-size:19px; }
+.about-panel strong { display:block; color:#34465d; font-size:12px; }
+.about-panel p { margin:4px 0 0; color:#7a8798; font-size:10px; line-height:1.5; }
+.time-preset:focus-visible, .reset-button:focus-visible { outline:2px solid #43688f; outline-offset:3px; }
+@media (max-width:380px) {
+  .control-panel { padding:14px 13px; }
+  .scene-subtitle { max-width:220px; }
+}
+@media (orientation:landscape) and (min-width:600px) {
+  .mobile-shell { grid-template-rows:auto auto auto auto auto; }
+  .switch-card { grid-column:1; grid-row:2 / 5; }
+  .scene-panel { grid-column:2; grid-row:2; }
+  .world-tools { grid-column:2; grid-row:3; }
+  .control-panel { grid-column:2; }
+  .optics-panel { grid-column:2; }
+  .about-panel { grid-column:1 / -1; }
+  .app-footer { grid-column:1 / -1; }
+}
