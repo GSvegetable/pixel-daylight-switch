@@ -44,6 +44,10 @@ The package is safe to import during SSR; mount only after the target DOM elemen
 
 Framework lifecycle examples are in [INTEGRATIONS.md](docs/INTEGRATIONS.md). Scene plugin authoring, manifest constraints and API examples are in [SCENE_PLUGINS.md](docs/SCENE_PLUGINS.md).
 
+## Standalone refractive glass engine (v3.1.1)
+
+Import `createGlass` from `pixel-daylight-switch-gsvegetable/glass-engine`, or load `glass-engine.js` directly and use `PixelGlassEngine.createGlass(container, options)`. The independent WebGL2 overlay has configurable width, height, position, radius, refraction, dispersion, bezel, shine, opacity, source and lifecycle methods. Sources are origin-clean canvas, image, video, ImageBitmap or a callback returning one. WebGL cannot sample arbitrary DOM pixels; host applications must supply a renderable background source. See [GLASS_ENGINE.md](docs/GLASS_ENGINE.md) and [the demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+
 ## Community scene plugins (current: Manifest v2)
 
 The optional `scene-plugin.js` registry exposes `registerScene(manifest)`, `validateScene(manifest)`, `getScene(id)` and `listScenes()`. Register a data-only JSON manifest before mounting the scene. Manifest v2 supports up to 24 reusable pixel-matrix assets, up to 16 ordered layers, transparent overlay pixels (.), and bounded deterministic drift/bob motion tracks. Manifest v1 remains supported and its schema is unchanged. Every symbol in the base matrix and assets must be defined in each palette. Registration validates, copies and freezes the data; arbitrary JavaScript, remote image downloads and executable callbacks are not run.
