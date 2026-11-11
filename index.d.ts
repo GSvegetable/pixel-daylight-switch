@@ -68,12 +68,18 @@ export default PixelDaylightSwitch;
 export type GlassSource = HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | HTMLVideoElement | ImageBitmap | (() => GlassSource);
 export interface GlassEngineOptions {
   source?: GlassSource;
-  width?: number | string; height?: number | string;
-  left?: number | string; top?: number | string;
-  radius?: number | string; refraction?: number; dispersion?: number;
-  bezel?: number; shine?: number; opacity?: number; edgeDark?: number;
-  ink?: [number, number, number]; light?: [number, number, number];\n  shellDay?: [number, number, number]; shellNight?: [number, number, number];\n  hiNight?: [number, number, number]; loNight?: [number, number, number]; night?: number;
-  dpr?: number; continuous?: boolean;
+  /** Full capsule shell geometry, positioned relative to the host container. */
+  pillWidth?: number | string; pillHeight?: number | string;
+  pillLeft?: number | string; pillTop?: number | string; pillRadius?: number | string;
+  /** Independent sliding lens geometry, positioned relative to the host container. */
+  lensWidth?: number | string; lensHeight?: number | string;
+  lensLeft?: number | string; lensTop?: number | string;
+  refraction?: number; dispersion?: number; bezel?: number; shine?: number;
+  lift?: number; seam?: number; opacity?: number;
+  ink?: [number, number, number]; light?: [number, number, number];
+  shellDay?: [number, number, number]; shellNight?: [number, number, number];
+  hiNight?: [number, number, number]; loNight?: [number, number, number];
+  night?: number; dpr?: number; continuous?: boolean;
 }
 export interface GlassEngineInstance {
   canvas: HTMLCanvasElement;
