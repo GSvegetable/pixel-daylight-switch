@@ -58,7 +58,7 @@ A browser does not expose arbitrary DOM pixels as a WebGL texture. Therefore thi
 - `bezel`: relative edge thickness, clamped to `0–0.3`.
 - `shine`: highlight intensity.
 - `opacity`: glass opacity from `0–1`.
-- `ink`, `light`: RGB arrays in normalized `0–1`.
+- `ink`, `light`: RGB arrays in normalized `0–1`.\n- `shellDay`, `shellNight`, `hiNight`, `loNight`, `night`: day/night environment colors and blend amount, preserving the original renderer's lighting controls.
 - `dpr`: render pixel-ratio ceiling, default `2`.
 - `continuous`: redraw continuously for animated sources; set `false` for static sources and call `render()` when the source changes.
 
