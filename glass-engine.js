@@ -82,14 +82,16 @@ void main(){
         gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,el);
       }
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(program);gl.bindVertexArray(vao);
-      const width=opts.width,height=opts.height,left=opts.left,top=opts.top;
-      const cssPx=(v,total)=>{if(typeof v==='number')return v;const value=String(v??'').trim();if(value.endsWith('%'))return (parseFloat(value)||0)*total/100;return parseFloat(value)||total;};
-      const w=cssPx(width,rect.width),h=cssPx(height,rect.height),x=cssPx(left,rect.width),y=cssPx(top,rect.height);
-      const cx=(x+w/2)*dpr,cy=H-(y+h/2)*dpr,halfX=w*dpr/2,halfY=h*dpr/2;
-      const radius=Math.min(cssPx(opts.radius,Math.min(w,h)*0.28)*dpr,halfX,halfY);
-      const bezel=Math.max(0.1,Math.min(0.3,Number(opts.bezel)||0.046))*Math.min(halfX,halfY);
-      gl.uniform2f(U.uResolution,W,H);gl.uniform2f(U.uCenter,cx,cy);gl.uniform2f(U.uHalf,halfX,halfY);gl.uniform2f(U.uSourceSize,dim?.w||W,dim?.h||H);
-      gl.uniform1f(U.uRadius,radius);gl.uniform1f(U.uRefraction,Math.max(1.001,Number(opts.refraction)||1.24));gl.uniform1f(U.uDispersion,Math.max(0,Math.min(.25,Number(opts.dispersion)||0)));gl.uniform1f(U.uBezel,bezel);gl.uniform1f(U.uShine,Math.max(0,Number(opts.shine)||0));gl.uniform1f(U.uOpacity,Math.max(0,Math.min(1,Number(opts.opacity)??1)));gl.uniform1f(U.uEdgeDark,Math.max(0,Math.min(1,Number(opts.edgeDark)??.42)));gl.uniform3fv(U.uInk,new Float32Array(opts.ink||defaults.ink));gl.uniform3fv(U.uLight,new Float32Array(opts.light||defaults.light));gl.uniform3fv(U.uShellDay,new Float32Array(opts.shellDay||defaults.shellDay));gl.uniform3fv(U.uShellNight,new Float32Array(opts.shellNight||defaults.shellNight));gl.uniform3fv(U.uHiNight,new Float32Array(opts.hiNight||defaults.hiNight));gl.uniform3fv(U.uLoNight,new Float32Array(opts.loNight||defaults.loNight));gl.uniform1f(U.uNight,Math.max(0,Math.min(1,Number(opts.night)||0)));
+      const cssPx=(v,total)=>{if(typeof v==='number')return v;const value=String(v??'').trim();if(value.endsWith('%'))return (parseFloat(value)||0)*total/100;return parseFloat(value)||0;};
+      const pillW=cssPx(opts.pillWidth??'100%',rect.width),pillH=cssPx(opts.pillHeight??'72%',rect.height),pillX=cssPx(opts.pillLeft??'0%',rect.width),pillY=cssPx(opts.pillTop??'14%',rect.height);
+      const cx=(pillX+pillW/2)*dpr,cy=H-(pillY+pillH/2)*dpr,halfX=pillW*dpr/2,halfY=pillH*dpr/2;
+      const radius=Math.min(cssPx(opts.pillRadius??Math.min(pillH/2,pillW/2),Math.min(rect.width,rect.height))*dpr,halfY,halfX);
+      const bezel=Math.max(0.1,Math.min(0.3,Number(opts.bezel)||0.046))*halfY;
+      const lensW=cssPx(opts.lensWidth??'34%',rect.width),lensH=cssPx(opts.lensHeight??'82%',rect.height),lensX=cssPx(opts.lensLeft??'5%',rect.width),lensY=cssPx(opts.lensTop??'9%',rect.height);
+      const lensCx=(lensX+lensW/2)*dpr-cx,lensCy=cy-(lensY+lensH/2)*dpr;
+      const lensRadius=Math.min(lensH*dpr/2,lensW*dpr/2);
+      gl.uniform2f(U.uRes,W,H);gl.uniform2f(U.uSourceSize,dim.w||W,dim.h||H);gl.uniform2f(U.uPill,halfX,halfY);gl.uniform2f(U.uOrigin,0,H);gl.uniform4f(U.uLens,lensCx,lensCy,lensW*dpr/2,lensH*dpr/2);
+      gl.uniform1f(U.uK,W/(dim.w||W));gl.uniform1f(U.uRefraction,Math.max(1.001,Number(opts.refraction)||1.24));gl.uniform1f(U.uDispersion,Math.max(0,Math.min(.25,Number(opts.dispersion)||0)));gl.uniform1f(U.uBezel,bezel);gl.uniform1f(U.uShine,Math.max(0,Number(opts.shine)||0));gl.uniform1f(U.uOpacity,Math.max(0,Math.min(1,Number(opts.opacity)??1)));gl.uniform1f(U.uLift,Number(opts.lift)||0);gl.uniform1f(U.uSeam,Number(opts.seam)||0.1);gl.uniform3fv(U.uInk,new Float32Array(opts.ink||defaults.ink));gl.uniform3fv(U.uLight,new Float32Array(opts.light||defaults.light));gl.uniform3fv(U.uShellDay,new Float32Array(opts.shellDay||defaults.shellDay));gl.uniform3fv(U.uShellNight,new Float32Array(opts.shellNight||defaults.shellNight));gl.uniform3fv(U.uHiNight,new Float32Array(opts.hiNight||defaults.hiNight));gl.uniform3fv(U.uLoNight,new Float32Array(opts.loNight||defaults.loNight));gl.uniform1f(U.uNight,Math.max(0,Math.min(1,Number(opts.night)||0)));
       gl.drawArrays(gl.TRIANGLES,0,3);
       if(opts.continuous)raf=doc.defaultView.requestAnimationFrame(draw);
     }
