@@ -17,6 +17,17 @@
 
 All notable changes to Pixel Daylight Switch are documented here.
 
+## [Unreleased] — Expanded mobile showcase
+
+### Mobile app experience
+- Turn the Capacitor app into a fuller interactive showcase with instant day/night presets and descriptions for all five scenes.
+- Add live world-speed control, plus adjustable glass refraction, color dispersion and highlight intensity while reusing the original renderer.
+- Persist scene, weather, day/night and tuning preferences locally on the device.
+- Keep English, Simplified Chinese and Japanese localization, accessible control states, diagnostic overlays and responsive portrait/landscape layouts.
+
+### Verification
+- Extend mobile smoke tests to cover the new controls, local preference persistence and responsive showcase panels.
+
 ## [Unreleased] — Developer integration
 
 - Make the one-line embed responsive and prevent demo-page global CSS from leaking into host websites.
