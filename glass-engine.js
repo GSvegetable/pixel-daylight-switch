@@ -111,7 +111,6 @@
       texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i(gl.getUniformLocation(program,'uSource'),0);
     }catch(error){canvas.remove();throw error;}
     const U={};for(const n of ['uResolution','uCenter','uHalf','uSourceSize','uRadius','uRefraction','uDispersion','uBezel','uShine','uOpacity','uEdgeDark','uInk','uLight','uShellDay','uHiNight','uLoNight','uNight'])U[n]=gl.getUniformLocation(program,n);
-    const scratch=doc.createElement('canvas');sourceCanvas=scratch;sourceCtx=scratch.getContext('2d',{willReadFrequently:false});
     function resolveSource(){if(typeof source==='function')return source();return source;}
     function dimensions(el){return {w:el?.videoWidth||el?.naturalWidth||el?.width||0,h:el?.videoHeight||el?.naturalHeight||el?.height||0};}
     function draw(){
