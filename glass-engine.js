@@ -41,7 +41,7 @@ void main(){
  float n=fract(sin(dot(frag,vec2(12.9898,78.233)))*43758.5453);n+=fract(sin(dot(frag,vec2(93.989,67.345)))*24634.6345)-1.0;color+=(n*0.75)/255.0*min(alpha*4.0,1.0);outColor=vec4(clamp(color,0.0,1.0),alpha*uOpacity);
 }`;
 
-  const defaults={width:'100%',height:'100%',left:'0px',top:'0px',radius:'28px',refraction:1.24,dispersion:0.05,bezel:0.046,shine:0.44,opacity:1,edgeDark:0.42,ink:[0.08,0.1,0.16],light:[0.94,0.97,1],shellDay:[0.42,0.52,0.62],shellNight:[0.08,0.1,0.16],hiNight:[0.42,0.5,0.62],loNight:[0.06,0.08,0.13],night:0,dpr:2,continuous:true};
+  const defaults={pillWidth:'100%',pillHeight:'72%',pillLeft:'0%',pillTop:'14%',pillRadius:'50%',lensWidth:'34%',lensHeight:'58%',lensLeft:'5%',lensTop:'21%',lift:0,seam:0.1,refraction:1.24,dispersion:0.05,bezel:0.046,shine:0.44,opacity:1,edgeDark:0.42,ink:[0.08,0.1,0.16],light:[0.94,0.97,1],shellDay:[0.42,0.52,0.62],shellNight:[0.08,0.1,0.16],hiNight:[0.42,0.5,0.62],loNight:[0.06,0.08,0.13],night:0,dpr:2,continuous:true};
   function createGlass(container, options) {
     if(!container || !container.ownerDocument) throw new TypeError('createGlass(container): a DOM element is required');
     const opts={...defaults,...(options||{})};
