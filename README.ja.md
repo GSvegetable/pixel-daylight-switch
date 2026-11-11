@@ -257,8 +257,8 @@ pixel-daylight-switch/
 ├── scene-plugin.js          # シーン登録・検証 API
 ├── embed.js                 # Web サイト埋め込みローダー
 ├── index.html               # ライブデモ
-├── playground.html          # パラメーター Playground
-├── preview.html             # コンポーネントプレビュー
+├── demos/                   # パラメーター Playground と Preview
+├── config/                  # 開発ツール設定
 ├── index.mjs / index.cjs    # ESM / CommonJS エントリー
 ├── package.json             # パッケージ設定とスクリプト
 ├── capacitor.config.json    # Capacitor 設定
