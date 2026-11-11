@@ -100,11 +100,11 @@ The package exposes ESM and CommonJS entry points. Importing is safe in an SSR e
 
 ## Standalone glass engine (v3.1.1)
 
-The glass lens is also available independently of the day/night switch. It accepts a canvas, image, video, bitmap, or source callback and lets you set any width, height, position, radius, refraction, dispersion, bezel and highlight values. See the [glass engine guide](docs/GLASS_ENGINE.md) and [live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+The complete glass assembly is also available independently of the day/night switch: a configurable outer capsule shell and a separately positioned sliding lens, using the original lens refraction and highlight equations. It accepts a canvas, image, video, bitmap, or source callback. See the [glass engine guide](docs/GLASS_ENGINE.md) and [live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
-const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+const glass = createGlass(container, { source: backgroundCanvas, pillWidth: '100%', pillHeight: 180, lensWidth: '34%', lensHeight: 145 });
 glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
 glass.destroy();
 ```
