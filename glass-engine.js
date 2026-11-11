@@ -17,7 +17,7 @@
   uniform sampler2D uSource;
   uniform vec2 uResolution, uCenter, uHalf, uSourceSize;
   uniform float uRadius, uRefraction, uDispersion, uBezel, uShine, uOpacity, uEdgeDark;
-  uniform vec3 uInk, uLight, uShellDay, uHiNight, uLoNight;\n  uniform float uNight;
+  uniform vec3 uInk, uLight, uShellDay, uShellNight, uHiNight, uLoNight;\n  uniform float uNight;\n  vec3 envLow, envHigh;
   out vec4 outColor;
   float sdRoundBox(vec2 p, vec2 b, float r) {
     vec2 q=abs(p)-b+vec2(r);
@@ -35,7 +35,7 @@
     vec2 s=R.xy/(1.0+max(R.z,0.0));
     float key=softBox(s,vec2(-0.1,0.56),vec2(0.5,0.11),0.17);
     float fill=softBox(s,vec2(0.34,-0.6),vec2(0.3,0.05),0.2);
-    return c+high*key*1.15+high*fill*0.14;
+    c+=envHigh*key*1.15;\n    c+=envHigh*fill*0.14;\n    return c;
   }
   void main(){
     vec2 frag=gl_FragCoord.xy;
@@ -70,9 +70,9 @@
     float edge=pow(rho,16.0);
     lens=mix(lens,uInk,edge*uEdgeDark);
     float pool=smoothstep(0.05,0.95,-lp.y*0.9+lp.x*0.2)*smoothstep(1.0,0.8,rho)*smoothstep(0.42,0.86,rho);
-    lens+=uLight*pool*mix(0.3,0.1,uNight);
+    lens+=envHigh*pool*mix(0.3,0.1,uNight);
     float broad=softBox(lp,vec2(-0.1,0.62),vec2(0.5,0.17),0.3)*smoothstep(0.98,0.72,rho);
-    lens=mix(lens,uLight,broad*mix(uShine,0.1,uNight));
+    lens=mix(lens,envHigh,broad*mix(uShine,0.1,uNight));
     float fresnel=pow(1.0-N.z,3.0);
     float dir=0.2+0.8*smoothstep(-0.6,0.85,dot(gr,normalize(vec2(-0.42,0.9))));
     float mirror=clamp(fresnel*dir*dir*0.6,0.0,0.42);
@@ -110,7 +110,7 @@
       gl.useProgram(program);vao=gl.createVertexArray();gl.bindVertexArray(vao);buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
       texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i(gl.getUniformLocation(program,'uSource'),0);
     }catch(error){canvas.remove();throw error;}
-    const U={};for(const n of ['uResolution','uCenter','uHalf','uSourceSize','uRadius','uRefraction','uDispersion','uBezel','uShine','uOpacity','uEdgeDark','uInk','uLight','uNight'])U[n]=gl.getUniformLocation(program,n);
+    const U={};for(const n of ['uResolution','uCenter','uHalf','uSourceSize','uRadius','uRefraction','uDispersion','uBezel','uShine','uOpacity','uEdgeDark','uInk','uLight','uShellDay','uShellNight','uHiNight','uLoNight','uNight'])U[n]=gl.getUniformLocation(program,n);
     function resolveSource(){if(typeof source==='function')return source();return source;}
     function dimensions(el){return {w:el?.videoWidth||el?.naturalWidth||el?.width||0,h:el?.videoHeight||el?.naturalHeight||el?.height||0};}
     function draw(){
@@ -133,7 +133,7 @@
       const radius=Math.min(cssPx(opts.radius,Math.min(w,h)*0.28)*dpr,halfX,halfY);
       const bezel=Math.max(0.1,Math.min(0.3,Number(opts.bezel)||0.046))*Math.min(halfX,halfY);
       gl.uniform2f(U.uResolution,W,H);gl.uniform2f(U.uCenter,cx,cy);gl.uniform2f(U.uHalf,halfX,halfY);gl.uniform2f(U.uSourceSize,dim?.w||W,dim?.h||H);
-      gl.uniform1f(U.uRadius,radius);gl.uniform1f(U.uRefraction,Math.max(1.001,Number(opts.refraction)||1.24));gl.uniform1f(U.uDispersion,Math.max(0,Math.min(.25,Number(opts.dispersion)||0)));gl.uniform1f(U.uBezel,bezel);gl.uniform1f(U.uShine,Math.max(0,Number(opts.shine)||0));gl.uniform1f(U.uOpacity,Math.max(0,Math.min(1,Number(opts.opacity)??1)));gl.uniform1f(U.uEdgeDark,Math.max(0,Math.min(1,Number(opts.edgeDark)??.42)));gl.uniform3fv(U.uInk,new Float32Array(opts.ink||defaults.ink));gl.uniform3fv(U.uLight,new Float32Array(opts.light||defaults.light));gl.uniform1f(U.uNight,Math.max(0,Math.min(1,Number(opts.night)||0)));
+      gl.uniform1f(U.uRadius,radius);gl.uniform1f(U.uRefraction,Math.max(1.001,Number(opts.refraction)||1.24));gl.uniform1f(U.uDispersion,Math.max(0,Math.min(.25,Number(opts.dispersion)||0)));gl.uniform1f(U.uBezel,bezel);gl.uniform1f(U.uShine,Math.max(0,Number(opts.shine)||0));gl.uniform1f(U.uOpacity,Math.max(0,Math.min(1,Number(opts.opacity)??1)));gl.uniform1f(U.uEdgeDark,Math.max(0,Math.min(1,Number(opts.edgeDark)??.42)));gl.uniform3fv(U.uInk,new Float32Array(opts.ink||defaults.ink));gl.uniform3fv(U.uLight,new Float32Array(opts.light||defaults.light));gl.uniform3fv(U.uShellDay,new Float32Array(opts.shellDay||defaults.shellDay));gl.uniform3fv(U.uShellNight,new Float32Array(opts.shellNight||defaults.shellNight));gl.uniform3fv(U.uHiNight,new Float32Array(opts.hiNight||defaults.hiNight));gl.uniform3fv(U.uLoNight,new Float32Array(opts.loNight||defaults.loNight));gl.uniform1f(U.uNight,Math.max(0,Math.min(1,Number(opts.night)||0)));
       gl.drawArrays(gl.TRIANGLES,0,3);
       if(opts.continuous)raf=doc.defaultView.requestAnimationFrame(draw);
     }
