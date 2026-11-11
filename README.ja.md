@@ -14,22 +14,13 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 
 **[ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[ガラス画像/動画アップロード＆ドラッグデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
-## パラメーター Playground — 3 言語の UI
+## パラメーター Playground — 日本語 интерфェース
 
-パラメーター Playground は簡体字中国語、英語、日本語に対応しています。以下は各言語の実際の画面です。
+以下は日本語版パラメーター Playground の画面です。
 
-<table>
-  <tr>
-    <td align="center"><strong>简体中文</strong></td>
-    <td align="center"><strong>English</strong></td>
-    <td align="center"><strong>日本語</strong></td>
-  </tr>
-  <tr>
-    <td width="33%"><img src="assets/中.jpg" alt="簡体字中国語のパラメーター画面" width="100%"></td>
-    <td width="33%"><img src="assets/英.jpg" alt="英語のパラメーター画面" width="100%"></td>
-    <td width="33%"><img src="assets/日.jpg" alt="日本語のパラメーター画面" width="100%"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="assets/日.jpg" alt="日本語のパラメーター画面" width="100%">
+</p>
 
 [インタラクティブなパラメーター Playground を開く](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)と、各種設定を実際に調整できます。
 
