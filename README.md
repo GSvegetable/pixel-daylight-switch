@@ -14,6 +14,25 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 
 **[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[Try the glass upload & drag lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
+## Parameter lab — localized interface
+
+The interactive parameter lab is available in three languages. The screenshots below show the Simplified Chinese, English and Japanese interfaces.
+
+<table>
+  <tr>
+    <td align="center"><strong>简体中文</strong></td>
+    <td align="center"><strong>English</strong></td>
+    <td align="center"><strong>日本語</strong></td>
+  </tr>
+  <tr>
+    <td width="33%"><img src="assets/中.jpg" alt="Parameter lab in Simplified Chinese" width="100%"></td>
+    <td width="33%"><img src="assets/英.jpg" alt="Parameter lab in English" width="100%"></td>
+    <td width="33%"><img src="assets/日.jpg" alt="Parameter lab in Japanese" width="100%"></td>
+  </tr>
+</table>
+
+[Open the interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) to experiment with the settings.
+
 ## Start here
 
 | Goal | Direct link |
