@@ -10,7 +10,8 @@ try {
   delete globalThis.__PDS_DEFER_AUTO_MOUNT__;
 }
 
-const api = globalThis.PixelDaylightSwitch;\napi.createGlass = globalThis.PixelGlassEngine.createGlass;
+const api = globalThis.PixelDaylightSwitch;
+api.createGlass = globalThis.PixelGlassEngine.createGlass;
 const scenes = globalThis.PixelDaylightSwitchScenePlugins;
 export const mount = api.mount;
 export const unmount = api.unmount;
