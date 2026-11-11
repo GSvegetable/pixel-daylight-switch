@@ -23,7 +23,7 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 | 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |
+| React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |\n| 独立玻璃折射引擎 | [引擎文档](docs/GLASS_ENGINE.md) · [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
 | 阅读核心实现 | [运行时 app.js](app.js) · [样式 style.css](style.css) |
 | 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -95,6 +95,20 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 ```
 
 npm 包提供 ESM 和 CommonJS 入口，可在 SSR 环境中安全导入；只有在浏览器中且目标元素已经存在时，才能调用 `mount()`。npm 发布文件清单以 [package.json](package.json) 为准。
+
+
+## 独立玻璃折射引擎（v3.1.1）
+
+这次升级把玻璃镜片从昼夜开关中独立出来。现在可以单独创建一层玻璃，不再受原开关的固定宽高比和尺寸限制；可分别设置宽度、高度、位置、圆角、折射、色散、边缘厚度和高光。支持 Canvas、图片、视频、ImageBitmap 或返回这些对象的函数作为背景源。查看[完整接入文档](docs/GLASS_ENGINE.md)和[在线调参演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)。
+
+```js
+import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
+const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
+glass.destroy();
+```
+
+注意：浏览器不允许 WebGL 直接读取任意网页 DOM 像素。若要折射实时网页背景，宿主应用必须提供可采样的 Canvas / 渲染目标；跨域媒体还必须满足 CORS 要求。
 
 ## 社区场景
 
