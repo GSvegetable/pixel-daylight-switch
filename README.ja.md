@@ -23,11 +23,11 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 | コンポーネントを見る | [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | Web サイトに埋め込む | [embed.js](embed.js) |
 | JavaScript プロジェクトで使う | [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| React / Vue の導入例 | [フレームワーク統合ガイド](INTEGRATIONS.md) |
+| React / Vue の導入例 | [フレームワーク統合ガイド](docs/INTEGRATIONS.md) |
 | 実装を読む | [app.js](app.js) · [style.css](style.css) |
 | モバイルビルド | [ビルド情報](builds/README.md) · [GitHub Actions](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | テスト結果 | [CI ワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
-| 更新履歴 | [CHANGELOG](CHANGELOG.md) |
+| 更新履歴 | [CHANGELOG](docs/CHANGELOG.md) |
 | 不具合を報告する | [Issues](https://github.com/GSvegetable/pixel-daylight-switch/issues) |
 
 ## 主な機能
@@ -96,50 +96,47 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 
 ESM と CommonJS の両方を提供します。SSR 環境でもインポートできますが、`mount()` はブラウザー上で対象要素が存在してから呼び出してください。
 
-## コミュニティシーンプラグイン（v3.0.0）
+## コミュニティシーン
 
-3.0.0 では JSON Manifest によるカスタムピクセルワールドの登録に対応しました。初めての方はピクセルマップをそのまま使い、昼夜パレットの色だけを変更できます。上級者はピクセルマップと時間パレットを自由に設計できます。プラグインは宣言型データのみを受け取り、レンダラー内で第三者 JavaScript を実行しません。
+コミュニティシーンは宣言型 JSON Manifest で定義し、コンポーネントのマウント前に登録します。現在の形式は **Manifest v2** です。再利用可能なピクセル素材、順序付きレイヤー、制限付きモーショントラックに対応し、既存の Manifest v1 シーンも引き続き利用できます。
 
-**ブラウザーで使用：**
+### シーンの登録
+
+npm プロジェクトの場合：
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import scene from './floating-island.v2.json';
+
+const unregister = registerScene(scene);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = scene.id;
+PixelDaylightSwitch.mount(root);
+```
+
+ブラウザーで直接使用する場合は、`scene-plugin.js` を `app.js` より先に読み込み、マウント前に Manifest を登録します。
 
 ```html
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
-<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+<div data-ld-part="toggle-daylight" data-scene="my-community-scene"></div>
 <script>
-  PixelDaylightSwitch.registerScene(sceneManifest);
+  PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
 </script>
 ```
 
-コンポーネントをマウントする前に Manifest を登録してください。npm の場合：
+### Manifest v2 の機能
 
-```js
-import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
-import myScene from './my-scene.json';
+- 最大 24 個の再利用可能な文字ベースのピクセル素材と、最大 16 個の順序付きレイヤー。
+- 整数のシーン座標を使用し、後のレイヤーほど手前に合成されます。
+- オーバーレイ素材のドット文字 `.` は透明ピクセルとして扱われます。
+- `drift` と `bob` の決定論的なモーショントラックに対応し、X/Y 軸上で動作します。
+- 既存の Manifest v1 と 5 つの組み込みシーンは引き続きサポートされます。
 
-const unregister = registerScene(myScene);
-const root = document.querySelector('[data-ld-part="toggle-daylight"]');
-root.dataset.scene = myScene.id;
-PixelDaylightSwitch.mount(root);
-```
+[Manifest v2 Schema](schemas/scene-manifest.v2.schema.json)、[Floating Island サンプル](examples/scenes/floating-island.v2.json)、[シーン制作ガイド](docs/SCENE_PLUGINS.md)を参照してください。互換性のため [v1 Schema](schemas/scene-manifest.v1.schema.json) も維持されています。
 
-Manifest v1 はシーン ID、作者・ライセンス、ピクセルキャンバス、文字ベースのピクセルマップ、複数の昼夜パレット、24 時間のタイムラインで構成されます。キャンバスは最大 192 × 112 ピクセルです。すべてのピクセル記号に各パレットの色を定義する必要があります。時間ノード間の色はレンダラーが補間します。
+現在の素材形式は文字ベースのピクセルマトリックスです。PNG/JPEG のアップロードや任意の実行コードには対応していません。
 
-- [プラグイン開発ガイド](SCENE_PLUGINS.md)
-- [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
-- [Sakura Evening サンプル](examples/scenes/sakura-evening.json)
-
-### Manifest v2：レイヤー付きピクセルワールド（v3.0.1）
-
-3.0.1 では Manifest v1 を変更せずに v2 を追加しました。v2 は最大 24 個の再利用可能なピクセルアセットと、最大 16 個の順序付きレイヤーに対応します。レイヤーはシーン座標に配置でき、drift または bob の宣言型モーショントラックで横・縦方向に動かせます。重ねるアセット内の . は透明として扱い、それ以外の文字は昼夜パレットで着色されます。
-
-- [Manifest v2 JSON Schema](schemas/scene-manifest.v2.schema.json)
-- [Floating Island レイヤーサンプル](examples/scenes/floating-island.v2.json)
-- [シーンプラグイン開発ガイド](SCENE_PLUGINS.md)
-
-v2 のアセットは文字ベースのピクセルマップです。PNG/JPEG の外部ダウンロードには対応しません。これによりピクセル表現と昼夜の色変化を一貫させ、外部画像の CORS や任意コード実行を避けます。
-
-5 つの組み込みシーンは従来の描画・アニメーション実装を維持します。
 
 ## 設定属性
 
@@ -273,7 +270,10 @@ pixel-daylight-switch/
 ├── package.json               # npm メタデータとスクリプト
 ├── capacitor.config.json     # Capacitor 設定
 ├── playwright.config.cjs     # ブラウザーテスト設定
-├── CHANGELOG.md
+├── docs/                    # Guides, integration recipes and release history
+│   
+│   
+│   └── SCENE_PLUGINS.md
 ├── llms.txt
 ├── LICENSE
 └── README*.md                 # 英語・簡体字中国語・日本語の README
