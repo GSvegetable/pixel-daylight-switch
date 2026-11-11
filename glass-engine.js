@@ -49,6 +49,8 @@
     return c;
   }
   void main(){
+    envLow=mix(uShellDay*0.74,uLoNight,uNight);
+    envHigh=mix(uLight,uHiNight,uNight);
     vec2 frag=gl_FragCoord.xy;
     vec2 p=frag-uCenter;
     float d=sdRoundBox(p,uHalf,uRadius);
