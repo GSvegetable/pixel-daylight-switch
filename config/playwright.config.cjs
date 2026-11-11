@@ -14,7 +14,7 @@ module.exports = defineConfig({
     launchOptions: { args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-webgl'] }
   },
   webServer: {
-    command: 'node tests/server.cjs',
+    command: 'node ../tests/server.cjs',
     url: 'http://127.0.0.1:4173/tests/fixture.html',
     reuseExistingServer: !process.env.CI,
     timeout: 15000
