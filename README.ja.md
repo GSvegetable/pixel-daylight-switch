@@ -14,7 +14,7 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 
 **[ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[パラメーター Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[ガラス画像/動画アップロード＆ドラッグデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[npm パッケージ](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
-## パラメーター Playground — 日本語 интерфェース
+## パラメーター Playground — 日本語版
 
 以下は日本語版パラメーター Playground の画面です。
 
