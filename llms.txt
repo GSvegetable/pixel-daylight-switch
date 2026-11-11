@@ -95,8 +95,8 @@ Invalid values fall back to defaults; documented numeric ranges are clamped.
 ## Links
 
 - [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/)
-- [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)
-- [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html)
+- [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)
+- [Preview](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html)
 - [Integration recipes](docs/INTEGRATIONS.md)
 - [English README](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 - [Changelog](docs/CHANGELOG.md)
