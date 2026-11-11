@@ -246,38 +246,27 @@ For iOS, use `npm run mobile:ios:init` once and `npm run mobile:ios` for later s
 ```text
 pixel-daylight-switch/
 ├── .github/workflows/       # CI, native mobile builds, npm publishing
-├── assets/
-│   └── scene-gallery.png    # Five-scene overview image
-├── builds/
-│   └── README.md            # Mobile artifact notes; binaries are workflow outputs
-├── mobile/
-│   ├── index.html            # Capacitor app entry
-│   └── mobile.css            # Mobile-only layout
-├── scripts/
-│   └── prepare-mobile.cjs   # Prepare the shared web runtime for Capacitor
-├── tests/
-│   ├── browser/              # Playwright interaction and mobile regressions
-│   ├── fixture.html
-│   ├── mobile-smoke.cjs
-│   ├── package-smoke.cjs
-│   └── server.cjs
-├── app.js                    # Component runtime, scenes, input and rendering
-├── style.css                 # Component styles
-├── embed.js                  # One-script website embed loader
-├── index.html                # Live demo page
-├── preview.html              # Component preview
-├── playground.html            # Interactive parameter lab
-├── index.mjs / index.cjs     # ESM and CommonJS package entry points
-├── package.json               # Package metadata and scripts
-├── capacitor.config.json     # Capacitor configuration
-├── playwright.config.cjs     # Browser test configuration
-├── docs/                    # Guides, integration recipes and release history
-│   
-│   
-│   └── SCENE_PLUGINS.md
-├── llms.txt
+├── assets/                  # Gallery artwork
+├── builds/                  # Mobile build notes
+├── docs/                    # Integration guides, scene guide, changelog
+├── examples/scenes/         # Community scene manifests
+├── mobile/                  # Capacitor app shell
+├── schemas/                 # Manifest v1 and v2 JSON Schemas
+├── scripts/                 # Mobile preparation/version scripts
+├── tests/                   # Node and Chromium regression tests
+├── app.js / style.css       # Runtime and component styles
+├── scene-plugin.js          # Community scene registry and validator
+├── embed.js                 # One-script website embed loader
+├── index.html               # Live demo
+├── playground.html          # Interactive parameter lab
+├── preview.html             # Component preview
+├── index.mjs / index.cjs    # ESM and CommonJS package entry points
+├── package.json             # Package metadata and scripts
+├── capacitor.config.json    # Capacitor configuration
+├── playwright.config.cjs    # Browser test configuration
+├── llms.txt                 # AI-readable project guide
 ├── LICENSE
-└── README*.md                 # English, Simplified Chinese and Japanese docs
+└── README*.md               # English, Simplified Chinese and Japanese
 ```
 
 ## License
