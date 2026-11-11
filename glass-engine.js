@@ -93,7 +93,7 @@
     const canvas=doc.createElement('canvas');
     canvas.setAttribute('aria-hidden','true');
     canvas.className='pixel-glass-engine';
-    canvas.style.cssText='position:absolute;pointer-events:none;z-index:1;display:block;max-width:none;max-height:none;';
+    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:block;max-width:none;max-height:none;';
     const computed=doc.defaultView.getComputedStyle(container);
     const previousPosition=container.style.position;
     if(computed.position==='static') container.style.position='relative';
@@ -122,7 +122,7 @@
       const el=resolveSource();
       if(!el){if(opts.background){gl.bindTexture(gl.TEXTURE_2D,texture);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([245,236,217,255]));}else{if(opts.continuous)raf=doc.defaultView.requestAnimationFrame(draw);return;}}
       else{
-        const dim=dimensions(el);if(!dim.w||!dim.h){if(opts.continuous)raf=doc.defaultView.requestAnimationFrame(draw);return;}
+        dim=dimensions(el);if(!dim.w||!dim.h){if(opts.continuous)raf=doc.defaultView.requestAnimationFrame(draw);return;}
         gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,el);
       }
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(program);gl.bindVertexArray(vao);
