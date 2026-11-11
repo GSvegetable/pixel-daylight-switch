@@ -24,6 +24,7 @@ Pixel Daylight Switch は、ドラッグ操作で昼・夕暮れ・夜を切り�
 | Web サイトに埋め込む | [embed.js](embed.js) |
 | JavaScript プロジェクトで使う | [npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | React / Vue の導入例 | [フレームワーク統合ガイド](docs/INTEGRATIONS.md) |
+| 独立ガラス屈折エンジン | [ガイド](docs/GLASS_ENGINE.md) · [アップロード＆ドラッグデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
 | 実装を読む | [app.js](app.js) · [style.css](style.css) |
 | モバイルビルド | [ビルド情報](builds/README.md) · [GitHub Actions](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | テスト結果 | [CI ワークフロー](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -99,11 +100,11 @@ ESM と CommonJS の両方を提供します。SSR 環境でもインポート�
 
 ## 独立ガラス屈折エンジン（v3.1.1）
 
-ガラスレンズを昼夜スイッチから独立して利用できるようになりました。固定アスペクト比に依存せず、幅・高さ・位置・角丸・屈折・色分散・縁の厚さ・ハイライトを個別に設定できます。Canvas、画像、動画、ImageBitmap、またはそれらを返す関数を背景ソースとして指定します。[ガイド](docs/GLASS_ENGINE.md) と [ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) を参照してください。
+ガラスレンズを昼夜スイッチから独立して利用できます。外側のカプセルとレンズのサイズ・位置、角丸、屈折、色分散、縁の厚さ、ハイライトを個別に設定できます。Canvas、画像、動画、ImageBitmap を背景ソースとして指定できます。オンラインデモでは画像/動画をローカルから読み込み、マウスやタッチでガラスをドラッグできます。メディアはブラウザー内で処理され、サーバーにはアップロードされません。[ガイド](docs/GLASS_ENGINE.md) と [アップロード＆ドラッグデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) を参照してください。
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
-const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+const glass = createGlass(container, { source: backgroundCanvas, pillWidth: '72%', pillHeight: 180, pillRadius: 28, lensWidth: '34%', lensHeight: 145 });
 glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
 glass.destroy();
 ```
