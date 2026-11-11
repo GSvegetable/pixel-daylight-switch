@@ -1,7 +1,7 @@
 {
   "name": "pixel-daylight-switch-gsvegetable",
-  "version": "3.0.1",
-  "description": "A draggable pixel-art day/night switch with layered, animated community scenes.",
+  "version": "3.1.1",
+  "description": "A pixel-art day/night switch plus a standalone reusable WebGL2 refractive glass engine.",
   "keywords": [
     "pixel-art",
     "day-night",
@@ -17,7 +17,11 @@
     "scene-plugin",
     "pixel-world",
     "scene-manifest",
-    "pixel-art-scenes"
+    "pixel-art-scenes",
+    "refractive-glass",
+    "glass-engine",
+    "webgl2-glass",
+    "lens-shader"
   ],
   "author": "GSvegetable",
   "license": "Unlicense",
@@ -44,6 +48,11 @@
     "./scene-plugin": {
       "import": "./scene-plugin.js",
       "require": "./scene-plugin.js"
+    },
+    "./glass-engine": {
+      "types": "./index.d.ts",
+      "import": "./glass-engine.js",
+      "require": "./glass-engine.js"
     }
   },
   "files": [
@@ -60,7 +69,9 @@
     "examples",
     "browser.mjs",
     "index.d.ts",
-    "docs/CHANGELOG.md"
+    "docs/CHANGELOG.md",
+    "glass-engine.js",
+    "docs/GLASS_ENGINE.md"
   ],
   "sideEffects": [
     "./app.js"
@@ -72,7 +83,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "node tests/package-smoke.cjs && node tests/scene-plugin-smoke.cjs && node tests/mobile-smoke.cjs && node tests/embed-smoke.cjs",
+    "test": "node tests/package-smoke.cjs && node tests/scene-plugin-smoke.cjs && node tests/mobile-smoke.cjs && node tests/embed-smoke.cjs && node tests/glass-engine-smoke.cjs",
     "test:browser": "playwright test --config config/playwright.config.cjs",
     "mobile:prepare": "node scripts/prepare-mobile.cjs",
     "mobile:android": "npm run mobile:prepare && cap sync android && node scripts/set-android-version.cjs android/app/build.gradle",
