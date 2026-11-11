@@ -53,7 +53,8 @@ export interface PixelDaylightSwitchAPI {
   registerScene(manifest: SceneManifest): UnregisterScene;
   validateScene(manifest: unknown): SceneValidationResult;
   getScene(id: string): SceneManifest | null;
-  listScenes(): SceneManifest[];\n  createGlass: typeof createGlass;
+  listScenes(): SceneManifest[];
+  createGlass: typeof createGlass;
 }
 declare const PixelDaylightSwitch: PixelDaylightSwitchAPI;
 export declare const mount: PixelDaylightSwitchAPI['mount'];
