@@ -258,8 +258,8 @@ pixel-daylight-switch/
 ├── scene-plugin.js          # Community scene registry and validator
 ├── embed.js                 # One-script website embed loader
 ├── index.html               # Live demo
-├── playground.html          # Interactive parameter lab
-├── preview.html             # Component preview
+├── demos/                   # Public parameter lab and preview pages
+├── config/                  # Tooling configuration
 ├── index.mjs / index.cjs    # ESM and CommonJS package entry points
 ├── package.json             # Package metadata and scripts
 ├── capacitor.config.json    # Capacitor configuration
