@@ -137,3 +137,24 @@ Manifest v1 is data-only: a bounded pixel matrix, named palettes and a 24-hour p
 ## Configuration
 
 See [README.md](README.md) for the complete list of `data-*` attributes, CSS custom properties, rendering behavior and supported scene identifiers.
+
+
+## Standalone refractive glass
+
+The independent glass layer is exported as `createGlass` and does not mount or depend on the day/night switch:
+
+```js
+import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
+const glass = createGlass(container, {
+  source: backgroundCanvas,
+  width: '70%', height: 180, left: '15%', top: 24,
+  radius: 28, refraction: 1.24, dispersion: 0.05,
+  bezel: 0.046, shine: 0.44
+});
+// Update, swap source, and clean up independently.
+glass.setOptions({ refraction: 1.32 });
+glass.setSource(nextCanvas);
+glass.destroy();
+```
+
+See [the complete glass engine guide](GLASS_ENGINE.md) and [live parameter demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html). The source must be an origin-clean canvas, image, video, bitmap or callback returning one. Arbitrary DOM cannot be sampled directly by WebGL; host applications must provide a renderable source.
