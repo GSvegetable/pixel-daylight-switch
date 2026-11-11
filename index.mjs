@@ -7,3 +7,4 @@ export const validateScene = api.validateScene;
 export const getScene = api.getScene;
 export const listScenes = api.listScenes;
 export default api;
+\nexport const createGlass = api.createGlass;\n
