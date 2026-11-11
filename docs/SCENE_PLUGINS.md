@@ -1,6 +1,6 @@
 # Scene Plugin Guide
 
-Pixel Daylight Switch The community scene system supports a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
+The Pixel Daylight Switch community scene system supports a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
 
 ## Two ways to create a scene
 
@@ -38,7 +38,7 @@ Load the registry before the renderer:
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
 <div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
 <script>
-  PixelDaylightSwitch.registerScene(sceneManifest);
+  PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
 </script>
 ```
 
