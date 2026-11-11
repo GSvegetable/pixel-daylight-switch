@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel Glass Engine · 3.1.1</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9edf2;color:#17202c;font:14px/1.6 system-ui,sans-serif;padding:32px}
+main{max-width:980px;margin:auto}.stage{position:relative;height:420px;border-radius:24px;overflow:hidden;background:#d7e2eb;box-shadow:0 24px 70px #27384b22}
+#scene{width:100%;height:100%;display:block}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:22px}.control{background:#fff;padding:12px 14px;border-radius:12px}.control label{display:flex;justify-content:space-between}.control input{width:100%}
+.glass-note{color:#657386;font-size:13px;margin-top:12px}@media(max-width:600px){body{padding:16px}.stage{height:320px}}
+</style>
+<main><h1>独立玻璃折射引擎</h1><p>玻璃层可以独立叠加在任意容器中。拖动下面的参数，实时观察折射变化。</p>
+<div class="stage" id="stage"><canvas id="scene" width="1200" height="520"></canvas></div>
+<div class="controls">
+<div class="control"><label>折射强度 <output id="refractionOut">1.24</output></label><input id="refraction" type="range" min="1.01" max="1.8" step=".01" value="1.24"></div>
+<div class="control"><label>色散 <output id="dispersionOut">0.05</output></label><input id="dispersion" type="range" min="0" max=".25" step=".005" value=".05"></div>
+<div class="control"><label>边缘厚度 <output id="bezelOut">0.046</output></label><input id="bezel" type="range" min=".01" max=".12" step=".001" value=".046"></div>
+<div class="control"><label>高光 <output id="shineOut">0.44</output></label><input id="shine" type="range" min="0" max="1.5" step=".01" value=".44"></div>
+<div class="control"><label>圆角 <output id="radiusOut">32</output></label><input id="radius" type="range" min="4" max="100" step="1" value="32"></div>
+<div class="control"><label>玻璃宽度 <output id="widthOut">72%</output></label><input id="width" type="range" min="25" max="100" step="1" value="72"></div>
+</div>
+<p class="glass-note">演示背景由 Canvas 提供。真实网页 DOM 需要宿主应用提供可采样的 Canvas / Image / Video 源；浏览器不会允许 WebGL 直接读取任意 DOM 像素。</p></main>
+<script src="../glass-engine.js"></script><script>
+const c=document.querySelector('#scene'),g=c.getContext('2d');
+function paint(t){const w=c.width,h=c.height;const sky=g.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#8ab6d5');sky.addColorStop(.58,'#e5d6c1');sky.addColorStop(1,'#627b71');g.fillStyle=sky;g.fillRect(0,0,w,h);
+for(let i=0;i<8;i++){g.fillStyle=['#9aaebc','#778f9b','#b6a18d'][i%3];g.beginPath();g.moveTo(i*180-40,330);g.lineTo(i*180+60,120+(i%3)*30);g.lineTo(i*180+180,330);g.fill()}
+g.fillStyle='#e8e1d2';g.fillRect(0,360,w,160);g.fillStyle='#415c56';for(let i=0;i<16;i++){g.beginPath();g.arc((i*97+t*.015)%w,390+(i%4)*25,18+(i%3)*7,0,Math.PI*2);g.fill()}
+g.fillStyle='#263b50';g.font='bold 64px system-ui';g.fillText('GLASS',70,100);g.font='28px system-ui';g.fillText('REFRACTION ENGINE · 3.1.1',74,145);g.fillStyle='#f4f7fa';g.fillRect(760,60,330,190);g.fillStyle='#253b50';g.font='24px system-ui';g.fillText('Background source',790,115);g.fillText('Canvas → WebGL',790,160);g.fillStyle='#f5b94c';g.fillRect(790,190,220,12)}
+paint(0);
+const glass=PixelGlassEngine.createGlass(document.querySelector('#stage'),{source:c,width:'72%',height:'68%',left:'14%',top:'16%',radius:32,refraction:1.24,dispersion:.05,bezel:.046,shine:.44,continuous:false});
+for(const key of ['refraction','dispersion','bezel','shine','radius','width'])document.getElementById(key).addEventListener('input',e=>{const v=Number(e.target.value);document.getElementById(key+'Out').textContent=key==='width'?v+'%':v;glass.setOptions({[key]:key==='width'?v+'%':v});});
+</script></html>
