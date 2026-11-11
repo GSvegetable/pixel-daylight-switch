@@ -9,34 +9,36 @@ async function main() {
   assert.equal(pkg.name, 'pixel-daylight-switch-gsvegetable');
   assert.equal(pkg.version, '3.1.1');
 
-  // CommonJS import must be safe in Node/SSR without window or document.
   const cjs = require('../index.cjs');
   assert.equal(typeof cjs.mount, 'function');
   assert.equal(typeof cjs.unmount, 'function');
   assert.equal(typeof cjs.registerScene, 'function');
-  assert.equal(typeof cjs.validateScene, 'function');\n  assert.equal(typeof cjs.createGlass, 'function');\n  assert.equal(typeof cjs.createGlass, 'function');
+  assert.equal(typeof cjs.validateScene, 'function');
+  assert.equal(typeof cjs.createGlass, 'function');
 
-  // ESM import must expose the same API and remain SSR-safe.
   const esm = await import('../index.mjs');
   assert.equal(typeof esm.mount, 'function');
   assert.equal(typeof esm.unmount, 'function');
   assert.equal(typeof esm.registerScene, 'function');
+  assert.equal(typeof esm.createGlass, 'function');
   assert.equal(esm.default, cjs);
 
-  // Browser ESM entry must defer auto-mount and expose the plugin registry.
   const browserEntry = fs.readFileSync(path.join(__dirname, '..', 'browser.mjs'), 'utf8');
   assert.match(browserEntry, /__PDS_DEFER_AUTO_MOUNT__/);
   assert.match(browserEntry, /export const registerScene/);
+  assert.match(browserEntry, /PixelGlassEngine\.createGlass/);
 
   assert.equal(pkg.main, './index.cjs');
   assert.equal(pkg.module, './index.mjs');
   assert.equal(pkg.exports['.'].import, './index.mjs');
   assert.equal(pkg.exports['.'].require, './index.cjs');
   assert.equal(pkg.exports['.'].browser, './browser.mjs');
-  assert.equal(pkg.browser, './browser.mjs');\n  assert.equal(pkg.exports['./glass-engine'].import, './glass-engine.mjs');\n  assert.equal(pkg.exports['./glass-engine'].require, './glass-engine.js');
+  assert.equal(pkg.browser, './browser.mjs');
+  assert.equal(pkg.exports['./glass-engine'].import, './glass-engine.mjs');
+  assert.equal(pkg.exports['./glass-engine'].require, './glass-engine.js');
 
   const allowed = new Set(pkg.files);
-  for (const required of ['app.js', 'glass-engine.js', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'browser.mjs', 'docs/SCENE_PLUGINS.md', 'docs/INTEGRATIONS.md', 'docs/CHANGELOG.md', 'README.md', 'LICENSE', 'llms.txt']) {
+  for (const required of ['app.js', 'glass-engine.js', 'glass-engine.mjs', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'browser.mjs', 'docs/SCENE_PLUGINS.md', 'docs/INTEGRATIONS.md', 'docs/CHANGELOG.md', 'docs/GLASS_ENGINE.md', 'README.md', 'LICENSE', 'llms.txt']) {
     assert.ok(allowed.has(required), 'Missing package file: ' + required);
     assert.ok(fs.existsSync(path.join(__dirname, '..', required)), 'Missing source file: ' + required);
   }
