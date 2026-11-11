@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#eef1f5">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="Explore five living pixel-art worlds with a draggable glass day/night switch.">
+  <meta name="description" content="Explore five living pixel-art worlds, tune the glass optics and shape your own day-to-night atmosphere.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Pixel Daylight Switch</title>
@@ -20,7 +20,7 @@
         <p class="eyebrow" data-i18n="eyebrow">A LITTLE WORLD, IN YOUR HAND</p>
         <h1>Pixel Daylight</h1>
       </div>
-      <span class="version-mark">v3.0.1</span>
+      <span class="version-mark">v3.1.1</span>
     </header>
 
     <section class="switch-card" aria-label="Day and night switch">
@@ -28,11 +28,12 @@
         <div>
           <p class="eyebrow" data-i18n="now">YOUR WORLD</p>
           <h2 data-i18n="dayMode" id="daylight-label">Daylight</h2>
+          <p class="scene-subtitle" id="scene-description" data-i18n="descCountryside">A quiet home among green hills.</p>
         </div>
         <span class="live-indicator"><i></i><span data-i18n="live">LIVE WORLD</span></span>
       </div>
       <div class="switch-stage">
-        <div data-ld-part="toggle-daylight" data-scene="countryside" lang="en">
+        <div data-ld-part="toggle-daylight" data-scene="countryside" data-time-speed="1" data-refraction="1.24" data-dispersion="0.05" data-shine="0.44" lang="en">
           <canvas class="scene" aria-hidden="true"></canvas>
           <button class="hit" type="button" role="switch" aria-checked="false" aria-label="Day/night switch"></button>
           <span class="vh" role="status" aria-live="polite" data-status></span>
@@ -40,6 +41,10 @@
         </div>
       </div>
       <p class="hint" data-i18n="dragHint">Drag the glass lens to move between day and night</p>
+      <div class="quick-time" role="group" aria-label="Day and night presets">
+        <button type="button" data-time-state="day" class="time-preset is-active" aria-pressed="true"><span>☀</span><span data-i18n="day">Day</span></button>
+        <button type="button" data-time-state="night" class="time-preset" aria-pressed="false"><span>☾</span><span data-i18n="night">Night</span></button>
+      </div>
     </section>
 
     <section class="scene-panel" aria-labelledby="scene-title">
@@ -48,7 +53,7 @@
           <p class="eyebrow" data-i18n="chooseWorld">CHOOSE YOUR WORLD</p>
           <h2 id="scene-title" data-i18n="scenes">Five pixel scenes</h2>
         </div>
-        <span class="scene-count">01 <span>/</span> 05</span>
+        <span class="scene-count" id="scene-count">01 <span>/</span> 05</span>
       </div>
       <div class="scene-picker" role="group" aria-label="Choose a scene">
         <button class="scene-choice is-active" type="button" data-scene-choice="countryside" aria-pressed="true"><span class="scene-icon">🏡</span><span data-i18n="countryside">Countryside</span></button>
@@ -67,6 +72,32 @@
       <button class="toggle-chip" id="weather-toggle" type="button" aria-pressed="false"><span class="toggle-dot"></span><span data-i18n="snow">Snow</span></button>
     </section>
 
+    <section class="control-panel" aria-labelledby="rhythm-title">
+      <div class="control-heading">
+        <div><p class="eyebrow" data-i18n="atmosphere">WORLD SETTINGS</p><h2 id="rhythm-title" data-i18n="rhythm">World rhythm</h2></div>
+        <output id="tempo-value" for="tempo-slider">1.0×</output>
+      </div>
+      <p class="control-description" data-i18n="rhythmDesc">Set how quickly the tiny world moves. Choose 0× to pause its animation.</p>
+      <input id="tempo-slider" class="range-control" type="range" min="0" max="3" step="0.1" value="1" aria-label="World animation speed">
+      <div class="range-labels"><span data-i18n="paused">Paused</span><span data-i18n="natural">Natural</span><span data-i18n="fast">Fast</span></div>
+    </section>
+
+    <section class="control-panel optics-panel" aria-labelledby="optics-title">
+      <div class="control-heading">
+        <div><p class="eyebrow" data-i18n="glassLab">GLASS LAB</p><h2 id="optics-title" data-i18n="optics">Glass optics</h2></div>
+        <button type="button" class="reset-button" id="reset-settings" data-i18n="reset">Reset</button>
+      </div>
+      <p class="control-description" data-i18n="opticsDesc">Fine-tune the lens while keeping the original glass renderer.</p>
+      <label class="range-row"><span><strong data-i18n="refraction">Refraction</strong><output id="refraction-value">1.24</output></span><input id="refraction-slider" class="range-control" type="range" min="1" max="1.6" step="0.01" value="1.24"></label>
+      <label class="range-row"><span><strong data-i18n="dispersion">Color dispersion</strong><output id="dispersion-value">0.05</output></span><input id="dispersion-slider" class="range-control" type="range" min="0" max="0.2" step="0.01" value="0.05"></label>
+      <label class="range-row"><span><strong data-i18n="shine">Glass highlight</strong><output id="shine-value">0.44</output></span><input id="shine-slider" class="range-control" type="range" min="0" max="1.2" step="0.01" value="0.44"></label>
+    </section>
+
+    <section class="about-panel">
+      <span class="about-icon">✧</span>
+      <div><strong data-i18n="aboutTitle">A living miniature</strong><p data-i18n="aboutDesc">Five handcrafted pixel scenes, one responsive glass lens, and a world that follows your touch.</p></div>
+    </section>
+
     <footer class="app-footer">
       <span>PIXEL DAYLIGHT SWITCH</span>
       <span data-i18n="footer">Five scenes · One tiny world</span>
@@ -80,9 +111,9 @@
       var browserLanguage = (navigator.language || 'en').toLowerCase();
       var lang = browserLanguage.indexOf('ja') === 0 ? 'ja' : browserLanguage.indexOf('zh') === 0 ? 'zh-CN' : 'en';
       var copy = {
-        en: {eyebrow:'A LITTLE WORLD, IN YOUR HAND',now:'YOUR WORLD',dayMode:'Daylight',nightMode:'Nightfall',live:'LIVE WORLD',dragHint:'Drag the glass lens to move between day and night',chooseWorld:'CHOOSE YOUR WORLD',scenes:'Five pixel scenes',countryside:'Countryside',japan:'Japanese street',apartment:'Apartment',seaside:'Seaside',mountain:'Mountain cabin',weather:'Weather',snowDesc:'Add gentle snowfall to the world',snow:'Snow',footer:'Five scenes · One tiny world'},
-        'zh-CN': {eyebrow:'掌心里的微缩世界',now:'当前世界',dayMode:'白昼',nightMode:'夜幕',live:'世界正在运转',dragHint:'拖动玻璃镜片，在白昼与黑夜之间切换',chooseWorld:'选择你的世界',scenes:'五种像素场景',countryside:'乡间小屋',japan:'日本街道',apartment:'现代公寓',seaside:'海边灯塔',mountain:'山间木屋',weather:'天气',snowDesc:'为这个世界加一场轻柔的雪',snow:'飘雪',footer:'五种场景 · 一个小小世界'},
-        ja: {eyebrow:'手のひらの小さな世界',now:'あなたの世界',dayMode:'昼',nightMode:'夜',live:'世界が動いています',dragHint:'ガラスレンズをドラッグして昼と夜を切り替えます',chooseWorld:'世界を選ぶ',scenes:'5つのピクセルシーン',countryside:'田園の家',japan:'日本の街並み',apartment:'モダンな部屋',seaside:'海辺の灯台',mountain:'山小屋',weather:'天気',snowDesc:'世界にやさしい雪を降らせます',snow:'雪',footer:'5つのシーン · ひとつの小さな世界'}
+        en: {eyebrow:'A LITTLE WORLD, IN YOUR HAND',now:'YOUR WORLD',dayMode:'Daylight',nightMode:'Nightfall',live:'LIVE WORLD',dragHint:'Drag the glass lens to move between day and night',chooseWorld:'CHOOSE YOUR WORLD',scenes:'Five pixel scenes',countryside:'Countryside',japan:'Japanese street',apartment:'Apartment',seaside:'Seaside',mountain:'Mountain cabin',weather:'Weather',snowDesc:'Add gentle snowfall to the world',snow:'Snow',footer:'Five scenes · One tiny world',day:'Day',night:'Night',atmosphere:'WORLD SETTINGS',rhythm:'World rhythm',rhythmDesc:'Set how quickly the tiny world moves. Choose 0× to pause its animation.',paused:'Paused',natural:'Natural',fast:'Fast',glassLab:'GLASS LAB',optics:'Glass optics',opticsDesc:'Fine-tune the lens while keeping the original glass renderer.',refraction:'Refraction',dispersion:'Color dispersion',shine:'Glass highlight',reset:'Reset',aboutTitle:'A living miniature',aboutDesc:'Five handcrafted pixel scenes, one responsive glass lens, and a world that follows your touch.',descCountryside:'A quiet home among green hills.',descJapan:'A lantern-lit street after sunset.',descApartment:'A calm modern room above the city.',descSeaside:'A lighthouse watching the open sea.',descMountain:'A warm cabin beneath distant peaks.'},
+        'zh-CN': {eyebrow:'掌心里的微缩世界',now:'当前世界',dayMode:'白昼',nightMode:'夜幕',live:'世界正在运转',dragHint:'拖动玻璃镜片，在白昼与黑夜之间切换',chooseWorld:'选择你的世界',scenes:'五种像素场景',countryside:'乡间小屋',japan:'日本街道',apartment:'现代公寓',seaside:'海边灯塔',mountain:'山间木屋',weather:'天气',snowDesc:'为这个世界加一场轻柔的雪',snow:'飘雪',footer:'五种场景 · 一个小小世界',day:'白昼',night:'夜晚',atmosphere:'世界设置',rhythm:'世界节奏',rhythmDesc:'调整微缩世界的动画速度。设为 0× 即可暂停。',paused:'暂停',natural:'自然',fast:'快速',glassLab:'玻璃实验室',optics:'玻璃光学',opticsDesc:'微调镜片效果，继续使用原有玻璃渲染引擎。',refraction:'折射强度',dispersion:'色彩色散',shine:'玻璃高光',reset:'恢复默认',aboutTitle:'一个鲜活的微缩世界',aboutDesc:'五种精心制作的像素场景、一枚响应触控的玻璃镜片，以及随你指尖变化的世界。',descCountryside:'绿意山丘间的一座宁静小屋。',descJapan:'日落之后亮起灯笼的街道。',descApartment:'俯瞰城市的现代静谧居所。',descSeaside:'守望辽阔海面的海边灯塔。',descMountain:'远山之下温暖的山间木屋。'},
+        ja: {eyebrow:'手のひらの小さな世界',now:'あなたの世界',dayMode:'昼',nightMode:'夜',live:'世界が動いています',dragHint:'ガラスレンズをドラッグして昼と夜を切り替えます',chooseWorld:'世界を選ぶ',scenes:'5つのピクセルシーン',countryside:'田園の家',japan:'日本の街並み',apartment:'モダンな部屋',seaside:'海辺の灯台',mountain:'山小屋',weather:'天気',snowDesc:'世界にやさしい雪を降らせます',snow:'雪',footer:'5つのシーン · ひとつの小さな世界',day:'昼',night:'夜',atmosphere:'ワールド設定',rhythm:'世界のリズム',rhythmDesc:'小さな世界の動く速さを調整します。0×でアニメーションを停止します。',paused:'停止',natural:'標準',fast:'高速',glassLab:'ガラスラボ',optics:'ガラス光学',opticsDesc:'元のガラスレンダラーを保ちながらレンズを微調整します。',refraction:'屈折',dispersion:'色分散',shine:'ガラスのハイライト',reset:'リセット',aboutTitle:'生きている小さな世界',aboutDesc:'丁寧に作られた5つのピクセルシーン、指に反応するガラスレンズ、触れるたびに変化する世界。',descCountryside:'緑の丘に囲まれた静かな家。',descJapan:'日没後、提灯が灯る街並み。',descApartment:'街を見渡す落ち着いたモダンな部屋。',descSeaside:'広い海を見守る灯台。',descMountain:'遠くの山々の下にある暖かな山小屋。'}
       };
       var strings = copy[lang];
       document.documentElement.lang = lang;
@@ -95,37 +126,108 @@
       var hit = root.querySelector('.hit');
       hit.setAttribute('aria-label', lang === 'ja' ? '昼夜スイッチ' : lang === 'zh-CN' ? '昼夜开关' : 'Day/night switch');
       var dayLabel = document.getElementById('daylight-label');
-      root.addEventListener('daylight:change', function (event) {
-        dayLabel.textContent = event.detail.night ? strings.nightMode : strings.dayMode;
-      });
-      var choices = Array.prototype.slice.call(document.querySelectorAll('[data-scene-choice]'));
+      var descriptions = {'countryside':'descCountryside','japanese-street':'descJapan','apartment':'descApartment','seaside':'descSeaside','mountain-cabin':'descMountain'};
       var sceneIndex = {countryside:'01','japanese-street':'02',apartment:'03',seaside:'04','mountain-cabin':'05'};
-      function selectScene(name) {
-        if (root.dataset.scene === name) return;
-        root.dataset.startNight = String(root.querySelector('.hit').getAttribute('aria-checked') === 'true');
-        if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
-        root.dataset.scene = name;
-        if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
+      var defaults = {tempo:'1',refraction:'1.24',dispersion:'0.05',shine:'0.44'};
+      var controls = {
+        tempo:{input:document.getElementById('tempo-slider'),output:document.getElementById('tempo-value'),attribute:'timeSpeed',digits:1},
+        refraction:{input:document.getElementById('refraction-slider'),output:document.getElementById('refraction-value'),attribute:'refraction',digits:2},
+        dispersion:{input:document.getElementById('dispersion-slider'),output:document.getElementById('dispersion-value'),attribute:'dispersion',digits:2},
+        shine:{input:document.getElementById('shine-slider'),output:document.getElementById('shine-value'),attribute:'shine',digits:2}
+      };
+      var storageKey = 'pixel-daylight-switch.mobile.preferences.v1';
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (_) {}
+      var sceneNames = Object.keys(sceneIndex);
+      if (sceneNames.indexOf(saved.scene) !== -1) root.dataset.scene = saved.scene;
+      if (saved.weather === 'snow') root.dataset.weather = 'snow';
+      ['tempo','refraction','dispersion','shine'].forEach(function (key) {
+        var value = Number(saved[key]);
+        if (Number.isFinite(value) && value >= Number(controls[key].input.min) && value <= Number(controls[key].input.max)) root.dataset[controls[key].attribute] = String(value);
+      });
+      if (typeof saved.night === 'boolean') root.dataset.startNight = String(saved.night);
+      var choices = Array.prototype.slice.call(document.querySelectorAll('[data-scene-choice]'));
+      var weatherButton = document.getElementById('weather-toggle');
+      var timeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-time-state]'));
+      function isNight() { return root.dataset.startNight === 'true' || (root.querySelector('.hit') && root.querySelector('.hit').getAttribute('aria-checked') === 'true'); }
+      function persist() {
+        var state = {scene:root.dataset.scene || 'countryside',weather:root.dataset.weather || 'default',night:isNight()};
+        Object.keys(controls).forEach(function (key) { state[key] = controls[key].input.value; });
+        try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (_) {}
+      }
+      function updateSceneUI() {
+        var name = root.dataset.scene || 'countryside';
         choices.forEach(function (button) {
           var active = button.dataset.sceneChoice === name;
           button.classList.toggle('is-active', active);
           button.setAttribute('aria-pressed', String(active));
         });
-        document.querySelector('.scene-count').innerHTML = sceneIndex[name] + ' <span>/</span> 05';
+        document.getElementById('scene-count').innerHTML = sceneIndex[name] + ' <span>/</span> 05';
+        document.getElementById('scene-description').textContent = strings[descriptions[name]];
       }
-      choices.forEach(function (button) {
-        button.addEventListener('click', function () { selectScene(button.dataset.sceneChoice); });
-      });
-      var weatherButton = document.getElementById('weather-toggle');
-      weatherButton.addEventListener('click', function () {
-        var enabled = weatherButton.getAttribute('aria-pressed') !== 'true';
-        root.dataset.startNight = String(root.querySelector('.hit').getAttribute('aria-checked') === 'true');
+      function updateControlsUI() {
+        Object.keys(controls).forEach(function (key) {
+          var control = controls[key];
+          var value = root.dataset[control.attribute] || defaults[key];
+          control.input.value = value;
+          control.output.textContent = Number(value).toFixed(control.digits) + (key === 'tempo' ? '×' : '');
+        });
+        var snow = root.dataset.weather === 'snow';
+        weatherButton.setAttribute('aria-pressed', String(snow));
+        weatherButton.classList.toggle('is-on', snow);
+        timeButtons.forEach(function (button) {
+          var active = (button.dataset.timeState === 'night') === isNight();
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+      function remount(changes) {
+        var night = isNight();
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.unmount(root);
-        root.dataset.weather = enabled ? 'snow' : 'default';
+        Object.keys(changes).forEach(function (key) { root.dataset[key] = String(changes[key]); });
+        root.dataset.startNight = String(night);
         if (window.PixelDaylightSwitch) window.PixelDaylightSwitch.mount(root);
-        weatherButton.setAttribute('aria-pressed', String(enabled));
-        weatherButton.classList.toggle('is-on', enabled);
+        updateSceneUI();
+        updateControlsUI();
+        persist();
+      }
+      root.addEventListener('daylight:change', function (event) {
+        dayLabel.textContent = event.detail.night ? strings.nightMode : strings.dayMode;
+        updateControlsUI();
+        persist();
       });
+      choices.forEach(function (button) {
+        button.addEventListener('click', function () {
+          if (root.dataset.scene !== button.dataset.sceneChoice) remount({scene:button.dataset.sceneChoice});
+        });
+      });
+      weatherButton.addEventListener('click', function () {
+        remount({weather:root.dataset.weather === 'snow' ? 'default' : 'snow'});
+      });
+      timeButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+          var target = button.dataset.timeState === 'night';
+          var current = root.querySelector('.hit').getAttribute('aria-checked') === 'true';
+          if (target !== current) root.querySelector('.hit').click();
+        });
+      });
+      Object.keys(controls).forEach(function (key) {
+        var control = controls[key];
+        control.input.addEventListener('input', function () {
+          control.output.textContent = Number(control.input.value).toFixed(control.digits) + (key === 'tempo' ? '×' : '');
+        });
+        control.input.addEventListener('change', function () {
+          var changes = {};
+          changes[control.attribute] = control.input.value;
+          remount(changes);
+        });
+      });
+      document.getElementById('reset-settings').addEventListener('click', function () {
+        remount({timeSpeed:defaults.tempo,refraction:defaults.refraction,dispersion:defaults.dispersion,shine:defaults.shine,weather:'default'});
+      });
+      updateSceneUI();
+      updateControlsUI();
+      dayLabel.textContent = isNight() ? strings.nightMode : strings.dayMode;
       function showDiagnostic(title, detail) {
         try {
           if (!panel) {
@@ -168,22 +270,17 @@
             var canvas = root.querySelector('canvas.scene');
             var rect = root.getBoundingClientRect();
             if (!canvas) showDiagnostic('App Initialization Failed', 'The renderer did not create a scene canvas.');
-            else if (!canvas.width || !canvas.height || !rect.width || !rect.height) {
-              showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + rect.width + 'x' + rect.height);
-            }
+            else if (!canvas.width || !canvas.height || !rect.width || !rect.height) showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + rect.width + 'x' + rect.height);
+            else { updateControlsUI(); updateSceneUI(); persist(); }
           }, 2500);
         };
-        appScript.onerror = function () {
-          showDiagnostic('Resource Load Failed', 'app.js could not be loaded from: ' + appScript.src);
-        };
+        appScript.onerror = function () { showDiagnostic('Resource Load Failed', 'app.js could not be loaded from: ' + appScript.src); };
         document.body.appendChild(appScript);
       };
       var pluginScript = document.createElement('script');
       pluginScript.src = './scene-plugin.js';
       pluginScript.onload = loadApp;
-      pluginScript.onerror = function () {
-        showDiagnostic('Resource Load Failed', 'scene-plugin.js could not be loaded from: ' + pluginScript.src);
-      };
+      pluginScript.onerror = function () { showDiagnostic('Resource Load Failed', 'scene-plugin.js could not be loaded from: ' + pluginScript.src); };
       document.body.appendChild(pluginScript);
     })();
   </script>
