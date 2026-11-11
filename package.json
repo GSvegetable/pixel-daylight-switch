@@ -51,7 +51,7 @@
     },
     "./glass-engine": {
       "types": "./index.d.ts",
-      "import": "./glass-engine.js",
+      "import": "./glass-engine.mjs",
       "require": "./glass-engine.js"
     }
   },
@@ -71,7 +71,8 @@
     "index.d.ts",
     "docs/CHANGELOG.md",
     "glass-engine.js",
-    "docs/GLASS_ENGINE.md"
+    "docs/GLASS_ENGINE.md",
+    "glass-engine.mjs"
   ],
   "sideEffects": [
     "./app.js"
