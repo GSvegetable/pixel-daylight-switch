@@ -73,7 +73,7 @@
   },
   "scripts": {
     "test": "node tests/package-smoke.cjs && node tests/scene-plugin-smoke.cjs && node tests/mobile-smoke.cjs && node tests/embed-smoke.cjs",
-    "test:browser": "playwright test",
+    "test:browser": "playwright test --config config/playwright.config.cjs",
     "mobile:prepare": "node scripts/prepare-mobile.cjs",
     "mobile:android": "npm run mobile:prepare && cap sync android && node scripts/set-android-version.cjs android/app/build.gradle",
     "mobile:ios": "npm run mobile:prepare && cap sync ios",
