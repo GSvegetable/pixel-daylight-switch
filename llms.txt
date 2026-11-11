@@ -42,11 +42,13 @@ CommonJS: `const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetabl
 
 The package is safe to import during SSR; mount only after the target DOM element exists. `mount(element)` is idempotent and returns a cleanup function on success (or null on failure). `unmount(element)` stops rendering and removes observers/listeners; it does not remove the DOM root or forcibly invalidate the canvas context.
 
-Framework lifecycle examples are in [INTEGRATIONS.md](INTEGRATIONS.md). Scene plugin authoring, manifest constraints and API examples are in [SCENE_PLUGINS.md](SCENE_PLUGINS.md).
+Framework lifecycle examples are in [INTEGRATIONS.md](docs/INTEGRATIONS.md). Scene plugin authoring, manifest constraints and API examples are in [SCENE_PLUGINS.md](docs/SCENE_PLUGINS.md).
 
-## Community scene plugins (v3.0.0)
+## Community scene plugins (current: Manifest v2)
 
-The optional `scene-plugin.js` registry exposes `registerScene(manifest)`, `validateScene(manifest)`, `getScene(id)` and `listScenes()`. Load the registry before `app.js` in a browser, or import `registerScene` from the npm package. Register a scene before mounting its root. Manifest v1 uses a 1–192 by 1–112 printable-ASCII pixel map, up to 8 named palettes, and a 24-hour timeline that starts at 0 and ends at 24. Every used pixel symbol must have a valid `#RGB` or `#RRGGBB` color in every palette. Data is copied and deeply frozen on registration. Arbitrary plugin JavaScript is never executed. External image/sprite assets, layered tile maps and custom animation tracks are not supported in v1; they are reserved for a future schema extension. See [SCENE_PLUGINS.md](SCENE_PLUGINS.md), the [v1 JSON Schema](schemas/scene-manifest.v1.schema.json), and the [Sakura example](examples/scenes/sakura-evening.json).
+The optional `scene-plugin.js` registry exposes `registerScene(manifest)`, `validateScene(manifest)`, `getScene(id)` and `listScenes()`. Register a data-only JSON manifest before mounting the scene. Manifest v2 supports up to 24 reusable pixel-matrix assets, up to 16 ordered layers, transparent overlay pixels (.), and bounded deterministic drift/bob motion tracks. Manifest v1 remains supported and its schema is unchanged. Every symbol in the base matrix and assets must be defined in each palette. Registration validates, copies and freezes the data; arbitrary JavaScript, remote image downloads and executable callbacks are not run.
+
+For npm, import `registerScene` from the package. In a browser, load `scene-plugin.js` before `app.js` and register the manifest before mounting. See [the scene authoring guide](docs/SCENE_PLUGINS.md), [Manifest v2 Schema](schemas/scene-manifest.v2.schema.json), [v1 compatibility schema](schemas/scene-manifest.v1.schema.json) and [Floating Island v2 example](examples/scenes/floating-island.v2.json).
 
 ## Scenes and weather
 
@@ -97,26 +99,15 @@ Invalid values fall back to defaults; documented numeric ranges are clamped.
 - [Preview](https://gsvegetable.github.io/pixel-daylight-switch/preview.html)
 - [Integration recipes](INTEGRATIONS.md)
 - [English README](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
-- [Changelog](CHANGELOG.md)
+- [Changelog](docs/CHANGELOG.md)
 
 
-## Scene plugins (v3.0.0)
+## Scene plugins — current Manifest v2
 
-- Public API: registerScene(manifest), validateScene(manifest), getScene(id), listScenes().
-- Manifest schema: schemas/scene-manifest.v1.schema.json.
-- Example: examples/scenes/sakura-evening.json.
-- Manifest v1: printable-ASCII pixel matrix (up to 192x112), named palettes, 24-hour palette interpolation.
-- Scene registration is data-only; arbitrary plugin JavaScript is not executed.
-- Browser script order: scene-plugin.js, register the manifest, then app.js. The one-line embed loader loads the registry before the renderer.
-- Existing built-in scenes and their custom live animation code remain unchanged.
-
-
-## Scene Manifest v2 (v3.0.1)
-
-- Manifest v1 remains supported and its schema is unchanged.
-- Manifest v2 adds up to 24 reusable pixel-matrix assets and up to 16 ordered layers.
-- Layers reference named assets and integer x/y positions; '.' is transparent in overlay assets.
-- Optional deterministic motion tracks: drift or bob, on x or y, bounded speed/distance/phase.
-- Every symbol across the base matrix and assets must be defined in every palette.
-- Schema: schemas/scene-manifest.v2.schema.json. Example: examples/scenes/floating-island.v2.json.
+- Current schema: `schemas/scene-manifest.v2.schema.json`.
+- Example: `examples/scenes/floating-island.v2.json`.
+- Reusable assets: up to 24 pixel matrices; ordered layers: up to 16.
+- Overlay dot (.) is transparent; later layers appear above earlier layers.
+- Motion tracks: bounded deterministic `drift` and `bob`, on x or y.
+- Manifest v1 remains backward compatible; its schema is retained.
 - No arbitrary remote image loading, eval, or executable plugin callbacks.
