@@ -1,3 +1,4 @@
+import './glass-engine.js';
 import './scene-plugin.js';
 
 // Browser ESM consumers need to register their scene before mounting.
@@ -18,3 +19,5 @@ export const validateScene = scenes.validateScene;
 export const getScene = scenes.getScene;
 export const listScenes = scenes.listScenes;
 export default api;
+
+export const createGlass = globalThis.PixelGlassEngine.createGlass;
