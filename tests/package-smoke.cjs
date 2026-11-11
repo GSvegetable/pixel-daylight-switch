@@ -14,7 +14,7 @@ async function main() {
   assert.equal(typeof cjs.mount, 'function');
   assert.equal(typeof cjs.unmount, 'function');
   assert.equal(typeof cjs.registerScene, 'function');
-  assert.equal(typeof cjs.validateScene, 'function');\n  assert.equal(typeof cjs.createGlass, 'function');
+  assert.equal(typeof cjs.validateScene, 'function');\n  assert.equal(typeof cjs.createGlass, 'function');\n  assert.equal(typeof cjs.createGlass, 'function');
 
   // ESM import must expose the same API and remain SSR-safe.
   const esm = await import('../index.mjs');
@@ -33,7 +33,7 @@ async function main() {
   assert.equal(pkg.exports['.'].import, './index.mjs');
   assert.equal(pkg.exports['.'].require, './index.cjs');
   assert.equal(pkg.exports['.'].browser, './browser.mjs');
-  assert.equal(pkg.browser, './browser.mjs');
+  assert.equal(pkg.browser, './browser.mjs');\n  assert.equal(pkg.exports['./glass-engine'].import, './glass-engine.mjs');\n  assert.equal(pkg.exports['./glass-engine'].require, './glass-engine.js');
 
   const allowed = new Set(pkg.files);
   for (const required of ['app.js', 'glass-engine.js', 'index.cjs', 'index.mjs', 'scene-plugin.js', 'browser.mjs', 'docs/SCENE_PLUGINS.md', 'docs/INTEGRATIONS.md', 'docs/CHANGELOG.md', 'README.md', 'LICENSE', 'llms.txt']) {
