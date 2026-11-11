@@ -7,7 +7,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const embed = fs.readFileSync(path.join(root, 'embed.js'), 'utf8');
 const playground = fs.readFileSync(path.join(root, 'playground.html'), 'utf8');
-const integrations = fs.readFileSync(path.join(root, 'INTEGRATIONS.md'), 'utf8');
+const integrations = fs.readFileSync(path.join(root, 'docs', 'INTEGRATIONS.md'), 'utf8');
 
 assert.match(embed, /data-ld-part/);
 assert.match(embed, /aspect-ratio:1\.6439/);
