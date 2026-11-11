@@ -11,9 +11,12 @@ on:
       - 'scripts/**'
       - 'capacitor.config.json'
       - 'package.json'
+      - 'tests/mobile-smoke.cjs'
+      - 'docs/CHANGELOG.md'
+      - 'README*.md'
       - '.github/workflows/mobile-build.yml'
     tags:
-      - 'v2.*'
+      - 'v*'
 
 permissions:
   contents: write
