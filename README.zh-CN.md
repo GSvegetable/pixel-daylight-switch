@@ -12,15 +12,15 @@
 
 Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃开关，可以让内部的像素世界从白天经过黄昏切换到夜晚。项目使用原生 JavaScript、WebGL2 和 Canvas 2D 回退渲染，不依赖第三方运行时库。
 
-**[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## 快速入口
 
 | 你想做什么 | 直接打开 |
 | --- | --- |
 | 体验昼夜开关 | [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| 调整场景与视觉参数 | [交互式参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
-| 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| 调整场景与视觉参数 | [交互式参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) |
+| 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |
