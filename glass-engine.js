@@ -89,6 +89,7 @@
   function createGlass(container, options) {
     if(!container || !container.ownerDocument) throw new TypeError('createGlass(container): a DOM element is required');
     const opts={...defaults,...(options||{})};
+    if(!opts.source) throw new TypeError('createGlass requires a renderable source (canvas, image, video, bitmap, or callback).');
     const doc=container.ownerDocument;
     const canvas=doc.createElement('canvas');
     canvas.setAttribute('aria-hidden','true');
@@ -101,7 +102,7 @@
     const gl=canvas.getContext('webgl2',{alpha:true,premultipliedAlpha:true,antialias:false,depth:false,stencil:false,powerPreference:'high-performance'});
     if(!gl){canvas.remove();if(previousPosition!==container.style.position)container.style.position=previousPosition;throw new Error('PixelGlassEngine requires WebGL2.');}
     const compile=(type,src)=>{const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){const msg=gl.getShaderInfoLog(s);gl.deleteShader(s);throw new Error(msg||'Shader compilation failed');}return s;};
-    let program,vao,buffer,texture,raf=0,destroyed=false,source=opts.source||null,sourceCanvas=null,sourceCtx=null,resizeObserver=null;
+    let program,vao,buffer,texture,raf=0,destroyed=false,source=opts.source||null,resizeObserver=null,dim={w:1,h:1};
     try{
       program=gl.createProgram();const vs=compile(gl.VERTEX_SHADER,VERT),fs=compile(gl.FRAGMENT_SHADER,FRAG);
       gl.attachShader(program,vs);gl.attachShader(program,fs);gl.bindAttribLocation(program,0,'aPos');gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);
@@ -127,7 +128,7 @@
       }
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(program);gl.bindVertexArray(vao);
       const width=opts.width,height=opts.height,left=opts.left,top=opts.top;
-      const cssPx=(v,total)=>typeof v==='number'?v:parseFloat(v)||total;
+      const cssPx=(v,total)=>{if(typeof v==='number')return v;const value=String(v??'').trim();if(value.endsWith('%'))return (parseFloat(value)||0)*total/100;return parseFloat(value)||total;};
       const w=cssPx(width,rect.width),h=cssPx(height,rect.height),x=cssPx(left,rect.width),y=cssPx(top,rect.height);
       const cx=(x+w/2)*dpr,cy=H-(y+h/2)*dpr,halfX=w*dpr/2,halfY=h*dpr/2;
       const radius=Math.min(cssPx(opts.radius,Math.min(w,h)*0.28)*dpr,halfX,halfY);
