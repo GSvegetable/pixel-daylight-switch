@@ -245,38 +245,27 @@ iOS は初回に `npm run mobile:ios:init`、以降は `npm run mobile:ios` を�
 ```text
 pixel-daylight-switch/
 ├── .github/workflows/       # CI、モバイルビルド、npm 公開
-├── assets/
-│   └── scene-gallery.png    # 5 シーンの一覧画像
-├── builds/
-│   └── README.md            # モバイル成果物の説明（バイナリは Actions が生成）
-├── mobile/
-│   ├── index.html            # Capacitor アプリの入口
-│   └── mobile.css            # モバイル専用レイアウト
-├── scripts/
-│   └── prepare-mobile.cjs   # Capacitor 用 Web ランタイム準備
-├── tests/
-│   ├── browser/              # Playwright 操作・モバイル回帰テスト
-│   ├── fixture.html
-│   ├── mobile-smoke.cjs
-│   ├── package-smoke.cjs
-│   └── server.cjs
-├── app.js                    # コンポーネント、シーン、入力、描画
-├── style.css                 # コンポーネントのスタイル
-├── embed.js                  # 1 スクリプト埋め込みローダー
-├── index.html                # ライブデモ
-├── preview.html              # コンポーネントプレビュー
-├── playground.html            # パラメーター Playground
-├── index.mjs / index.cjs     # ESM / CommonJS エントリー
-├── package.json               # npm メタデータとスクリプト
-├── capacitor.config.json     # Capacitor 設定
-├── playwright.config.cjs     # ブラウザーテスト設定
-├── docs/                    # Guides, integration recipes and release history
-│   
-│   
-│   └── SCENE_PLUGINS.md
-├── llms.txt
+├── assets/                  # シーンギャラリー画像
+├── builds/                  # モバイルビルド情報
+├── docs/                    # 統合ガイド、シーン制作ガイド、変更履歴
+├── examples/scenes/         # コミュニティシーン Manifest
+├── mobile/                  # Capacitor アプリシェル
+├── schemas/                 # Manifest v1 / v2 JSON Schema
+├── scripts/                 # モバイル準備・バージョン設定
+├── tests/                   # Node / Chromium 回帰テスト
+├── app.js / style.css       # ランタイムとコンポーネントスタイル
+├── scene-plugin.js          # シーン登録・検証 API
+├── embed.js                 # Web サイト埋め込みローダー
+├── index.html               # ライブデモ
+├── playground.html          # パラメーター Playground
+├── preview.html             # コンポーネントプレビュー
+├── index.mjs / index.cjs    # ESM / CommonJS エントリー
+├── package.json             # パッケージ設定とスクリプト
+├── capacitor.config.json    # Capacitor 設定
+├── playwright.config.cjs    # ブラウザーテスト設定
+├── llms.txt                 # AI 向けプロジェクトガイド
 ├── LICENSE
-└── README*.md                 # 英語・簡体字中国語・日本語の README
+└── README*.md               # 英語・簡体字中国語・日本語 README
 ```
 
 ## ライセンス
