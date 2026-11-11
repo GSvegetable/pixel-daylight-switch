@@ -257,8 +257,8 @@ pixel-daylight-switch/
 ├── scene-plugin.js          # 场景注册与校验 API
 ├── embed.js                 # 网站单脚本嵌入加载器
 ├── index.html               # 在线演示
-├── playground.html          # 交互式参数实验室
-├── preview.html             # 组件预览
+├── demos/                   # 参数实验室与组件预览页面
+├── config/                  # 工具配置
 ├── index.mjs / index.cjs    # ESM / CommonJS 入口
 ├── package.json             # 包元数据与脚本
 ├── capacitor.config.json    # Capacitor 配置
