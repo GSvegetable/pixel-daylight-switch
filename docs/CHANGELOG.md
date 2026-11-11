@@ -1,6 +1,4 @@
-# Changelog
-
-## [3.0.1] — Layered community scenes
+# Changelog\n\n## [3.1.1] — Standalone refractive glass engine\n\n- Extract the refractive lens into a separately mountable WebGL2 overlay with no fixed aspect ratio or switch dependency.\n- Expose configurable geometry, refraction, dispersion, bezel, shine, opacity and lifecycle methods.\n- Accept origin-clean canvas, image, video and bitmap sources; document browser security boundaries for DOM backgrounds.\n- Add a dedicated glass-engine demo, integration guide, TypeScript API and smoke checks.\n- Keep the existing day/night switch renderer and all five scenes unchanged.\n\n [3.0.1] — Layered community scenes
 
 - Add Manifest v2 with reusable pixel-matrix assets and ordered scene layers.
 - Add bounded, deterministic drift and bob motion tracks without executing third-party code.
