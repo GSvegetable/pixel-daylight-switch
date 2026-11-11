@@ -63,3 +63,22 @@ export declare const validateScene: PixelDaylightSwitchAPI['validateScene'];
 export declare const getScene: PixelDaylightSwitchAPI['getScene'];
 export declare const listScenes: PixelDaylightSwitchAPI['listScenes'];
 export default PixelDaylightSwitch;
+
+export type GlassSource = HTMLCanvasElement | OffscreenCanvas | HTMLImageElement | HTMLVideoElement | ImageBitmap | (() => GlassSource);
+export interface GlassEngineOptions {
+  source?: GlassSource;
+  width?: number | string; height?: number | string;
+  left?: number | string; top?: number | string;
+  radius?: number | string; refraction?: number; dispersion?: number;
+  bezel?: number; shine?: number; opacity?: number; edgeDark?: number;
+  ink?: [number, number, number]; light?: [number, number, number];
+  dpr?: number; continuous?: boolean;
+}
+export interface GlassEngineInstance {
+  canvas: HTMLCanvasElement;
+  setSource(source: GlassSource): this;
+  setOptions(options: Partial<GlassEngineOptions>): this;
+  render(): this;
+  destroy(): void;
+}
+export declare function createGlass(container: HTMLElement, options?: GlassEngineOptions): GlassEngineInstance;
