@@ -53,13 +53,14 @@
     "README.md",
     "LICENSE",
     "llms.txt",
-    "INTEGRATIONS.md",
-    "SCENE_PLUGINS.md",
+    "docs/INTEGRATIONS.md",
+    "docs/SCENE_PLUGINS.md",
     "scene-plugin.js",
     "schemas",
     "examples",
     "browser.mjs",
-    "index.d.ts"
+    "index.d.ts",
+    "docs/CHANGELOG.md"
   ],
   "sideEffects": [
     "./app.js"
