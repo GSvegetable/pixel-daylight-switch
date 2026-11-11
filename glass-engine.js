@@ -28,14 +28,25 @@
     float d=length(max(q,0.0))+min(max(q.x,q.y),0.0);
     return 1.0-smoothstep(-s,s,d);
   }
+  vec3 smoothTex(vec2 uv) {
+    vec2 st=uv*uSourceSize-0.5, i=floor(st), f=st-i, f2=f*f, f3=f2*f;
+    vec2 w0=(1.0-3.0*f+3.0*f2-f3)/6.0;
+    vec2 w1=(4.0-6.0*f2+3.0*f3)/6.0;
+    vec2 w2=(1.0+3.0*f+3.0*f2-3.0*f3)/6.0;
+    vec2 w3=f3/6.0, g0=w0+w1, g1=w2+w3;
+    vec2 h0=(i-0.5+w1/g0+0.5)/uSourceSize;
+    vec2 h1=(i+1.5+w3/g1+0.5)/uSourceSize;
+    return g0.y*(g0.x*texture(uSource,vec2(h0.x,h0.y)).rgb+g1.x*texture(uSource,vec2(h1.x,h0.y)).rgb)
+      +g1.y*(g0.x*texture(uSource,vec2(h0.x,h1.y)).rgb+g1.x*texture(uSource,vec2(h1.x,h1.y)).rgb);
+  }
   vec3 studio(vec3 R) {
-    vec3 low=mix(vec3(0.12,0.15,0.2),vec3(0.52,0.59,0.68),0.5);
-    vec3 high=mix(uLight,vec3(0.72,0.79,0.86),0.35);
-    vec3 c=mix(low,high,smoothstep(-0.55,0.85,R.y));
+    vec3 c=mix(envLow,envHigh,smoothstep(-0.55,0.85,R.y));
     vec2 s=R.xy/(1.0+max(R.z,0.0));
     float key=softBox(s,vec2(-0.1,0.56),vec2(0.5,0.11),0.17);
     float fill=softBox(s,vec2(0.34,-0.6),vec2(0.3,0.05),0.2);
-    c+=envHigh*key*1.15;\n    c+=envHigh*fill*0.14;\n    return c;
+    c+=envHigh*key*1.15;
+    c+=envHigh*fill*0.14;
+    return c;
   }
   void main(){
     vec2 frag=gl_FragCoord.xy;
@@ -56,19 +67,20 @@
     float bend=pow(band,2.2)*uRadius*strength;
     vec2 base=uCenter+p/mag;
     vec2 shiftDir=gr*bend;
-    vec2 uv0=vec2(base.x/uResolution.x,base.y/uResolution.y);
     float ca=uDispersion*band;
-    vec2 uvR=vec2((base.x+shiftDir.x*(1.0-ca))/uResolution.x,(base.y+shiftDir.y*(1.0-ca))/uResolution.y);
-    vec2 uvG=vec2((base.x+shiftDir.x)/uResolution.x,(base.y+shiftDir.y)/uResolution.y);
-    vec2 uvB=vec2((base.x+shiftDir.x*(1.0+ca))/uResolution.x,(base.y+shiftDir.y*(1.0+ca))/uResolution.y);
-    vec3 seen=vec3(texture(uSource,uvR).r,texture(uSource,uvG).g,texture(uSource,uvB).b);
+    vec2 uvR=(base+shiftDir*(1.0-ca))/uResolution;
+    vec2 uvG=(base+shiftDir)/uResolution;
+    vec2 uvB=(base+shiftDir*(1.0+ca))/uResolution;
+    vec3 seen;
+    if(band>0.02) seen=vec3(smoothTex(uvR).r,smoothTex(uvG).g,smoothTex(uvB).b);
+    else seen=smoothTex(uvG);
     vec2 tilt=gr*(0.22*rho+0.78*pow(rho,7.0));
     vec3 N=normalize(vec3(tilt,sqrt(max(1.0-dot(tilt,tilt),0.02))));
     vec3 R=vec3(2.0*N.z*N.xy,2.0*N.z*N.z-1.0);
     vec2 lp=q/max(uRadius,1.0);
     vec3 lens=seen*1.035;
     float edge=pow(rho,16.0);
-    lens=mix(lens,uInk,edge*uEdgeDark);
+    lens=mix(lens,uInk,edge*0.42);
     float pool=smoothstep(0.05,0.95,-lp.y*0.9+lp.x*0.2)*smoothstep(1.0,0.8,rho)*smoothstep(0.42,0.86,rho);
     lens+=envHigh*pool*mix(0.3,0.1,uNight);
     float broad=softBox(lp,vec2(-0.1,0.62),vec2(0.5,0.17),0.3)*smoothstep(0.98,0.72,rho);
@@ -77,11 +89,6 @@
     float dir=0.2+0.8*smoothstep(-0.6,0.85,dot(gr,normalize(vec2(-0.42,0.9))));
     float mirror=clamp(fresnel*dir*dir*0.6,0.0,0.42);
     if(mirror>1.0e-3) lens=mix(lens,studio(R),mirror);
-    float edgeBand=1.0-smoothstep(-uBezel,uBezel,d);
-    float innerShade=exp(-abs(d)/max(uBezel,0.5))*0.12;
-    lens=mix(lens,uInk,edgeBand*0.18+innerShade);
-    float topSheen=softBox(p/uHalf,vec2(-0.08,0.82),vec2(0.62,0.055),0.12)*uShine*0.22;
-    lens=mix(lens,uLight,topSheen);
     float alpha=uOpacity*(1.0-smoothstep(0.0,1.0,d));
     outColor=vec4(clamp(lens,0.0,1.0)*alpha,alpha);
   }`;
