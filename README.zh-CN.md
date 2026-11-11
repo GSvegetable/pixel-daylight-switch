@@ -12,7 +12,7 @@
 
 Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃开关，可以让内部的像素世界从白天经过黄昏切换到夜晚。项目使用原生 JavaScript、WebGL2 和 Canvas 2D 回退渲染，不依赖第三方运行时库。
 
-**[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[图片/视频上传与玻璃拖拽实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## 快速入口
 
@@ -23,7 +23,8 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 | 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |\n| 独立玻璃折射引擎 | [引擎文档](docs/GLASS_ENGINE.md) · [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
+| React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |
+| 独立玻璃折射引擎 | [引擎文档](docs/GLASS_ENGINE.md) · [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
 | 阅读核心实现 | [运行时 app.js](app.js) · [样式 style.css](style.css) |
 | 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
@@ -99,11 +100,11 @@ npm 包提供 ESM 和 CommonJS 入口，可在 SSR 环境中安全导入；只�
 
 ## 独立玻璃折射引擎（v3.1.1）
 
-这次升级把玻璃镜片从昼夜开关中独立出来。现在可以单独创建一层玻璃，不再受原开关的固定宽高比和尺寸限制；可分别设置宽度、高度、位置、圆角、折射、色散、边缘厚度和高光。支持 Canvas、图片、视频、ImageBitmap 或返回这些对象的函数作为背景源。查看[完整接入文档](docs/GLASS_ENGINE.md)和[在线调参演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)。
+这次升级把玻璃镜片从昼夜开关中独立出来。现在可以单独创建一层玻璃，不再受原开关的固定宽高比和尺寸限制；可分别设置外壳与镜片的尺寸、位置、圆角、折射、色散、边缘厚度和高光。支持 Canvas、图片、视频、ImageBitmap 或返回这些对象的函数作为背景源。在线实验室支持本地上传图片/视频，并用鼠标或手指拖动玻璃层；媒体只在本机浏览器处理，不会上传服务器。查看[完整接入文档](docs/GLASS_ENGINE.md)和[图片/视频上传与拖拽演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)。
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
-const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+const glass = createGlass(container, { source: backgroundCanvas, pillWidth: '72%', pillHeight: 180, pillRadius: 28, lensWidth: '34%', lensHeight: 145 });
 glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
 glass.destroy();
 ```
