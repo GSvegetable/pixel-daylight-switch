@@ -149,7 +149,7 @@
       var choices = Array.prototype.slice.call(document.querySelectorAll('[data-scene-choice]'));
       var weatherButton = document.getElementById('weather-toggle');
       var timeButtons = Array.prototype.slice.call(document.querySelectorAll('[data-time-state]'));
-      function isNight() { return root.dataset.startNight === 'true' || (root.querySelector('.hit') && root.querySelector('.hit').getAttribute('aria-checked') === 'true'); }
+      function isNight() { var currentHit = root.querySelector('.hit'); return currentHit ? currentHit.getAttribute('aria-checked') === 'true' : root.dataset.startNight === 'true'; }
       function persist() {
         var state = {scene:root.dataset.scene || 'countryside',weather:root.dataset.weather || 'default',night:isNight()};
         Object.keys(controls).forEach(function (key) { state[key] = controls[key].input.value; });
@@ -271,7 +271,7 @@
             var rect = root.getBoundingClientRect();
             if (!canvas) showDiagnostic('App Initialization Failed', 'The renderer did not create a scene canvas.');
             else if (!canvas.width || !canvas.height || !rect.width || !rect.height) showDiagnostic('Canvas Size Error', 'canvas=' + canvas.width + 'x' + canvas.height + ', root=' + rect.width + 'x' + rect.height);
-            else { updateControlsUI(); updateSceneUI(); persist(); }
+            else { dayLabel.textContent = isNight() ? strings.nightMode : strings.dayMode; updateControlsUI(); updateSceneUI(); persist(); }
           }, 2500);
         };
         appScript.onerror = function () { showDiagnostic('Resource Load Failed', 'app.js could not be loaded from: ' + appScript.src); };
