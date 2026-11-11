@@ -94,7 +94,7 @@
     float alpha=uOpacity*(1.0-smoothstep(0.0,1.0,d));
     outColor=vec4(clamp(lens,0.0,1.0)*alpha,alpha);
   }`;
-  const defaults={width:'100%',height:'100%',left:'0px',top:'0px',radius:'28px',refraction:1.24,dispersion:0.05,bezel:0.046,shine:0.44,opacity:1,edgeDark:0.42,ink:[0.08,0.1,0.16],light:[0.94,0.97,1],dpr:2,continuous:true};
+  const defaults={width:'100%',height:'100%',left:'0px',top:'0px',radius:'28px',refraction:1.24,dispersion:0.05,bezel:0.046,shine:0.44,opacity:1,edgeDark:0.42,ink:[0.08,0.1,0.16],light:[0.94,0.97,1],shellDay:[0.42,0.52,0.62],shellNight:[0.08,0.1,0.16],hiNight:[0.42,0.5,0.62],loNight:[0.06,0.08,0.13],night:0,dpr:2,continuous:true};
   function createGlass(container, options) {
     if(!container || !container.ownerDocument) throw new TypeError('createGlass(container): a DOM element is required');
     const opts={...defaults,...(options||{})};
