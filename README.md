@@ -23,7 +23,7 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 | Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |
+| Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |\n| Standalone glass refraction | [Glass engine guide](docs/GLASS_ENGINE.md) · [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
 | Scene plugin authoring guide | [Scene plugin guide](docs/SCENE_PLUGINS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
 | Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
@@ -96,6 +96,20 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 ```
 
 The package exposes ESM and CommonJS entry points. Importing is safe in an SSR environment; call `mount()` only in a browser after the target element exists. The package's published file list is defined in [package.json](package.json).
+
+
+## Standalone glass engine (v3.1.1)
+
+The glass lens is also available independently of the day/night switch. It accepts a canvas, image, video, bitmap, or source callback and lets you set any width, height, position, radius, refraction, dispersion, bezel and highlight values. See the [glass engine guide](docs/GLASS_ENGINE.md) and [live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+
+```js
+import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
+const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
+glass.destroy();
+```
+
+WebGL cannot sample arbitrary DOM pixels directly. To refract a live page background, provide an origin-clean canvas/render target from your application. Cross-origin media is subject to browser CORS rules.
 
 ## Community scenes
 
