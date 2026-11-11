@@ -14,22 +14,13 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 
 **[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[图片/视频上传与玻璃拖拽实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
-## 参数实验室 · 三种语言界面
+## 参数实验室 · 中文界面
 
-参数实验室提供简体中文、英文和日文三种语言界面。下面是对应的实际页面截图。
+下图展示的是简体中文界面的参数实验室。
 
-<table>
-  <tr>
-    <td align="center"><strong>简体中文</strong></td>
-    <td align="center"><strong>English</strong></td>
-    <td align="center"><strong>日本語</strong></td>
-  </tr>
-  <tr>
-    <td width="33%"><img src="assets/中.jpg" alt="参数实验室简体中文界面" width="100%"></td>
-    <td width="33%"><img src="assets/英.jpg" alt="参数实验室英文界面" width="100%"></td>
-    <td width="33%"><img src="assets/日.jpg" alt="参数实验室日文界面" width="100%"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="assets/中.jpg" alt="参数实验室简体中文界面" width="100%">
+</p>
 
 [打开交互式参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)，可以直接体验并调整各项参数。
 
