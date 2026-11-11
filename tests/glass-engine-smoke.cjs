@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const source=fs.readFileSync(path.join(__dirname,'..','glass-engine.js'),'utf8');
+assert.match(source,/createGlass/);
+assert.match(source,/uRefraction/);
+assert.match(source,/uDispersion/);
+assert.match(source,/ResizeObserver/);
+assert.match(source,/setSource/);
+assert.match(source,/setOptions/);
+assert.match(source,/destroy\(\)/);
+assert.match(source,/WebGL2/);
+const api=require('../glass-engine.js');
+assert.equal(api.version,'3.1.1');
+assert.equal(typeof api.createGlass,'function');
+console.log('Standalone glass engine API smoke checks passed.');
