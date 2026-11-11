@@ -12,15 +12,15 @@
 
 Pixel Daylight Switch is a draggable day/night UI component. Move its glass control to travel between day, dusk and night while a miniature pixel-art world changes inside the lens. It uses vanilla JavaScript, WebGL2 and a Canvas 2D fallback, with no third-party runtime dependency.
 
-**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/playground.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## Start here
 
 | Goal | Direct link |
 | --- | --- |
 | Experience the switch | [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| Customize scenes and visual behavior | [Interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/playground.html) |
-| Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
+| Customize scenes and visual behavior | [Interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) |
+| Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |
