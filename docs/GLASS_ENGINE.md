@@ -16,11 +16,8 @@ Load `glass-engine.js`, then pass a source that the browser can upload to WebGL:
   const background = document.querySelector('#background');
   const glass = PixelGlassEngine.createGlass(card, {
     source: background,
-    width: '72%',
-    height: '68%',
-    left: '14%',
-    top: '16%',
-    radius: 32,
+    pillWidth: '100%', pillHeight: '72%', pillTop: '14%', pillRadius: '50%',
+    lensWidth: '34%', lensHeight: '58%', lensLeft: '5%', lensTop: '21%',
     refraction: 1.24,
     dispersion: 0.05,
     bezel: 0.046,
@@ -36,7 +33,7 @@ Load `glass-engine.js`, then pass a source that the browser can upload to WebGL:
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
 
-const glass = createGlass(container, { source: backgroundCanvas, width: '70%', height: 160, radius: 28 });
+const glass = createGlass(container, { source: backgroundCanvas, pillWidth: '100%', pillHeight: 160, lensWidth: '34%', lensHeight: 130 });
 glass.setOptions({ dispersion: 0.08 });
 glass.setSource(nextCanvasOrImage);
 glass.destroy();
@@ -51,12 +48,13 @@ A browser does not expose arbitrary DOM pixels as a WebGL texture. Therefore thi
 ## Options
 
 - `source`: canvas/image/video/bitmap or a callback returning one.
-- `width`, `height`, `left`, `top`: numbers in CSS pixels or CSS length strings; no fixed aspect ratio.
-- `radius`: number in CSS pixels or CSS length string.
+- `pillWidth`, `pillHeight`, `pillLeft`, `pillTop`, `pillRadius`: independently configurable outer capsule geometry.
+- `lensWidth`, `lensHeight`, `lensLeft`, `lensTop`: independent sliding lens geometry; the lens is not locked to the shell dimensions.
 - `refraction`: magnification factor; default `1.24`.
 - `dispersion`: RGB edge separation, clamped to `0–0.25`.
 - `bezel`: relative edge thickness, clamped to `0–0.3`.
 - `shine`: highlight intensity.
+- `lift`, `seam`: original lens lift and pixel-seam controls.
 - `opacity`: glass opacity from `0–1`.
 - `ink`, `light`: RGB arrays in normalized `0–1`.\n- `shellDay`, `shellNight`, `hiNight`, `loNight`, `night`: day/night environment colors and blend amount, preserving the original renderer's lighting controls.
 - `dpr`: render pixel-ratio ceiling, default `2`.
