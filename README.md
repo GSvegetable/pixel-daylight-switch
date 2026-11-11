@@ -12,7 +12,7 @@
 
 Pixel Daylight Switch is a draggable day/night UI component. Move its glass control to travel between day, dusk and night while a miniature pixel-art world changes inside the lens. It uses vanilla JavaScript, WebGL2 and a Canvas 2D fallback, with no third-party runtime dependency.
 
-**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[Try the glass upload & drag lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## Start here
 
@@ -23,7 +23,8 @@ Pixel Daylight Switch is a draggable day/night UI component. Move its glass cont
 | Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |\n| Standalone glass refraction | [Glass engine guide](docs/GLASS_ENGINE.md) · [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
+| Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |
+| Standalone glass refraction | [Glass engine guide](docs/GLASS_ENGINE.md) · [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
 | Scene plugin authoring guide | [Scene plugin guide](docs/SCENE_PLUGINS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
 | Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
@@ -100,7 +101,7 @@ The package exposes ESM and CommonJS entry points. Importing is safe in an SSR e
 
 ## Standalone glass engine (v3.1.1)
 
-The complete glass assembly is also available independently of the day/night switch: a configurable outer capsule shell and a separately positioned sliding lens, using the original lens refraction and highlight equations. It accepts a canvas, image, video, bitmap, or source callback. See the [glass engine guide](docs/GLASS_ENGINE.md) and [live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+The complete glass assembly is also available independently of the day/night switch: a configurable outer capsule shell and a separately positioned sliding lens, using the original lens refraction and highlight equations. It accepts a canvas, image, video, bitmap, or source callback. The live playground supports local image/video uploads and pointer/touch dragging of the glass overlay. Media is processed in the browser and is not uploaded. See the [glass engine guide](docs/GLASS_ENGINE.md) and [interactive upload & drag demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
