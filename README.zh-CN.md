@@ -23,11 +23,11 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 | 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
-| React / Vue 接入示例 | [框架集成指南](INTEGRATIONS.md) |
+| React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |
 | 阅读核心实现 | [运行时 app.js](app.js) · [样式 style.css](style.css) |
 | 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
 | 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
-| 查看版本变化 | [更新日志](CHANGELOG.md) |
+| 查看版本变化 | [更新日志](docs/CHANGELOG.md) |
 | 反馈问题 | [GitHub Issues](https://github.com/GSvegetable/pixel-daylight-switch/issues) |
 
 ## 功能特点
@@ -96,50 +96,47 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 
 npm 包提供 ESM 和 CommonJS 入口，可在 SSR 环境中安全导入；只有在浏览器中且目标元素已经存在时，才能调用 `mount()`。npm 发布文件清单以 [package.json](package.json) 为准。
 
-## 社区场景插件（v3.0.0）
+## 社区场景
 
-3.0.0 开始支持通过 JSON Manifest 注册自定义像素世界。普通创作者可以保留像素矩阵、只修改昼夜色板；进阶创作者可以自己设计像素矩阵和时间色板。插件只提供声明式数据，不会在渲染器中执行第三方 JavaScript。
+社区场景使用声明式 JSON Manifest，在组件挂载前注册。当前采用 **Manifest v2**，支持可复用像素素材、顺序图层和受限动画轨道，同时继续兼容已有的 Manifest v1 场景。
 
-**浏览器使用：**
+### 注册场景
+
+在 npm 项目中：
+
+```js
+import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
+import scene from './floating-island.v2.json';
+
+const unregister = registerScene(scene);
+const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+root.dataset.scene = scene.id;
+PixelDaylightSwitch.mount(root);
+```
+
+直接在浏览器中使用时，先加载 `scene-plugin.js`，再加载 `app.js`，并在挂载组件前注册 Manifest：
 
 ```html
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
 <script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
-<div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
+<div data-ld-part="toggle-daylight" data-scene="my-community-scene"></div>
 <script>
-  PixelDaylightSwitch.registerScene(sceneManifest);
+  PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
 </script>
 ```
 
-请在组件挂载前注册 Manifest。使用 npm 时：
+### Manifest v2 能力
 
-```js
-import PixelDaylightSwitch, { registerScene } from 'pixel-daylight-switch-gsvegetable';
-import myScene from './my-scene.json';
+- 最多 24 个可复用字符像素素材、最多 16 个顺序合成图层。
+- 图层使用整数场景坐标，后声明的图层显示在前面图层之上。
+- 叠加素材中的点号 `.` 表示透明像素。
+- 支持 `drift`（往返漂移）和 `bob`（正弦浮动）两种受限动画轨道，可沿水平或垂直方向运行。
+- 继续兼容已有 v1 Manifest，原有五个内置场景保持不变。
 
-const unregister = registerScene(myScene);
-const root = document.querySelector('[data-ld-part="toggle-daylight"]');
-root.dataset.scene = myScene.id;
-PixelDaylightSwitch.mount(root);
-```
+查看 [Manifest v2 Schema](schemas/scene-manifest.v2.schema.json)、[Floating Island 分层场景示例](examples/scenes/floating-island.v2.json) 和[场景创作指南](docs/SCENE_PLUGINS.md)。为保证兼容性，原始 [v1 Schema](schemas/scene-manifest.v1.schema.json) 仍然保留。
 
-Manifest v1 包含场景 ID、作者与许可证、像素画布、字符像素矩阵、多个昼夜色板和 24 小时时间节点。画布最大为 192 × 112；每个像素符号都必须在每套色板中定义颜色。渲染器会在相邻时间节点之间插值颜色。
+当前素材采用字符像素矩阵，不支持 PNG/JPEG 上传，也不会执行社区提交的任意脚本。
 
-- [完整插件开发指南](SCENE_PLUGINS.md)
-- [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
-- [樱花黄昏示例](examples/scenes/sakura-evening.json)
-
-### Manifest v2：分层像素世界（v3.0.1）
-
-3.0.1 在不改变 Manifest v1 的前提下增加了 v2。v2 支持最多 24 个可复用像素素材、最多 16 个按顺序合成的图层。图层可以指定场景坐标，并使用 drift 或 bob 声明式运动轨道沿水平或垂直方向移动。叠加素材中的点号 . 表示透明，其余字符由昼夜色板统一着色。
-
-- [Manifest v2 JSON Schema](schemas/scene-manifest.v2.schema.json)
-- [Floating Island 分层场景示例](examples/scenes/floating-island.v2.json)
-- [完整场景插件开发指南](SCENE_PLUGINS.md)
-
-当前 v2 素材采用原生字符像素矩阵，而不是远程 PNG/JPEG 图片；这样可以保持像素边缘清晰、昼夜调色一致，也不需要额外的跨域图片加载或执行第三方代码。
-
-五个内置场景仍保留原有绘制与动态逻辑。
 
 ## 配置参数
 
@@ -273,7 +270,10 @@ pixel-daylight-switch/
 ├── package.json               # npm 元数据与脚本
 ├── capacitor.config.json     # Capacitor 配置
 ├── playwright.config.cjs     # 浏览器测试配置
-├── CHANGELOG.md
+├── docs/                    # Guides, integration recipes and release history
+│   
+│   
+│   └── SCENE_PLUGINS.md
 ├── llms.txt
 ├── LICENSE
 └── README*.md                 # 英文、简体中文、日文文档
