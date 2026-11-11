@@ -25,6 +25,6 @@ for(let i=0;i<8;i++){g.fillStyle=['#9aaebc','#778f9b','#b6a18d'][i%3];g.beginPat
 g.fillStyle='#e8e1d2';g.fillRect(0,360,w,160);g.fillStyle='#415c56';for(let i=0;i<16;i++){g.beginPath();g.arc((i*97+t*.015)%w,390+(i%4)*25,18+(i%3)*7,0,Math.PI*2);g.fill()}
 g.fillStyle='#263b50';g.font='bold 64px system-ui';g.fillText('GLASS',70,100);g.font='28px system-ui';g.fillText('REFRACTION ENGINE · 3.1.1',74,145);g.fillStyle='#f4f7fa';g.fillRect(760,60,330,190);g.fillStyle='#253b50';g.font='24px system-ui';g.fillText('Background source',790,115);g.fillText('Canvas → WebGL',790,160);g.fillStyle='#f5b94c';g.fillRect(790,190,220,12)}
 paint(0);
-const glass=PixelGlassEngine.createGlass(document.querySelector('#stage'),{source:c,width:'72%',height:'68%',left:'14%',top:'16%',radius:32,refraction:1.24,dispersion:.05,bezel:.046,shine:.44,continuous:false});
-for(const key of ['refraction','dispersion','bezel','shine','radius','width'])document.getElementById(key).addEventListener('input',e=>{const v=Number(e.target.value);document.getElementById(key+'Out').textContent=key==='width'?v+'%':v;glass.setOptions({[key]:key==='width'?v+'%':v});});
+const glass=PixelGlassEngine.createGlass(document.querySelector('#stage'),{source:c,pillWidth:'100%',pillHeight:'72%',pillTop:'14%',pillRadius:'50%',lensWidth:'34%',lensHeight:'58%',lensLeft:'5%',lensTop:'21%',refraction:1.24,dispersion:.05,bezel:.046,shine:.44,continuous:false});
+for(const key of ['refraction','dispersion','bezel','shine','radius','width'])document.getElementById(key).addEventListener('input',e=>{const v=Number(e.target.value);document.getElementById(key+'Out').textContent=key==='width'?v+'%':v;glass.setOptions(key==='width'?{pillWidth:v+'%'}:{[key]:v});});
 </script></html>
