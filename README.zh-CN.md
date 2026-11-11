@@ -245,38 +245,27 @@ iOS 首次创建使用 `npm run mobile:ios:init`，后续使用 `npm run mobile:
 ```text
 pixel-daylight-switch/
 ├── .github/workflows/       # CI、原生移动端构建、npm 发布
-├── assets/
-│   └── scene-gallery.png    # 五种场景总览图
-├── builds/
-│   └── README.md            # 移动端产物说明；二进制由工作流生成
-├── mobile/
-│   ├── index.html            # Capacitor 应用入口
-│   └── mobile.css            # 移动端专用布局
-├── scripts/
-│   └── prepare-mobile.cjs   # 为 Capacitor 准备共用 Web 运行时
-├── tests/
-│   ├── browser/              # Playwright 交互与移动端回归
-│   ├── fixture.html
-│   ├── mobile-smoke.cjs
-│   ├── package-smoke.cjs
-│   └── server.cjs
-├── app.js                    # 组件运行时、场景、交互与渲染
-├── style.css                 # 组件样式
-├── embed.js                  # 单脚本网站嵌入加载器
-├── index.html                # 在线演示主页
-├── preview.html              # 组件预览
-├── playground.html            # 交互式参数实验室
-├── index.mjs / index.cjs     # ESM 与 CommonJS 包入口
-├── package.json               # npm 元数据与脚本
-├── capacitor.config.json     # Capacitor 配置
-├── playwright.config.cjs     # 浏览器测试配置
-├── docs/                    # Guides, integration recipes and release history
-│   
-│   
-│   └── SCENE_PLUGINS.md
-├── llms.txt
+├── assets/                  # 场景展示图片
+├── builds/                  # 移动端构建说明
+├── docs/                    # 集成指南、场景创作指南、更新日志
+├── examples/scenes/         # 社区场景 Manifest 示例
+├── mobile/                  # Capacitor 应用外壳
+├── schemas/                 # Manifest v1 / v2 JSON Schema
+├── scripts/                 # 移动端准备与版本脚本
+├── tests/                   # Node 与 Chromium 回归测试
+├── app.js / style.css       # 运行时与组件样式
+├── scene-plugin.js          # 场景注册与校验 API
+├── embed.js                 # 网站单脚本嵌入加载器
+├── index.html               # 在线演示
+├── playground.html          # 交互式参数实验室
+├── preview.html             # 组件预览
+├── index.mjs / index.cjs    # ESM / CommonJS 入口
+├── package.json             # 包元数据与脚本
+├── capacitor.config.json    # Capacitor 配置
+├── playwright.config.cjs    # 浏览器测试配置
+├── llms.txt                 # 面向 AI 的项目说明
 ├── LICENSE
-└── README*.md                 # 英文、简体中文、日文文档
+└── README*.md               # 英文、简体中文和日文 README
 ```
 
 ## 许可证
