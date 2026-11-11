@@ -148,7 +148,7 @@ test('playground fits a narrow mobile viewport and applies settings', async ({ p
   await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
     status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
   }));
-  await page.goto('/playground.html');
+  await page.goto('/demos/playground.html');
   await expect(page.locator('#previewB canvas.scene')).toHaveCount(1);
   const widths = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
@@ -169,7 +169,7 @@ test('playground language selector is visible, switches all supported locales, a
   await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
     status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
   }));
-  await page.goto('/playground.html');
+  await page.goto('/demos/playground.html');
   const language = page.locator('#language');
   await expect(language).toBeVisible();
   for (const [locale, title] of [['en','Pixel Daylight Switch'],['zh-CN','像素昼夜开关'],['ja','昼夜スイッチ']]) {
@@ -235,7 +235,7 @@ test('playground status localization does not create a MutationObserver feedback
   await page.route('https://gsvegetable.github.io/pixel-daylight-switch/app.js', route => route.fulfill({
     status:200,contentType:'text/javascript',body:require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../../app.js'),'utf8')
   }));
-  await page.goto('/playground.html');
+  await page.goto('/demos/playground.html');
   const mutations = await page.evaluate(async () => {
     const node = document.querySelector('#status');
     let count = 0;
@@ -251,7 +251,7 @@ test('playground status localization does not create a MutationObserver feedback
 });
 
 test('range sliders preserve vertical page scrolling on touch devices', async ({ page }) => {
-  await page.goto('/playground.html');
+  await page.goto('/demos/playground.html');
   const touchAction = await page.locator('#speed').evaluate(el => getComputedStyle(el).touchAction);
   expect(touchAction).toBe('pan-y');
 });
@@ -259,7 +259,7 @@ test('range sliders preserve vertical page scrolling on touch devices', async ({
 
 test('playground remains vertically scrollable on a narrow mobile viewport', async ({ page }) => {
   await page.setViewportSize({width:360,height:800});
-  await page.goto('/playground.html');
+  await page.goto('/demos/playground.html');
   const before = await page.evaluate(() => ({height:document.documentElement.scrollHeight, viewport:window.innerHeight}));
   expect(before.height).toBeGreaterThan(before.viewport);
   await page.mouse.move(330, 700);
