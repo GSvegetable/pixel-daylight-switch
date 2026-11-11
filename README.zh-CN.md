@@ -238,7 +238,7 @@ GitHub Actions 会在 Node.js 18、20、22 环境中执行包与 SSR 检查，�
 
 ## Android 与 iOS
 
-Capacitor 移动端现已提供完整的场景控制界面：可在乡间小屋、日本街道、现代公寓、海边灯塔、山间木屋五个世界之间切换，并可单独开启飘雪效果。切换时复用同一套渲染器，不改动玻璃 Shader 和昼夜拖动交互。界面会根据设备语言显示简体中文、日文或英文。布局同时适配竖屏和横屏：竖屏采用纵向浏览；较宽的横屏将开关放在左侧、场景与天气控制放在右侧；窄屏横向手机则采用更紧凑的单列布局。GitHub Actions 会生成 Android Debug APK 和未签名的 iOS 模拟器应用压缩包。它们属于开发测试产物，不是可直接上架的商店版本：Android APK 不是 Play Store 发布包，iOS 模拟器版本也不能安装到实体 iPhone/iPad。请查看[移动端构建说明](builds/README.md)和[移动端工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml)。
+Capacitor 移动端现在是一套完整的交互展示应用，而不只是一个开关：可以探索乡间小屋、日本街道、现代公寓、海边灯塔、山间木屋五种世界，快速切换白昼与夜晚、开启飘雪、调整世界动画速度，并微调玻璃折射、色彩色散和高光。场景与参数偏好会保存在设备本地。应用继续使用项目原有的共享渲染器和玻璃 Shader，不另写一套视觉效果；界面会根据设备语言自动显示简体中文、日文或英文，并适配竖屏与横屏。GitHub Actions 会生成 Android Debug APK 和未签名的 iOS 模拟器应用压缩包。它们属于开发测试产物，不是可直接上架的商店版本：Android APK 不是 Play Store 发布包，iOS 模拟器版本也不能安装到实体 iPhone/iPad。请查看[移动端构建说明](builds/README.md)和[移动端工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml)。
 
 
 
