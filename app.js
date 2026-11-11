@@ -1289,29 +1289,7 @@ function mount(root) {
   const io = new IntersectionObserver((entries) => { visible = entries.some((e) => e.isIntersecting); if (visible) { dirty = true; wake(); } else { stopDrawing(); } });
   io.observe(root);
   on(root.ownerDocument, 'visibilitychange', () => { pageVisible = root.ownerDocument.visibilityState !== 'hidden'; if (pageVisible) { dirty = true; wake(); if (lost) waitForRestore(); } else { stopDrawing(); clearTimeout(restoreTimer); } });
-  const ro = new ResizeObserver(() => {
-    const resized = measure();
-    if (resized) {
-      // A canvas backing-store resize clears its pixels. Rebuild and draw the
-      // current frame synchronously so the embed never exposes a blank frame
-      // while waiting for the next animation tick.
-      const clock = clockOf();
-      renderWorld(clock, 0, 0);
-      if (ready) uploadWorld();
-      const night = nightAmount(hourOf(clock));
-      if (ready) drawGl(night);
-      else draw2d(night);
-      lastNightText = night.toFixed(3);
-      lastWorldClock = clock;
-      worldAcc = 0;
-      dirty = false;
-    } else {
-      dirty = true;
-      lastWorldClock = -1;
-    }
-    wake();
-  });
-  ro.observe(root);
+  const ro = new ResizeObserver(() => { measure(); dirty = true; lastWorldClock = -1; wake(); }); ro.observe(root);
   const applyCalm = () => { calm = motionQuery.matches; dirty = true; lastWorldClock = -1; wake(); };
   on(motionQuery, 'change', applyCalm);
   on(schemeQuery, 'change', () => { readPalette(); dirty = true; lastWorldClock = -1; wake(); });
