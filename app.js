@@ -1196,10 +1196,18 @@ function mount(root) {
   let renderScale = 1; let fullK = 1; let thumbSeam = 1;
   const pickK = (winH) => { const whole = Math.max(1, Math.floor(winH / CORE_H)); return ((whole + 1) * CORE_H) / winH <= 1.12 ? whole + 1 : whole; };
   const measure = () => {
-    const box = root.getBoundingClientRect(); const fullDpr = Math.min(2, devicePixelRatio || 1); const nextFullK = pickK((Math.round(box.height * fullDpr) / 1.32) * (1 - bezelRatio * 2));
+    // getBoundingClientRect() includes CSS transforms on ancestors. The host
+    // site scales the embed wrapper during its card animation, so measuring
+    // the transformed rectangle here would shrink the canvas backing store
+    // to the visible thumbnail. A scene remount would then paint only a
+    // magnified corner. clientWidth/clientHeight retain the true layout size.
+    const box = root.getBoundingClientRect();
+    const cssWidth = root.clientWidth || root.offsetWidth || box.width;
+    const cssHeight = root.clientHeight || root.offsetHeight || box.height;
+    const fullDpr = Math.min(2, devicePixelRatio || 1); const nextFullK = pickK((Math.round(cssHeight * fullDpr) / 1.32) * (1 - bezelRatio * 2));
     if (nextFullK !== fullK) { fullK = nextFullK; renderScale = 1; }
-    const dpr = fullDpr * renderScale; const W = Math.max(2, Math.round(box.width * dpr)); const H = Math.max(2, Math.round(box.height * dpr)); const changed = W !== shape.W || H !== shape.H;
-    shape.W = W; shape.H = H; shape.cssW = box.width; shape.cssH = box.height; shape.dpr = dpr;
+    const dpr = fullDpr * renderScale; const W = Math.max(2, Math.round(cssWidth * dpr)); const H = Math.max(2, Math.round(cssHeight * dpr)); const changed = W !== shape.W || H !== shape.H;
+    shape.W = W; shape.H = H; shape.cssW = cssWidth; shape.cssH = cssHeight; shape.dpr = dpr;
     shape.pillH = H / 1.32; shape.pillW = shape.pillH * PILL_RATIO; shape.bezel = shape.pillH * bezelRatio;
     shape.winW = shape.pillW - shape.bezel * 2; shape.winH = shape.pillH - shape.bezel * 2;
     const gap = shape.pillH * 0.032; shape.r0 = shape.winH / 2 - gap; shape.travel = shape.winW - (shape.r0 + gap) * 2; shape.travelCss = shape.travel / dpr;
