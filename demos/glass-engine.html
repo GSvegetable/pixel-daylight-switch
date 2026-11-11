@@ -1,30 +1,67 @@
 <!doctype html>
-<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pixel Glass Engine · 3.1.1</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#e9edf2;color:#17202c;font:14px/1.6 system-ui,sans-serif;padding:32px}
-main{max-width:980px;margin:auto}.stage{position:relative;height:420px;border-radius:24px;overflow:hidden;background:#d7e2eb;box-shadow:0 24px 70px #27384b22}
-#scene{width:100%;height:100%;display:block}.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:22px}.control{background:#fff;padding:12px 14px;border-radius:12px}.control label{display:flex;justify-content:space-between}.control input{width:100%}
-.glass-note{color:#657386;font-size:13px;margin-top:12px}@media(max-width:600px){body{padding:16px}.stage{height:320px}}
-</style>
-<main><h1>独立玻璃折射引擎</h1><p>玻璃层可以独立叠加在任意容器中。拖动下面的参数，实时观察折射变化。</p>
-<div class="stage" id="stage"><canvas id="scene" width="1200" height="520"></canvas></div>
+*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#18212d;font:14px/1.55 system-ui,sans-serif;padding:28px}
+main{max-width:1100px;margin:auto}h1{font-size:28px;margin:0 0 6px}.intro{color:#657386;margin:0 0 20px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.upload{display:inline-flex;align-items:center;gap:8px;background:#172331;color:white;padding:10px 15px;border-radius:10px;cursor:pointer}
+.upload input{display:none}.hint{color:#667487;font-size:12px}
+.stage{position:relative;height:min(58vw,540px);min-height:300px;border-radius:22px;overflow:hidden;background:#d7e2eb;box-shadow:0 20px 60px #27384b22;touch-action:none}
+#scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#fallback{position:absolute;inset:0;width:100%;height:100%;display:block}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:18px}
+.control{background:white;padding:12px 14px;border-radius:12px;box-shadow:0 3px 14px #26384b0b}.control label{display:flex;justify-content:space-between;gap:8px;font-size:13px}.control input{width:100%;margin:10px 0 0}
+.glass-note{color:#657386;font-size:12px;margin-top:14px}.status{font-size:12px;color:#536477;margin-left:auto}
+@media(max-width:600px){body{padding:14px}.stage{height:420px;min-height:280px}.status{width:100%;margin:0}}
+</style></head>
+<body><main>
+<h1>独立玻璃折射引擎</h1>
+<p class="intro">上传自己的图片或视频，把玻璃镜片拖到任意位置，实时观察真实背景折射、边缘色散和高光。</p>
+<div class="toolbar">
+<label class="upload">上传图片 / 视频<input id="file" type="file" accept="image/*,video/*"></label>
+<button id="reset" type="button">重置玻璃位置</button>
+<span class="status" id="status">可拖动玻璃；支持鼠标和触屏</span>
+</div>
+<div class="stage" id="stage">
+<canvas id="fallback" width="1400" height="700"></canvas>
+<img id="imageSource" alt="" hidden>
+<video id="videoSource" muted loop playsinline hidden></video>
+</div>
 <div class="controls">
 <div class="control"><label>折射强度 <output id="refractionOut">1.24</output></label><input id="refraction" type="range" min="1.01" max="1.8" step=".01" value="1.24"></div>
 <div class="control"><label>色散 <output id="dispersionOut">0.05</output></label><input id="dispersion" type="range" min="0" max=".25" step=".005" value=".05"></div>
 <div class="control"><label>边缘厚度 <output id="bezelOut">0.046</output></label><input id="bezel" type="range" min=".01" max=".12" step=".001" value=".046"></div>
 <div class="control"><label>高光 <output id="shineOut">0.44</output></label><input id="shine" type="range" min="0" max="1.5" step=".01" value=".44"></div>
-<div class="control"><label>圆角 <output id="radiusOut">32</output></label><input id="radius" type="range" min="4" max="100" step="1" value="32"></div>
 <div class="control"><label>玻璃宽度 <output id="widthOut">72%</output></label><input id="width" type="range" min="25" max="100" step="1" value="72"></div>
+<div class="control"><label>玻璃高度 <output id="heightOut">72%</output></label><input id="height" type="range" min="25" max="100" step="1" value="72"></div>
 </div>
-<p class="glass-note">演示背景由 Canvas 提供。真实网页 DOM 需要宿主应用提供可采样的 Canvas / Image / Video 源；浏览器不会允许 WebGL 直接读取任意 DOM 像素。</p></main>
-<script src="../glass-engine.js"></script><script>
-const c=document.querySelector('#scene'),g=c.getContext('2d');
-function paint(t){const w=c.width,h=c.height;const sky=g.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#8ab6d5');sky.addColorStop(.58,'#e5d6c1');sky.addColorStop(1,'#627b71');g.fillStyle=sky;g.fillRect(0,0,w,h);
-for(let i=0;i<8;i++){g.fillStyle=['#9aaebc','#778f9b','#b6a18d'][i%3];g.beginPath();g.moveTo(i*180-40,330);g.lineTo(i*180+60,120+(i%3)*30);g.lineTo(i*180+180,330);g.fill()}
-g.fillStyle='#e8e1d2';g.fillRect(0,360,w,160);g.fillStyle='#415c56';for(let i=0;i<16;i++){g.beginPath();g.arc((i*97+t*.015)%w,390+(i%4)*25,18+(i%3)*7,0,Math.PI*2);g.fill()}
-g.fillStyle='#263b50';g.font='bold 64px system-ui';g.fillText('GLASS',70,100);g.font='28px system-ui';g.fillText('REFRACTION ENGINE · 3.1.1',74,145);g.fillStyle='#f4f7fa';g.fillRect(760,60,330,190);g.fillStyle='#253b50';g.font='24px system-ui';g.fillText('Background source',790,115);g.fillText('Canvas → WebGL',790,160);g.fillStyle='#f5b94c';g.fillRect(790,190,220,12)}
-paint(0);
-const glass=PixelGlassEngine.createGlass(document.querySelector('#stage'),{source:c,pillWidth:'100%',pillHeight:'72%',pillTop:'14%',pillRadius:'50%',lensWidth:'34%',lensHeight:'58%',lensLeft:'5%',lensTop:'21%',refraction:1.24,dispersion:.05,bezel:.046,shine:.44,continuous:false});
-for(const key of ['refraction','dispersion','bezel','shine','radius','width'])document.getElementById(key).addEventListener('input',e=>{const v=Number(e.target.value);document.getElementById(key+'Out').textContent=key==='width'?v+'%':v;glass.setOptions(key==='width'?{pillWidth:v+'%'}:{[key]:v});});
-</script></html>
+<p class="glass-note">提示：视频会循环播放。图片和视频在本机浏览器内处理，不会上传到服务器。外部网页 DOM 不能被 WebGL 任意读取；此处使用你上传的媒体作为可采样背景。</p>
+</main>
+<script src="../glass-engine.js"></script>
+<script>
+const stage=document.querySelector('#stage'),fallback=document.querySelector('#fallback'),ctx=fallback.getContext('2d');
+const image=document.querySelector('#imageSource'),video=document.querySelector('#videoSource'),status=document.querySelector('#status');
+let source=fallback,objectUrl=null,mediaKind='canvas';
+function paintFallback(){const w=fallback.width,h=fallback.height;const sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,'#8ab6d5');sky.addColorStop(.58,'#e5d6c1');sky.addColorStop(1,'#627b71');ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+for(let i=0;i<10;i++){ctx.fillStyle=['#9aaebc','#778f9b','#b6a18d'][i%3];ctx.beginPath();ctx.moveTo(i*170-40,450);ctx.lineTo(i*170+65,120+(i%3)*38);ctx.lineTo(i*170+180,450);ctx.fill()}
+ctx.fillStyle='#e8e1d2';ctx.fillRect(0,470,w,230);ctx.fillStyle='#415c56';for(let i=0;i<22;i++){ctx.beginPath();ctx.arc((i*97)%w,500+(i%5)*34,18+(i%3)*8,0,Math.PI*2);ctx.fill()}
+ctx.fillStyle='#263b50';ctx.font='bold 76px system-ui';ctx.fillText('GLASS REFRACTION',58,92);ctx.font='32px system-ui';ctx.fillText('UPLOAD YOUR OWN IMAGE OR VIDEO',62,140)}
+paintFallback();
+const initial={pillWidth:'72%',pillHeight:'72%',pillLeft:'14%',pillTop:'14%',pillRadius:'50%',lensWidth:'34%',lensHeight:'58%',lensLeft:'19%',lensTop:'21%',refraction:1.24,dispersion:.05,bezel:.046,shine:.44,continuous:true};
+const glass=PixelGlassEngine.createGlass(stage,{...initial,source});
+function updateSource(next){source=next;glass.setSource(next);glass.render();if(next===fallback){fallback.hidden=false;image.hidden=true;video.hidden=true;}else if(next===image){fallback.hidden=true;image.hidden=false;video.hidden=true;}else{fallback.hidden=true;image.hidden=true;video.hidden=false;}}
+document.querySelector('#file').addEventListener('change',e=>{const file=e.target.files&&e.target.files[0];if(!file)return;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(file);
+if(file.type.startsWith('image/')){image.onload=()=>{updateSource(image);status.textContent='图片已载入 · 可拖动玻璃';};image.onerror=()=>status.textContent='图片读取失败';image.src=objectUrl;}
+else if(file.type.startsWith('video/')){video.onloadeddata=()=>{updateSource(video);video.play().catch(()=>{});status.textContent='视频已载入 · 正在循环播放';};video.onerror=()=>status.textContent='视频读取失败';video.src=objectUrl;video.load();}
+else status.textContent='请选择图片或视频文件';});
+for(const key of ['refraction','dispersion','bezel','shine','width','height'])document.getElementById(key).addEventListener('input',e=>{const v=Number(e.target.value);document.getElementById(key+'Out').textContent=['width','height'].includes(key)?v+'%':v;glass.setOptions(key==='width'?{pillWidth:v+'%'}:key==='height'?{pillHeight:v+'%'}:{[key]:v});});
+let dragging=false,start=null,origin=null;
+stage.addEventListener('pointerdown',e=>{dragging=true;stage.setPointerCapture(e.pointerId);const r=stage.getBoundingClientRect();start={x:e.clientX,y:e.clientY};origin={x:r.width*.14,y:r.height*.14};});
+stage.addEventListener('pointermove',e=>{if(!dragging)return;const r=stage.getBoundingClientRect();const dx=e.clientX-start.x,dy=e.clientY-start.y;const x=Math.max(0,Math.min(r.width*.28,origin.x+dx)),y=Math.max(0,Math.min(r.height*.28,origin.y+dy));const px=x/r.width*100,py=y/r.height*100;const lensX=px+(Number(document.querySelector('#width').value)*.5-17),lensY=py+7;glass.setOptions({pillLeft:px+'%',pillTop:py+'%',lensLeft:lensX+'%',lensTop:lensY+'%'});});
+function stop(){dragging=false;}stage.addEventListener('pointerup',stop);stage.addEventListener('pointercancel',stop);
+document.querySelector('#reset').addEventListener('click',()=>{glass.setOptions({pillLeft:'14%',pillTop:'14%',pillWidth:document.querySelector('#width').value+'%',pillHeight:document.querySelector('#height').value+'%',lensLeft:'19%',lensTop:'21%'});});
+window.addEventListener('beforeunload',()=>{glass.destroy();if(objectUrl)URL.revokeObjectURL(objectUrl);});
+</script></body></html>
