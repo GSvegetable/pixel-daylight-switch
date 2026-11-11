@@ -96,6 +96,20 @@ const PixelDaylightSwitch = require('pixel-daylight-switch-gsvegetable');
 
 ESM と CommonJS の両方を提供します。SSR 環境でもインポートできますが、`mount()` はブラウザー上で対象要素が存在してから呼び出してください。
 
+
+## 独立ガラス屈折エンジン（v3.1.1）
+
+ガラスレンズを昼夜スイッチから独立して利用できるようになりました。固定アスペクト比に依存せず、幅・高さ・位置・角丸・屈折・色分散・縁の厚さ・ハイライトを個別に設定できます。Canvas、画像、動画、ImageBitmap、またはそれらを返す関数を背景ソースとして指定します。[ガイド](docs/GLASS_ENGINE.md) と [ライブデモ](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) を参照してください。
+
+```js
+import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
+const glass = createGlass(container, { source: backgroundCanvas, width: '72%', height: 180, radius: 28 });
+glass.setOptions({ refraction: 1.3, dispersion: 0.08 });
+glass.destroy();
+```
+
+WebGL は任意の DOM ピクセルを直接読み取れません。Web ページの背景を屈折させるには、ホストアプリが Canvas などの描画ソースを提供する必要があります。クロスオリジンメディアには CORS 制約があります。
+
 ## コミュニティシーン
 
 コミュニティシーンは宣言型 JSON Manifest で定義し、コンポーネントのマウント前に登録します。現在の形式は **Manifest v2** です。再利用可能なピクセル素材、順序付きレイヤー、制限付きモーショントラックに対応し、既存の Manifest v1 シーンも引き続き利用できます。
