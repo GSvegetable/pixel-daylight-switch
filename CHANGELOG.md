@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1] — Layered community scenes
+
+- Add Manifest v2 with reusable pixel-matrix assets and ordered scene layers.
+- Add bounded, deterministic drift and bob motion tracks without executing third-party code.
+- Preserve the original Manifest v1 schema and registration behavior.
+- Add a Floating Island example, v2 JSON Schema, TypeScript declarations and validation tests.
+
+
 ## [3.0.0] — Community scene plugins
 
 - Add a validated, data-only Scene Manifest v1 and public scene registry API.

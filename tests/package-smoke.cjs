@@ -7,7 +7,7 @@ const path = require('node:path');
 async function main() {
   const pkg = require('../package.json');
   assert.equal(pkg.name, 'pixel-daylight-switch-gsvegetable');
-  assert.equal(pkg.version, '3.0.0');
+  assert.equal(pkg.version, '3.0.1');
 
   // CommonJS import must be safe in Node/SSR without window or document.
   const cjs = require('../index.cjs');

@@ -8,7 +8,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const registry = new Map();
-  const MAX_WIDTH = 192, MAX_HEIGHT = 112, MAX_PALETTES = 8, MAX_SYMBOLS = 64, MAX_TIME_STOPS = 48;
+  const MAX_WIDTH = 192, MAX_HEIGHT = 112, MAX_PALETTES = 8, MAX_SYMBOLS = 64, MAX_TIME_STOPS = 48, MAX_ASSETS = 24, MAX_LAYERS = 16, MAX_TOTAL_CELLS = 430080;
   const ID_RE = /^[a-z0-9][a-z0-9._-]{1,62}[a-z0-9]$/;
   const COLOR_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
   const SYMBOL_RE = /^[\x20-\x7E]$/;
@@ -24,8 +24,10 @@
   function validateScene(input) {
     const errors = [];
     if (!isPlainObject(input)) return { valid:false, errors:['Scene manifest must be a plain object.'] };
-    unknownKeys(input, new Set(['schemaVersion','id','name','author','license','canvas','pixels','palettes','timeCycle']), 'manifest', errors);
-    if (input.schemaVersion !== 1) errors.push('schemaVersion must be 1.');
+    unknownKeys(input, new Set(['schemaVersion','id','name','author','license','canvas','pixels','palettes','timeCycle','assets','layers']), 'manifest', errors);
+    if (input.schemaVersion !== 1 && input.schemaVersion !== 2) errors.push('schemaVersion must be 1 or 2.');
+    if (input.schemaVersion === 1 && (input.assets !== undefined || input.layers !== undefined)) errors.push('assets and layers require schemaVersion 2.');
+    if (input.schemaVersion !== 1 && input.schemaVersion !== 2) errors.push('schemaVersion must be 1 or 2.');
     if (typeof input.id !== 'string' || !ID_RE.test(input.id)) errors.push('id must be 3-64 lowercase letters, numbers, dots, underscores or hyphens.');
     if (BUILT_INS.has(input.id)) errors.push('Built-in scene IDs are reserved.');
     if (typeof input.name !== 'string' || !input.name.trim() || input.name.length > 80) errors.push('name must be a non-empty string of at most 80 characters.');
@@ -65,6 +67,49 @@
         }
       });
     }
+    const assets = input.assets;
+    if (input.schemaVersion === 2) {
+      if (!isPlainObject(assets) || Object.keys(assets).length < 1) errors.push('schemaVersion 2 requires at least one named pixel asset.');
+      else {
+        const names = Object.keys(assets);
+        if (names.length > MAX_ASSETS) errors.push('assets may contain at most 24 pixel assets.');
+        names.forEach(name => {
+          const asset = assets[name];
+          if (!/^[a-z0-9][a-z0-9._-]{0,47}$/.test(name)) errors.push('Asset names must be lowercase identifiers.');
+          if (!isPlainObject(asset)) { errors.push('Asset "' + name + '" must be an object.'); return; }
+          unknownKeys(asset, new Set(['width','height','pixels']), 'assets.' + name, errors);
+          if (!Number.isInteger(asset.width) || asset.width < 1 || asset.width > MAX_WIDTH) errors.push('Asset "' + name + '" width must be 1-192.');
+          if (!Number.isInteger(asset.height) || asset.height < 1 || asset.height > MAX_HEIGHT) errors.push('Asset "' + name + '" height must be 1-112.');
+          if (!Array.isArray(asset.pixels) || asset.pixels.length !== asset.height) errors.push('Asset "' + name + '" pixels must match its height.');
+          else asset.pixels.forEach((row,index) => {
+            if (typeof row !== 'string' || row.length !== asset.width || !Array.from(row).every(symbol => SYMBOL_RE.test(symbol))) errors.push('Asset "' + name + '" row ' + index + ' must be printable ASCII and match its width.');
+          });
+        });
+      }
+      if (!Array.isArray(input.layers) || input.layers.length < 1 || input.layers.length > MAX_LAYERS) errors.push('layers must contain 1-16 layer definitions.');
+      else input.layers.forEach((layer,index) => {
+        if (!isPlainObject(layer)) { errors.push('layers[' + index + '] must be an object.'); return; }
+        unknownKeys(layer, new Set(['id','asset','x','y','animation']), 'layers[' + index + ']', errors);
+        if (typeof layer.id !== 'string' || !/^[a-z0-9][a-z0-9._-]{0,47}$/.test(layer.id)) errors.push('layers[' + index + '].id must be a lowercase identifier.');
+        if (!isPlainObject(assets) || typeof layer.asset !== 'string' || !Object.prototype.hasOwnProperty.call(assets,layer.asset)) errors.push('layers[' + index + '] references an unknown asset.');
+        if (!Number.isInteger(layer.x) || layer.x < -MAX_WIDTH || layer.x > MAX_WIDTH) errors.push('layers[' + index + '].x must be an integer from -192 to 192.');
+        if (!Number.isInteger(layer.y) || layer.y < -MAX_HEIGHT || layer.y > MAX_HEIGHT) errors.push('layers[' + index + '].y must be an integer from -112 to 112.');
+        if (layer.animation !== undefined) {
+          const animation = layer.animation;
+          if (!isPlainObject(animation)) errors.push('layers[' + index + '].animation must be an object.');
+          else {
+            unknownKeys(animation,new Set(['type','axis','speed','distance','phase']),'layers[' + index + '].animation',errors);
+            if (animation.type !== 'drift' && animation.type !== 'bob') errors.push('Animation type must be drift or bob.');
+            if (animation.axis !== 'x' && animation.axis !== 'y') errors.push('Animation axis must be x or y.');
+            if (!Number.isFinite(animation.speed) || animation.speed < 0 || animation.speed > 4) errors.push('Animation speed must be between 0 and 4.');
+            if (!Number.isInteger(animation.distance) || animation.distance < 1 || animation.distance > 64) errors.push('Animation distance must be an integer from 1 to 64.');
+            if (animation.phase !== undefined && (!Number.isFinite(animation.phase) || animation.phase < 0 || animation.phase > 6.2832)) errors.push('Animation phase must be between 0 and 2π.');
+          }
+        }
+      });
+      const totalCells = Object.values(assets || {}).reduce((sum,asset) => sum + (asset && Number.isInteger(asset.width) && Number.isInteger(asset.height) ? asset.width * asset.height : 0),0);
+      if (totalCells > MAX_TOTAL_CELLS) errors.push('Total pixel asset area exceeds the scene budget.');
+    }
     const timeCycle = input.timeCycle;
     if (!Array.isArray(timeCycle) || timeCycle.length < 2) errors.push('timeCycle must contain at least two time stops.');
     else {
@@ -83,6 +128,7 @@
     if (Array.isArray(input.pixels) && isPlainObject(palettes)) {
       const symbols = new Set();
       input.pixels.forEach(row => { if (typeof row === 'string') for (const symbol of row) symbols.add(symbol); });
+      if (input.schemaVersion === 2 && isPlainObject(assets)) Object.values(assets).forEach(asset => { if (asset && Array.isArray(asset.pixels)) asset.pixels.forEach(row => { if (typeof row === 'string') for (const symbol of row) symbols.add(symbol); }); });
       if (symbols.size > MAX_SYMBOLS) errors.push('pixels cannot use more than 64 unique symbols.');
       Object.keys(palettes).forEach(name => {
         const palette = palettes[name];

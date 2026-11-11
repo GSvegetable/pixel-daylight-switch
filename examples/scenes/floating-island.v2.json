@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 2,
+  "id": "floating-island",
+  "name": "Floating Island",
+  "author": "Pixel Daylight Switch",
+  "license": "CC0-1.0",
+  "canvas": {
+    "width": 24,
+    "height": 12
+  },
+  "pixels": [
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................",
+    "........................"
+  ],
+  "palettes": {
+    "day": {
+      ".": "#8ed5f4",
+      "g": "#74b66d",
+      "t": "#79543f",
+      "l": "#f8d77a",
+      "c": "#ffffff"
+    },
+    "dusk": {
+      ".": "#e99a91",
+      "g": "#627e69",
+      "t": "#5b4653",
+      "l": "#f6bb86",
+      "c": "#f4c6d0"
+    },
+    "night": {
+      ".": "#171d3b",
+      "g": "#304b4a",
+      "t": "#302c43",
+      "l": "#f1d28a",
+      "c": "#a8b7e8"
+    }
+  },
+  "timeCycle": [
+    {
+      "at": 0,
+      "palette": "night"
+    },
+    {
+      "at": 6,
+      "palette": "night"
+    },
+    {
+      "at": 8,
+      "palette": "day"
+    },
+    {
+      "at": 17,
+      "palette": "day"
+    },
+    {
+      "at": 19,
+      "palette": "dusk"
+    },
+    {
+      "at": 21,
+      "palette": "night"
+    },
+    {
+      "at": 24,
+      "palette": "night"
+    }
+  ],
+  "assets": {
+    "island": {
+      "width": 14,
+      "height": 4,
+      "pixels": [
+        "......gg......",
+        "....gggggg....",
+        "..gggggggggg..",
+        "gggggggggggggg"
+      ]
+    },
+    "tree": {
+      "width": 5,
+      "height": 7,
+      "pixels": [
+        "..g..",
+        ".ggg.",
+        "ggggg",
+        "..t..",
+        "..t..",
+        "..t..",
+        "..t.."
+      ]
+    },
+    "cloud": {
+      "width": 8,
+      "height": 3,
+      "pixels": [
+        "..cccc..",
+        ".cccccc.",
+        "cccccccc"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "island",
+      "asset": "island",
+      "x": 5,
+      "y": 7
+    },
+    {
+      "id": "tree",
+      "asset": "tree",
+      "x": 8,
+      "y": 0
+    },
+    {
+      "id": "cloud-left",
+      "asset": "cloud",
+      "x": -3,
+      "y": 2,
+      "animation": {
+        "type": "drift",
+        "axis": "x",
+        "speed": 0.12,
+        "distance": 4,
+        "phase": 0
+      }
+    },
+    {
+      "id": "cloud-right",
+      "asset": "cloud",
+      "x": 17,
+      "y": 4,
+      "animation": {
+        "type": "bob",
+        "axis": "y",
+        "speed": 0.18,
+        "distance": 2,
+        "phase": 1.4
+      }
+    }
+  ]
+}

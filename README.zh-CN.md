@@ -129,7 +129,17 @@ Manifest v1 包含场景 ID、作者与许可证、像素画布、字符像素�
 - [Manifest v1 JSON Schema](schemas/scene-manifest.v1.schema.json)
 - [樱花黄昏示例](examples/scenes/sakura-evening.json)
 
-v1 暂不支持外部图片/Sprite、分层 Tile Map 和自定义动画轨道；这些能力会通过后续独立版本的 Schema 扩展，不会开放任意代码执行。五个内置场景仍保留原有绘制与动态逻辑。
+### Manifest v2：分层像素世界（v3.0.1）
+
+3.0.1 在不改变 Manifest v1 的前提下增加了 v2。v2 支持最多 24 个可复用像素素材、最多 16 个按顺序合成的图层。图层可以指定场景坐标，并使用 drift 或 bob 声明式运动轨道沿水平或垂直方向移动。叠加素材中的点号 . 表示透明，其余字符由昼夜色板统一着色。
+
+- [Manifest v2 JSON Schema](schemas/scene-manifest.v2.schema.json)
+- [Floating Island 分层场景示例](examples/scenes/floating-island.v2.json)
+- [完整场景插件开发指南](SCENE_PLUGINS.md)
+
+当前 v2 素材采用原生字符像素矩阵，而不是远程 PNG/JPEG 图片；这样可以保持像素边缘清晰、昼夜调色一致，也不需要额外的跨域图片加载或执行第三方代码。
+
+五个内置场景仍保留原有绘制与动态逻辑。
 
 ## 配置参数
 

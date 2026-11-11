@@ -1,6 +1,6 @@
 # Scene Plugin Guide
 
-Pixel Daylight Switch 3.0.0 introduces a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
+Pixel Daylight Switch 3.0.0 introduced a declarative community-scene format. A scene is JSON data, not an executable JavaScript plugin. The renderer validates the manifest and draws the resulting pixel world through the existing refractive-glass pipeline.
 
 ## Two ways to create a scene
 
@@ -50,7 +50,7 @@ The one-line `embed.js` loader loads the registry before the renderer, but it do
 
 Required fields:
 
-- `schemaVersion`: currently `1`.
+- `schemaVersion`: `1` for the original single-matrix format or `2` for layered pixel assets and motion.
 - `id`: unique lowercase ID, 3–64 characters. Built-in scene IDs are reserved.
 - `name`, `author`, `license`: scene metadata.
 - `canvas`: width 1–192 and height 1–112.
@@ -61,6 +61,22 @@ Required fields:
 Every symbol used in `pixels` must have a color in every palette. The renderer interpolates the RGB values between adjacent time stops, including across midnight. Keep the first and last palette compatible to avoid a visible midnight jump.
 
 The authoritative machine-readable contract is [schemas/scene-manifest.v1.schema.json](schemas/scene-manifest.v1.schema.json). A complete sample is [examples/scenes/sakura-evening.json](examples/scenes/sakura-evening.json).
+
+## Layered scenes and pixel assets (Manifest v2)
+
+Version 3.0.1 adds reusable pixel-art assets, compositing layers and deterministic motion tracks. Manifest v1 remains supported without changes; use `schemaVersion: 2` to opt in.
+
+A v2 manifest keeps the base `canvas`, `pixels`, `palettes` and `timeCycle`, and adds:
+
+- `assets`: up to 24 named pixel matrices (each up to 192 × 112).
+- `layers`: 1–16 ordered placements that reference an asset and specify integer `x` / `y` coordinates.
+- `animation`: optional `drift` or `bob` motion on either axis, with bounded speed, distance and phase.
+
+The dot character (`.`) is transparent when an asset is composited as a layer. All other characters are palette symbols, so every palette must define colors for symbols used by the base matrix and every asset. Layers are drawn in array order; later layers appear above earlier ones. Motion is deterministic and uses the scene's animation clock; it does not execute plugin code.
+
+Example: [Floating Island v2](examples/scenes/floating-island.v2.json). The v2 contract is [schemas/scene-manifest.v2.schema.json](schemas/scene-manifest.v2.schema.json); the original v1 contract remains at [schemas/scene-manifest.v1.schema.json](schemas/scene-manifest.v1.schema.json).
+
+The current asset format is deliberately pixel-matrix based. Arbitrary PNG/JPEG downloads and executable animation callbacks are not part of v3.0.1; this keeps rendering crisp, portable, CSP-friendly and safe for community contributions.
 
 ## API
 
@@ -73,6 +89,6 @@ Registration rejects duplicate IDs, built-in IDs, malformed dimensions, invalid 
 
 ## Scope and safety
 
-Manifest v1 supports palette-driven pixel maps. It intentionally does not execute plugin JavaScript, evaluate expressions, or load arbitrary code. External image/sprite assets, layered tile maps and custom animation tracks are not part of v1; they should be introduced through a separately versioned schema extension with explicit asset limits and lifecycle rules.
+Manifest v1 supports palette-driven pixel maps; Manifest v2 adds bounded pixel-matrix assets, ordered layers and declarative drift/bob tracks. Neither version executes plugin JavaScript, evaluates expressions, loads arbitrary code or downloads external images. Raster image imports and tile-atlas tooling are outside the v3.0.1 scope.
 
 All five built-in scenes continue to use their original hand-authored painters and scene-specific live behavior. Community scenes use the data-driven renderer and do not replace or mutate built-in scene definitions.

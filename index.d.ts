@@ -1,38 +1,52 @@
 export interface ScenePalette {
   [symbol: string]: `#${string}`;
 }
-
-export interface SceneTimeStop {
-  /** Local scene time in hours, from 0 through 24. */
-  at: number;
-  /** Key in SceneManifest.palettes. */
-  palette: string;
+export interface SceneTimeStop { at: number; palette: string; }
+export interface ScenePixelAsset {
+  width: number;
+  height: number;
+  /** One printable-ASCII character per pixel. A dot is transparent when used as a layer. */
+  pixels: string[];
 }
-
-export interface SceneManifest {
-  schemaVersion: 1;
-  /** Unique lowercase community scene identifier (3-64 characters). */
+export interface SceneLayerAnimation {
+  /** drift and bob are deterministic sinusoidal motion tracks. */
+  type: 'drift' | 'bob';
+  axis: 'x' | 'y';
+  /** Angular speed in radians per second, from 0 to 4. */
+  speed: number;
+  /** Motion amplitude in scene pixels, from 1 to 64. */
+  distance: number;
+  /** Optional phase in radians, from 0 to 2π. */
+  phase?: number;
+}
+export interface SceneLayer {
+  id: string;
+  asset: string;
+  x: number;
+  y: number;
+  animation?: SceneLayerAnimation;
+}
+export interface SceneManifestBase {
   id: string;
   name: string;
   author: string;
-  /** SPDX identifier or a clearly stated license label. */
   license: string;
   canvas: { width: number; height: number };
-  /** One printable-ASCII character per pixel; rows match canvas dimensions. */
   pixels: string[];
-  /** Each palette maps every used pixel symbol to a #RGB or #RRGGBB color. */
   palettes: Record<string, ScenePalette>;
-  /** Strictly increasing palette stops; must begin at 0 and end at 24. */
   timeCycle: SceneTimeStop[];
 }
-
-export interface SceneValidationResult {
-  valid: boolean;
-  errors: string[];
+/** Manifest v1 preserves the original single pixel-matrix format. */
+export interface SceneManifestV1 extends SceneManifestBase { schemaVersion: 1; }
+/** Manifest v2 adds reusable pixel assets, compositing layers and declarative motion. */
+export interface SceneManifestV2 extends SceneManifestBase {
+  schemaVersion: 2;
+  assets: Record<string, ScenePixelAsset>;
+  layers: SceneLayer[];
 }
-
+export type SceneManifest = SceneManifestV1 | SceneManifestV2;
+export interface SceneValidationResult { valid: boolean; errors: string[]; }
 export type UnregisterScene = () => boolean;
-
 export interface PixelDaylightSwitchAPI {
   mount(root: Element | null): (() => void) | null;
   unmount(root: Element | null): void;
@@ -41,7 +55,6 @@ export interface PixelDaylightSwitchAPI {
   getScene(id: string): SceneManifest | null;
   listScenes(): SceneManifest[];
 }
-
 declare const PixelDaylightSwitch: PixelDaylightSwitchAPI;
 export declare const mount: PixelDaylightSwitchAPI['mount'];
 export declare const unmount: PixelDaylightSwitchAPI['unmount'];
