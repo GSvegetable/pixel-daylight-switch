@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5ecd9">
+<title>像素昼夜开关 · 作品预览</title>
+<style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent}
+body{display:grid;place-items:center}
+[data-ld-part="toggle-daylight"]{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  aspect-ratio:1.6439;
+  margin:0!important;
+}
+</style>
+</head>
+<body>
+<div data-ld-part="toggle-daylight" data-scene="seaside" lang="zh-CN">
+  <canvas class="scene" aria-hidden="true"></canvas>
+  <button class="hit" type="button" role="switch" aria-checked="false" aria-label="昼夜开关"></button>
+  <span class="vh" role="status" aria-live="polite" data-status></span>
+  <span class="probe" aria-hidden="true"></span>
+</div>
+<script src="./scene-plugin.js"></script>
+<script src="./app.js"></script>
+<script>
+(() => {
+  const root = document.querySelector('[data-ld-part="toggle-daylight"]');
+  const valid = new Set(['countryside','japanese-street','apartment','seaside','mountain-cabin']);
+  const setScene = scene => {
+    if (!valid.has(scene) || !root) return;
+    if (root.dataset.scene === scene) return;
+    root.dataset.scene = scene;
+    const api = window.PixelDaylightSwitch;
+    if (api && typeof api.unmount === 'function' && typeof api.mount === 'function') {
+      api.unmount(root);
+      api.mount(root);
+    }
+  };
+  window.addEventListener('message', event => {
+    if (!event.data || event.data.type !== 'pds-set-scene') return;
+    setScene(event.data.scene);
+  });
+  const announce = () => window.parent.postMessage({type:'pds-preview-ready'}, '*');
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', announce, {once:true});
+  } else announce();
+})();
+</script>
+</body>
+</html>
