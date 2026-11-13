@@ -45,7 +45,7 @@
 
     const loadRuntime = function () {
       const runtime = document.createElement('script');
-      runtime.src = 'https://gsvegetable.github.io/pixel-daylight-switch/app.js';
+      runtime.src = 'https://gsvegetable.github.io/1_pixel-daylight-switch/app.js';
       runtime.async = true;
       runtime.onerror = showLoadError;
       (document.body || document.documentElement).appendChild(runtime);
@@ -57,7 +57,7 @@
       wrapper.replaceChildren(message);
     };
     const plugins = document.createElement('script');
-    plugins.src = 'https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js';
+    plugins.src = 'https://gsvegetable.github.io/1_pixel-daylight-switch/scene-plugin.js';
     plugins.async = true;
     plugins.onload = loadRuntime;
     plugins.onerror = showLoadError;
