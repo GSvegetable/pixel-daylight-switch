@@ -10,7 +10,7 @@ Load `glass-engine.js`, then pass a source that the browser can upload to WebGL:
 <div id="card" style="position:relative;width:100%;height:260px;overflow:hidden">
   <canvas id="background" width="1200" height="520"></canvas>
 </div>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/glass-engine.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/glass-engine.js"></script>
 <script>
   const card = document.querySelector('#card');
   const background = document.querySelector('#background');
