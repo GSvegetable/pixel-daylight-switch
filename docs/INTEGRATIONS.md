@@ -78,13 +78,13 @@ onBeforeUnmount(() => {
 For one default switch with no build step, use the one-line embed:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 Set supported options on the script tag when you want a particular scene or weather:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
 ```
 
 For custom configuration, place a root element where you want it and load the runtime:
@@ -98,7 +98,7 @@ For custom configuration, place a root element where you want it and load the ru
     data-start-night="true"
   ></div>
 </div>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 ```
 
 The runtime injects component-scoped styles. Do not import `style.css` just to use the component; that file also contains styles for the repository's standalone demo page.
@@ -157,4 +157,4 @@ glass.setSource(nextCanvas);
 glass.destroy();
 ```
 
-See [the complete glass engine guide](GLASS_ENGINE.md) and [live parameter demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html). The source must be an origin-clean canvas, image, video, bitmap or callback returning one. Arbitrary DOM cannot be sampled directly by WebGL; host applications must provide a renderable source.
+See [the complete glass engine guide](GLASS_ENGINE.md) and [live parameter demo](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html). The source must be an origin-clean canvas, image, video, bitmap or callback returning one. Arbitrary DOM cannot be sampled directly by WebGL; host applications must provide a renderable source.
