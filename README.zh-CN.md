@@ -1,6 +1,6 @@
 # Pixel Daylight Switch
 
-[![自动化检查](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml/badge.svg)](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml)
+[![自动化检查](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml/badge.svg)](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml)
 [![npm 版本](https://img.shields.io/npm/v/pixel-daylight-switch-gsvegetable)](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
 [![Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE)
 
@@ -12,7 +12,7 @@
 
 Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃开关，可以让内部的像素世界从白天经过黄昏切换到夜晚。项目使用原生 JavaScript、WebGL2 和 Canvas 2D 回退渲染，不依赖第三方运行时库。
 
-**[直接体验在线演示](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[图片/视频上传与玻璃拖拽实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[直接体验在线演示](https://gsvegetable.github.io/1_pixel-daylight-switch/)** · **[打开参数实验室](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html)** · **[图片/视频上传与玻璃拖拽实验室](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html)** · **[npm 安装](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## 参数实验室 · 中文界面
 
@@ -22,24 +22,24 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
   <img src="assets/中.jpg" alt="参数实验室简体中文界面" width="100%">
 </p>
 
-[打开交互式参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)，可以直接体验并调整各项参数。
+[打开交互式参数实验室](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html)，可以直接体验并调整各项参数。
 
 ## 快速入口
 
 | 你想做什么 | 直接打开 |
 | --- | --- |
-| 体验昼夜开关 | [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| 调整场景与视觉参数 | [交互式参数实验室](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) |
-| 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
+| 体验昼夜开关 | [在线演示](https://gsvegetable.github.io/1_pixel-daylight-switch/) |
+| 调整场景与视觉参数 | [交互式参数实验室](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html) |
+| 查看组件预览 | [Preview 页面](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/preview.html) |
 | 用一个脚本嵌入网站 | [嵌入加载器源码](embed.js) |
 | 在 JavaScript 项目中使用 | [npm 包](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | React / Vue 接入示例 | [框架集成指南](docs/INTEGRATIONS.md) |
-| 独立玻璃折射引擎 | [引擎文档](docs/GLASS_ENGINE.md) · [在线演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
+| 独立玻璃折射引擎 | [引擎文档](docs/GLASS_ENGINE.md) · [在线演示](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html) |
 | 阅读核心实现 | [运行时 app.js](app.js) · [样式 style.css](style.css) |
-| 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
-| 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| 获取移动端构建 | [构建说明与限制](builds/README.md) · [GitHub Actions 构建任务](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| 查看自动化测试 | [CI 工作流](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml) |
 | 查看版本变化 | [更新日志](docs/CHANGELOG.md) |
-| 反馈问题 | [GitHub Issues](https://github.com/GSvegetable/pixel-daylight-switch/issues) |
+| 反馈问题 | [GitHub Issues](https://github.com/GSvegetable/1_pixel-daylight-switch/issues) |
 
 ## 功能特点
 
@@ -60,7 +60,7 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 <div data-ld-part="toggle-daylight" style="width: min(100%, 800px);">
 </div>
 
-<script defer src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script defer src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 ```
 
 浏览器运行时会自动查找挂载节点并生成组件界面。请为挂载元素设置可用宽度。
@@ -70,13 +70,13 @@ Pixel Daylight Switch 是一个可拖动的昼夜切换 UI 组件。拖动玻璃
 如果希望脚本自动插入组件，可在希望显示组件的位置添加：
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 也可以直接在 script 标签上配置场景和天气：
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
 ```
 
 加载器会自动创建响应式实例并加载运行时。组件样式仅作用于组件本身，不会重置或修改宿主网页的 `body`、`main` 等全局元素。你也可以直接在 script 标签上设置 `data-scene`、`data-weather`、`data-start-night` 等参数。若要创建多个实例或精确控制位置，请使用上面的挂载节点方式。
@@ -110,7 +110,7 @@ npm 包提供 ESM 和 CommonJS 入口，可在 SSR 环境中安全导入；只�
 
 ## 独立玻璃折射引擎（v3.1.1）
 
-这次升级把玻璃镜片从昼夜开关中独立出来。现在可以单独创建一层玻璃，不再受原开关的固定宽高比和尺寸限制；可分别设置外壳与镜片的尺寸、位置、圆角、折射、色散、边缘厚度和高光。支持 Canvas、图片、视频、ImageBitmap 或返回这些对象的函数作为背景源。在线实验室支持本地上传图片/视频，并用鼠标或手指拖动玻璃层；媒体只在本机浏览器处理，不会上传服务器。查看[完整接入文档](docs/GLASS_ENGINE.md)和[图片/视频上传与拖拽演示](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)。
+这次升级把玻璃镜片从昼夜开关中独立出来。现在可以单独创建一层玻璃，不再受原开关的固定宽高比和尺寸限制；可分别设置外壳与镜片的尺寸、位置、圆角、折射、色散、边缘厚度和高光。支持 Canvas、图片、视频、ImageBitmap 或返回这些对象的函数作为背景源。在线实验室支持本地上传图片/视频，并用鼠标或手指拖动玻璃层；媒体只在本机浏览器处理，不会上传服务器。查看[完整接入文档](docs/GLASS_ENGINE.md)和[图片/视频上传与拖拽演示](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html)。
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
@@ -142,8 +142,8 @@ PixelDaylightSwitch.mount(root);
 直接在浏览器中使用时，先加载 `scene-plugin.js`，再加载 `app.js`，并在挂载组件前注册 Manifest：
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 <div data-ld-part="toggle-daylight" data-scene="my-community-scene"></div>
 <script>
   PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
@@ -221,8 +221,8 @@ root.addEventListener('daylight:change', (event) => {
 ## 开发与测试
 
 ```bash
-git clone https://github.com/GSvegetable/pixel-daylight-switch.git
-cd pixel-daylight-switch
+git clone https://github.com/GSvegetable/1_pixel-daylight-switch.git
+cd 1_pixel-daylight-switch
 npm test
 ```
 
@@ -234,11 +234,11 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-GitHub Actions 会在 Node.js 18、20、22 环境中执行包与 SSR 检查，并运行 Chromium 交互和移动端回归测试。最新状态见 [CI 工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml)。
+GitHub Actions 会在 Node.js 18、20、22 环境中执行包与 SSR 检查，并运行 Chromium 交互和移动端回归测试。最新状态见 [CI 工作流](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml)。
 
 ## Android 与 iOS
 
-Capacitor 移动端现在是一套完整的交互展示应用，而不只是一个开关：可以探索乡间小屋、日本街道、现代公寓、海边灯塔、山间木屋五种世界，快速切换白昼与夜晚、开启飘雪、调整世界动画速度，并微调玻璃折射、色彩色散和高光。场景与参数偏好会保存在设备本地。应用继续使用项目原有的共享渲染器和玻璃 Shader，不另写一套视觉效果；界面会根据设备语言自动显示简体中文、日文或英文，并适配竖屏与横屏。GitHub Actions 会生成 Android Debug APK 和未签名的 iOS 模拟器应用压缩包。它们属于开发测试产物，不是可直接上架的商店版本：Android APK 不是 Play Store 发布包，iOS 模拟器版本也不能安装到实体 iPhone/iPad。请查看[移动端构建说明](builds/README.md)和[移动端工作流](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml)。
+Capacitor 移动端现在是一套完整的交互展示应用，而不只是一个开关：可以探索乡间小屋、日本街道、现代公寓、海边灯塔、山间木屋五种世界，快速切换白昼与夜晚、开启飘雪、调整世界动画速度，并微调玻璃折射、色彩色散和高光。场景与参数偏好会保存在设备本地。应用继续使用项目原有的共享渲染器和玻璃 Shader，不另写一套视觉效果；界面会根据设备语言自动显示简体中文、日文或英文，并适配竖屏与横屏。GitHub Actions 会生成 Android Debug APK 和未签名的 iOS 模拟器应用压缩包。它们属于开发测试产物，不是可直接上架的商店版本：Android APK 不是 Play Store 发布包，iOS 模拟器版本也不能安装到实体 iPhone/iPad。请查看[移动端构建说明](builds/README.md)和[移动端工作流](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/mobile-build.yml)。
 
 
 
@@ -247,7 +247,7 @@ Capacitor 移动端现在是一套完整的交互展示应用，而不只是一�
 如果只需要在网页中放入一个昼夜开关，无需安装依赖，直接粘贴下面这一行即可。它会自动加载样式和组件：
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 这是一键式基础嵌入，会创建响应式的默认场景开关；不会注入演示页面样式，也不会修改网站全局样式。如果需要自定义场景、天气或多个实例，请使用上面的 npm API（`data-scene`、`data-weather` 等参数）。
