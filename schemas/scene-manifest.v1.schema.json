@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://gsvegetable.github.io/pixel-daylight-switch/schemas/scene-manifest.v1.schema.json",
+  "$id": "https://gsvegetable.github.io/1_pixel-daylight-switch/schemas/scene-manifest.v1.schema.json",
   "title": "Pixel Daylight Switch Scene Manifest v1",
   "type": "object",
   "additionalProperties": false,
