@@ -1,6 +1,6 @@
 # Pixel Daylight Switch
 
-[![Quality checks](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml/badge.svg)](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml)
+[![Quality checks](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml/badge.svg)](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/pixel-daylight-switch-gsvegetable)](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](LICENSE)
 
@@ -12,7 +12,7 @@
 
 Pixel Daylight Switch is a draggable day/night UI component. Move its glass control to travel between day, dusk and night while a miniature pixel-art world changes inside the lens. It uses vanilla JavaScript, WebGL2 and a Canvas 2D fallback, with no third-party runtime dependency.
 
-**[Open the live demo](https://gsvegetable.github.io/pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)** · **[Try the glass upload & drag lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
+**[Open the live demo](https://gsvegetable.github.io/1_pixel-daylight-switch/)** · **[Launch the parameter lab](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html)** · **[Try the glass upload & drag lab](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html)** · **[Install from npm](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable)**
 
 ## Parameter lab — English interface
 
@@ -22,25 +22,25 @@ The screenshot below shows the parameter lab in English.
   <img src="assets/英.jpg" alt="Parameter lab in English" width="100%">
 </p>
 
-[Open the interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) to experiment with the settings.
+[Open the interactive parameter lab](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html) to experiment with the settings.
 
 ## Start here
 
 | Goal | Direct link |
 | --- | --- |
-| Experience the switch | [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/) |
-| Customize scenes and visual behavior | [Interactive parameter lab](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html) |
-| Inspect the component | [Preview page](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html) |
+| Experience the switch | [Live demo](https://gsvegetable.github.io/1_pixel-daylight-switch/) |
+| Customize scenes and visual behavior | [Interactive parameter lab](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html) |
+| Inspect the component | [Preview page](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/preview.html) |
 | Add it to a website with one script | [Embed loader source](embed.js) |
 | Use it in a JavaScript project | [npm package](https://www.npmjs.com/package/pixel-daylight-switch-gsvegetable) |
 | Framework integration recipes | [React and Vue examples](docs/INTEGRATIONS.md) |
-| Standalone glass refraction | [Glass engine guide](docs/GLASS_ENGINE.md) · [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html) |
+| Standalone glass refraction | [Glass engine guide](docs/GLASS_ENGINE.md) · [Live demo](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html) |
 | Scene plugin authoring guide | [Scene plugin guide](docs/SCENE_PLUGINS.md) |
 | Read implementation details | [Runtime](app.js) · [Styles](style.css) |
-| Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml) |
-| Check tests | [CI workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml) |
+| Download mobile builds | [Build notes and limitations](builds/README.md) · [GitHub Actions artifacts](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/mobile-build.yml) |
+| Check tests | [CI workflow](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml) |
 | Review changes | [Changelog](docs/CHANGELOG.md) |
-| Report a bug | [Issue tracker](https://github.com/GSvegetable/pixel-daylight-switch/issues) |
+| Report a bug | [Issue tracker](https://github.com/GSvegetable/1_pixel-daylight-switch/issues) |
 
 ## Features
 
@@ -61,7 +61,7 @@ Place a mount point on your page and load the runtime:
 <div data-ld-part="toggle-daylight" style="width: min(100%, 800px);">
 </div>
 
-<script defer src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script defer src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 ```
 
 The browser runtime finds the mount point and creates the component UI. The host element needs a usable width.
@@ -71,13 +71,13 @@ The browser runtime finds the mount point and creates the component UI. The host
 For a self-inserting embed, add this script where you want the component to appear:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 Configure the generated instance directly on the script tag:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js" data-scene="seaside" data-weather="snow" data-start-night="true"></script>
 ```
 
 The loader inserts one responsive instance and loads only the component runtime. Its styles are isolated to the component and do not reset or modify your page's `body`, `main`, or other global elements. You can set `data-scene`, `data-weather`, `data-start-night` and the other documented `data-*` options directly on the script tag. For multiple instances or exact placement, use the mount-point approach above.
@@ -111,7 +111,7 @@ The package exposes ESM and CommonJS entry points. Importing is safe in an SSR e
 
 ## Standalone glass engine (v3.1.1)
 
-The complete glass assembly is also available independently of the day/night switch: a configurable outer capsule shell and a separately positioned sliding lens, using the original lens refraction and highlight equations. It accepts a canvas, image, video, bitmap, or source callback. The live playground supports local image/video uploads and pointer/touch dragging of the glass overlay. Media is processed in the browser and is not uploaded. See the [glass engine guide](docs/GLASS_ENGINE.md) and [interactive upload & drag demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+The complete glass assembly is also available independently of the day/night switch: a configurable outer capsule shell and a separately positioned sliding lens, using the original lens refraction and highlight equations. It accepts a canvas, image, video, bitmap, or source callback. The live playground supports local image/video uploads and pointer/touch dragging of the glass overlay. Media is processed in the browser and is not uploaded. See the [glass engine guide](docs/GLASS_ENGINE.md) and [interactive upload & drag demo](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html).
 
 ```js
 import { createGlass } from 'pixel-daylight-switch-gsvegetable/glass-engine';
@@ -143,8 +143,8 @@ PixelDaylightSwitch.mount(root);
 For direct browser usage, load `scene-plugin.js` before `app.js`, then register the manifest before mounting:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 <div data-ld-part="toggle-daylight" data-scene="my-community-scene"></div>
 <script>
   PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
@@ -222,8 +222,8 @@ Performance varies with browser, graphics hardware, device pixel ratio and the n
 ## Development and tests
 
 ```bash
-git clone https://github.com/GSvegetable/pixel-daylight-switch.git
-cd pixel-daylight-switch
+git clone https://github.com/GSvegetable/1_pixel-daylight-switch.git
+cd 1_pixel-daylight-switch
 npm test
 ```
 
@@ -235,11 +235,11 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-GitHub Actions runs package and SSR checks on Node.js 18, 20 and 22, plus Chromium interaction and mobile regression tests. See [current workflow runs](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/ci.yml).
+GitHub Actions runs package and SSR checks on Node.js 18, 20 and 22, plus Chromium interaction and mobile regression tests. See [current workflow runs](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/ci.yml).
 
 ## Android and iOS
 
-The Capacitor app is a hands-on showcase rather than a single-switch wrapper. Explore all five worlds (countryside, Japanese street, apartment, seaside and mountain cabin), switch instantly between day and night, add snowfall, tune world animation speed, and adjust glass refraction, color dispersion and highlights. Your scene and tuning preferences are saved locally on the device. The app keeps the exact shared renderer and original glass shader, and adapts its interface to English, Simplified Chinese or Japanese from the device language. Portrait and landscape layouts are both supported. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/pixel-daylight-switch/actions/workflows/mobile-build.yml).
+The Capacitor app is a hands-on showcase rather than a single-switch wrapper. Explore all five worlds (countryside, Japanese street, apartment, seaside and mountain cabin), switch instantly between day and night, add snowfall, tune world animation speed, and adjust glass refraction, color dispersion and highlights. Your scene and tuning preferences are saved locally on the device. The app keeps the exact shared renderer and original glass shader, and adapts its interface to English, Simplified Chinese or Japanese from the device language. Portrait and landscape layouts are both supported. GitHub Actions produces an Android debug APK and an unsigned iOS Simulator archive. These are development artifacts, not store-ready releases: the Android APK is not a Play Store release, and the iOS Simulator build cannot be installed on a physical iPhone or iPad. See [mobile build notes](builds/README.md) and the [mobile workflow](https://github.com/GSvegetable/1_pixel-daylight-switch/actions/workflows/mobile-build.yml).
 
 
 
@@ -248,7 +248,7 @@ The Capacitor app is a hands-on showcase rather than a single-switch wrapper. Ex
 For one basic day/night switch, no package installation is required. Paste this single line into your HTML:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 The loader creates a responsive default-scene switch and loads the runtime. It does not inject the demo page stylesheet or alter your site's global styles. For custom scenes, weather, multiple instances or full control over placement, use the npm API above and its `data-scene` / `data-weather` attributes.
