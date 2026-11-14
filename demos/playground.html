@@ -127,7 +127,7 @@ main{max-width:1120px;margin:0 auto;padding:8px 28px 40px;display:grid;grid-temp
 </section>
 </main>
 
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 
 <script>
 (()=>{
@@ -211,7 +211,7 @@ function generateCode() {
   const a = fields.filter(id=>c[id]!==defaults[id]).map(id=>`  data-${attr[id]}="${c[id]}"`);
   const el = a.length ? ['<div','  data-ld-part="toggle-daylight"',...a,'></div>'].join('\n') : '<div data-ld-part="toggle-daylight"></div>';
   const sized = '<div style="width:min(100%, 800px); margin-inline:auto;">\n' + el + '\n</div>';
-  $('snippet').textContent = sized + '\n<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"><\/script>';
+  $('snippet').textContent = sized + '\n<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"><\/script>';
 }
 
 function mark(){
