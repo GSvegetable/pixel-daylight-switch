@@ -1,6 +1,6 @@
 /*!
  * Pixel Day-Night Switch (Unlicense, public domain)
- * https://github.com/GSvegetable/pixel-daylight-switch
+ * https://github.com/GSvegetable/1_pixel-daylight-switch
  *
  * 用法：引入这个文件，页面里放一个空的 div 就行。
  *   <script src="app.js"></script>
