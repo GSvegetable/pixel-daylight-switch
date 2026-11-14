@@ -34,8 +34,8 @@ The scene must be registered before its root is mounted. Registering a scene ret
 Load the registry before the renderer:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/scene-plugin.js"></script>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/scene-plugin.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 <div data-ld-part="toggle-daylight" data-scene="sakura-evening"></div>
 <script>
   PixelDaylightSwitchScenePlugins.registerScene(sceneManifest);
