@@ -7,7 +7,7 @@
 Paste one line where the component should appear:
 
 ```html
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/embed.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/embed.js"></script>
 ```
 
 The loader creates a responsive instance and loads the runtime. Component styles are scoped; the loader does not inject the demo stylesheet or reset the host page's body, main, footer, typography or layout. Set supported `data-*` options (including `data-scene` and `data-weather`) on the script tag to configure this instance. Use the mount API for multiple instances or custom placement.
@@ -18,7 +18,7 @@ The loader creates a responsive instance and loads the runtime. Component styles
 <div style="width:min(100%, 800px);margin-inline:auto">
   <div data-ld-part="toggle-daylight" data-scene="japanese-street"></div>
 </div>
-<script src="https://gsvegetable.github.io/pixel-daylight-switch/app.js"></script>
+<script src="https://gsvegetable.github.io/1_pixel-daylight-switch/app.js"></script>
 ```
 
 No stylesheet import is required. The runtime injects component-scoped CSS and automatically mounts matching elements. The host/container must have a measurable width. The component preserves its 1.6439 aspect ratio and scales to its available width.
@@ -46,7 +46,7 @@ Framework lifecycle examples are in [INTEGRATIONS.md](docs/INTEGRATIONS.md). Sce
 
 ## Standalone refractive glass engine (v3.1.1)
 
-Import `createGlass` from `pixel-daylight-switch-gsvegetable/glass-engine`, or load `glass-engine.js` directly and use `PixelGlassEngine.createGlass(container, options)`. The independent WebGL2 overlay has configurable width, height, position, radius, refraction, dispersion, bezel, shine, opacity, source and lifecycle methods. Sources are origin-clean canvas, image, video, ImageBitmap or a callback returning one. WebGL cannot sample arbitrary DOM pixels; host applications must supply a renderable background source. See [GLASS_ENGINE.md](docs/GLASS_ENGINE.md) and [the demo](https://gsvegetable.github.io/pixel-daylight-switch/demos/glass-engine.html).
+Import `createGlass` from `pixel-daylight-switch-gsvegetable/glass-engine`, or load `glass-engine.js` directly and use `PixelGlassEngine.createGlass(container, options)`. The independent WebGL2 overlay has configurable width, height, position, radius, refraction, dispersion, bezel, shine, opacity, source and lifecycle methods. Sources are origin-clean canvas, image, video, ImageBitmap or a callback returning one. WebGL cannot sample arbitrary DOM pixels; host applications must supply a renderable background source. See [GLASS_ENGINE.md](docs/GLASS_ENGINE.md) and [the demo](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/glass-engine.html).
 
 ## Community scene plugins (current: Manifest v2)
 
@@ -98,9 +98,9 @@ Invalid values fall back to defaults; documented numeric ranges are clamped.
 
 ## Links
 
-- [Live demo](https://gsvegetable.github.io/pixel-daylight-switch/)
-- [Interactive Playground](https://gsvegetable.github.io/pixel-daylight-switch/demos/playground.html)
-- [Preview](https://gsvegetable.github.io/pixel-daylight-switch/demos/preview.html)
+- [Live demo](https://gsvegetable.github.io/1_pixel-daylight-switch/)
+- [Interactive Playground](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/playground.html)
+- [Preview](https://gsvegetable.github.io/1_pixel-daylight-switch/demos/preview.html)
 - [Integration recipes](docs/INTEGRATIONS.md)
 - [English README](README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 - [Changelog](docs/CHANGELOG.md)
